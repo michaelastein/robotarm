@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/tmcm-bb4.png</file>
+        <file>images/fail.png</file>
+        <file>images/ok.png</file>
+    </qresource>
+</RCC>

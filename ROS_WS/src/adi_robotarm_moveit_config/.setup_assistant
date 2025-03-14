@@ -1,0 +1,25 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: adi_robotarm
+    relative_path: urdf/adi_robotarm.urdf
+  srdf:
+    relative_path: config/visual.srdf
+  package_settings:
+    author_name: Mihai Ursu
+    author_email: mihai.ursu@analog.com
+    generated_timestamp: 1736457769
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity

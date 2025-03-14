@@ -1,0 +1,4 @@
+arm:
+  kinematics_solver: adi_4dof_ik_kinematics_plugin/ADI_4DOF_KinematicsPlugin
+  kinematics_solver_search_resolution: 0.01
+  kinematics_solver_timeout: 0.01
