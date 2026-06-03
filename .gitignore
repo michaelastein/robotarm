@@ -1,0 +1,5 @@
+ROS_WS/build/
+ROS_WS/install/
+ROS_WS/log/
+*.pyc
+__pycache__/
