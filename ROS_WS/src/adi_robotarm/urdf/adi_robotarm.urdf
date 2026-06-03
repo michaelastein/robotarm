@@ -170,7 +170,7 @@
   <link name="end_effector_link">
     <visual>
       <geometry>
-        <cylinder length="0.12" radius="0.01"/>
+        <cylinder length="0.01" radius="0.01"/>
       </geometry>
       <origin xyz="0 0 0.06"/>
       <material name="blue"/>
@@ -178,7 +178,7 @@
 
     <collision>
       <geometry>
-        <cylinder length="0.12" radius="0.02"/>
+        <cylinder length="0.01" radius="0.01"/>
       </geometry>
       <origin xyz="0 0 0.06"/>
     </collision>
