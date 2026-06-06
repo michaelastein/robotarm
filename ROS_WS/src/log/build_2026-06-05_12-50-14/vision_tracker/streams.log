@@ -1,0 +1,21 @@
+[1.401s] Invoking command in '/home/micha/RobotArm/ROS_WS/src/vision_tracker': PYTHONPATH=/home/micha/RobotArm/ROS_WS/src/build/vision_tracker/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/micha/RobotArm/ROS_WS/src/install/vision_tracker/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/vision_tracker build --build-base /home/micha/RobotArm/ROS_WS/src/build/vision_tracker/build install --record /home/micha/RobotArm/ROS_WS/src/build/vision_tracker/install.log --single-version-externally-managed install_data
+[1.640s] running egg_info
+[1.657s] writing ../build/vision_tracker/vision_tracker.egg-info/PKG-INFO
+[1.658s] writing dependency_links to ../build/vision_tracker/vision_tracker.egg-info/dependency_links.txt
+[1.658s] writing entry points to ../build/vision_tracker/vision_tracker.egg-info/entry_points.txt
+[1.658s] writing requirements to ../build/vision_tracker/vision_tracker.egg-info/requires.txt
+[1.658s] writing top-level names to ../build/vision_tracker/vision_tracker.egg-info/top_level.txt
+[1.700s] reading manifest file '../build/vision_tracker/vision_tracker.egg-info/SOURCES.txt'
+[1.702s] writing manifest file '../build/vision_tracker/vision_tracker.egg-info/SOURCES.txt'
+[1.702s] running build
+[1.702s] running build_py
+[1.703s] running install
+[1.707s] running install_lib
+[1.727s] running install_data
+[1.727s] running install_egg_info
+[1.747s] removing '/home/micha/RobotArm/ROS_WS/src/install/vision_tracker/lib/python3.12/site-packages/vision_tracker-0.0.0-py3.12.egg-info' (and everything under it)
+[1.747s] Copying ../build/vision_tracker/vision_tracker.egg-info to /home/micha/RobotArm/ROS_WS/src/install/vision_tracker/lib/python3.12/site-packages/vision_tracker-0.0.0-py3.12.egg-info
+[1.749s] running install_scripts
+[1.875s] Installing hotspot_tracker script to /home/micha/RobotArm/ROS_WS/src/install/vision_tracker/lib/vision_tracker
+[1.876s] writing list of installed files to '/home/micha/RobotArm/ROS_WS/src/build/vision_tracker/install.log'
+[1.902s] Invoked command in '/home/micha/RobotArm/ROS_WS/src/vision_tracker' returned '0': PYTHONPATH=/home/micha/RobotArm/ROS_WS/src/build/vision_tracker/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/micha/RobotArm/ROS_WS/src/install/vision_tracker/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/vision_tracker build --build-base /home/micha/RobotArm/ROS_WS/src/build/vision_tracker/build install --record /home/micha/RobotArm/ROS_WS/src/build/vision_tracker/install.log --single-version-externally-managed install_data

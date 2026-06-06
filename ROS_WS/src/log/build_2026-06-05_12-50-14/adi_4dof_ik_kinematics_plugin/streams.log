@@ -1,0 +1,36 @@
+[0.048s] Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin -- -j8 -l8
+[0.237s] [100%] Built target adi_4dof_ik_kinematics_plugin
+[0.365s] Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin -- -j8 -l8
+[0.366s] Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin
+[0.380s] -- Install configuration: ""
+[0.381s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/include
+[0.381s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/include/adi_4dof_ik
+[0.386s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/include/adi_4dof_ik/adi_4dof_ik_kinematics_plugin.hpp
+[0.387s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/include/adi_4dof_ik/SerialRobot.hpp
+[0.387s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/lib/libadi_4dof_ik_kinematics_plugin.so
+[0.387s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/adi_4dof_ik_kinematics_description.xml
+[0.387s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/environment/library_path.sh
+[0.388s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/environment/library_path.dsv
+[0.388s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/ament_index/resource_index/package_run_dependencies/adi_4dof_ik_kinematics_plugin
+[0.388s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/ament_index/resource_index/parent_prefix_path/adi_4dof_ik_kinematics_plugin
+[0.388s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/environment/ament_prefix_path.sh
+[0.389s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/environment/ament_prefix_path.dsv
+[0.389s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/environment/path.sh
+[0.389s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/environment/path.dsv
+[0.389s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/local_setup.bash
+[0.389s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/local_setup.sh
+[0.390s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/local_setup.zsh
+[0.390s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/local_setup.dsv
+[0.390s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/package.dsv
+[0.390s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/ament_index/resource_index/packages/adi_4dof_ik_kinematics_plugin
+[0.391s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/ament_index/resource_index/moveit_core__pluginlib__plugin/adi_4dof_ik_kinematics_plugin
+[0.391s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/cmake/export_adi_4dof_ik_kinematics_pluginExport.cmake
+[0.391s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/cmake/export_adi_4dof_ik_kinematics_pluginExport-noconfig.cmake
+[0.391s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/cmake/ament_cmake_export_libraries-extras.cmake
+[0.392s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/cmake/ament_cmake_export_targets-extras.cmake
+[0.392s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/cmake/ament_cmake_export_dependencies-extras.cmake
+[0.392s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/cmake/ament_cmake_export_include_directories-extras.cmake
+[0.392s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/cmake/adi_4dof_ik_kinematics_pluginConfig.cmake
+[0.392s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/cmake/adi_4dof_ik_kinematics_pluginConfig-version.cmake
+[0.393s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/package.xml
+[0.434s] Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin

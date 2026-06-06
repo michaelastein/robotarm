@@ -1,0 +1,46 @@
+[0.040s] Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/adi_robotarm': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake /home/micha/RobotArm/ROS_WS/src/adi_robotarm -DCMAKE_INSTALL_PREFIX=/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm
+[0.215s] -- The C compiler identification is GNU 13.3.0
+[1.010s] -- The CXX compiler identification is GNU 13.3.0
+[1.702s] -- Detecting C compiler ABI info
+[2.025s] -- Detecting C compiler ABI info - done
+[2.036s] -- Check for working C compiler: /usr/bin/cc - skipped
+[2.037s] -- Detecting C compile features
+[2.037s] -- Detecting C compile features - done
+[2.125s] -- Detecting CXX compiler ABI info
+[2.403s] -- Detecting CXX compiler ABI info - done
+[2.417s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[2.417s] -- Detecting CXX compile features
+[2.418s] -- Detecting CXX compile features - done
+[2.423s] -- Found ament_cmake: 2.5.6 (/opt/ros/jazzy/share/ament_cmake/cmake)
+[2.644s] -- Found Python3: /usr/bin/python3 (found version "3.12.3") found components: Interpreter 
+[2.826s] -- Found ament_lint_auto: 0.17.5 (/opt/ros/jazzy/share/ament_lint_auto/cmake)
+[2.955s] -- Configuring done (2.9s)
+[2.961s] -- Generating done (0.0s)
+[2.964s] -- Build files have been written to: /home/micha/RobotArm/ROS_WS/src/build/adi_robotarm
+[2.970s] Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/adi_robotarm' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake /home/micha/RobotArm/ROS_WS/src/adi_robotarm -DCMAKE_INSTALL_PREFIX=/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm
+[2.972s] Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/adi_robotarm': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/micha/RobotArm/ROS_WS/src/build/adi_robotarm -- -j8 -l8
+[3.027s] Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/adi_robotarm' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/micha/RobotArm/ROS_WS/src/build/adi_robotarm -- -j8 -l8
+[3.041s] Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/adi_robotarm': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/micha/RobotArm/ROS_WS/src/build/adi_robotarm
+[3.051s] -- Install configuration: ""
+[3.052s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/launch
+[3.052s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/launch/display.launch.py
+[3.053s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/rviz
+[3.053s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/rviz/urdf.rviz
+[3.054s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/urdf
+[3.054s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/urdf/adi_robotarm.urdf
+[3.056s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/ament_index/resource_index/package_run_dependencies/adi_robotarm
+[3.056s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/ament_index/resource_index/parent_prefix_path/adi_robotarm
+[3.057s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/environment/ament_prefix_path.sh
+[3.057s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/environment/ament_prefix_path.dsv
+[3.057s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/environment/path.sh
+[3.058s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/environment/path.dsv
+[3.058s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/local_setup.bash
+[3.058s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/local_setup.sh
+[3.059s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/local_setup.zsh
+[3.059s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/local_setup.dsv
+[3.059s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/package.dsv
+[3.060s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/ament_index/resource_index/packages/adi_robotarm
+[3.060s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/cmake/adi_robotarmConfig.cmake
+[3.061s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/cmake/adi_robotarmConfig-version.cmake
+[3.061s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/package.xml
+[3.065s] Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/adi_robotarm' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/micha/RobotArm/ROS_WS/src/build/adi_robotarm

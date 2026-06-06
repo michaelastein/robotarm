@@ -1,0 +1,13 @@
+package.xml
+setup.cfg
+setup.py
+../build/vision_tracker/vision_tracker.egg-info/PKG-INFO
+../build/vision_tracker/vision_tracker.egg-info/SOURCES.txt
+../build/vision_tracker/vision_tracker.egg-info/dependency_links.txt
+../build/vision_tracker/vision_tracker.egg-info/entry_points.txt
+../build/vision_tracker/vision_tracker.egg-info/requires.txt
+../build/vision_tracker/vision_tracker.egg-info/top_level.txt
+../build/vision_tracker/vision_tracker.egg-info/zip-safe
+resource/vision_tracker
+vision_tracker/__init__.py
+vision_tracker/hotspot_tracker.py

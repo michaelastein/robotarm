@@ -1,0 +1,19 @@
+running egg_info
+writing ../build/vision_tracker/vision_tracker.egg-info/PKG-INFO
+writing dependency_links to ../build/vision_tracker/vision_tracker.egg-info/dependency_links.txt
+writing entry points to ../build/vision_tracker/vision_tracker.egg-info/entry_points.txt
+writing requirements to ../build/vision_tracker/vision_tracker.egg-info/requires.txt
+writing top-level names to ../build/vision_tracker/vision_tracker.egg-info/top_level.txt
+reading manifest file '../build/vision_tracker/vision_tracker.egg-info/SOURCES.txt'
+writing manifest file '../build/vision_tracker/vision_tracker.egg-info/SOURCES.txt'
+running build
+running build_py
+running install
+running install_lib
+running install_data
+running install_egg_info
+removing '/home/micha/RobotArm/ROS_WS/src/install/vision_tracker/lib/python3.12/site-packages/vision_tracker-0.0.0-py3.12.egg-info' (and everything under it)
+Copying ../build/vision_tracker/vision_tracker.egg-info to /home/micha/RobotArm/ROS_WS/src/install/vision_tracker/lib/python3.12/site-packages/vision_tracker-0.0.0-py3.12.egg-info
+running install_scripts
+Installing hotspot_tracker script to /home/micha/RobotArm/ROS_WS/src/install/vision_tracker/lib/vision_tracker
+writing list of installed files to '/home/micha/RobotArm/ROS_WS/src/build/vision_tracker/install.log'

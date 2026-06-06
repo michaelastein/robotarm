@@ -1,0 +1,10 @@
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin/CMakeFiles/uninstall.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin/CMakeFiles/adi_4dof_ik_kinematics_plugin_uninstall.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin/CMakeFiles/adi_4dof_ik_kinematics_plugin.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin/CMakeFiles/test.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin/CMakeFiles/edit_cache.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin/CMakeFiles/rebuild_cache.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin/CMakeFiles/list_install_components.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin/CMakeFiles/install.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin/CMakeFiles/install/local.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin/CMakeFiles/install/strip.dir

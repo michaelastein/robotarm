@@ -1,0 +1,641 @@
+[0.402s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build']
+[0.402s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=8, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, mixin_files=None, mixin=None, verb_parser=<colcon_mixin.mixin.mixin_argument.MixinArgumentDecorator object at 0x7ac2d4c72c30>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7ac2d4dbd820>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7ac2d4dbd820>>, mixin_verb=('build',))
+[0.496s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.496s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.496s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.496s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.496s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.496s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.496s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/micha/RobotArm/ROS_WS/src'
+[0.496s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.497s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.497s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.497s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.497s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.497s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.497s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.497s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.497s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.546s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[0.546s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[0.546s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[0.546s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[0.546s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[0.546s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_endeffector_xyz) by extensions ['ignore', 'ignore_ament_install']
+[0.546s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_endeffector_xyz) by extension 'ignore'
+[0.546s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_endeffector_xyz) by extension 'ignore_ament_install'
+[0.546s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_endeffector_xyz) by extensions ['colcon_pkg']
+[0.546s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_endeffector_xyz) by extension 'colcon_pkg'
+[0.546s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_endeffector_xyz) by extensions ['colcon_meta']
+[0.546s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_endeffector_xyz) by extension 'colcon_meta'
+[0.546s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_endeffector_xyz) by extensions ['ros']
+[0.546s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_endeffector_xyz) by extension 'ros'
+[0.551s] DEBUG:colcon.colcon_core.package_identification:Package 'adi_4dof_endeffector_xyz' with type 'ros.ament_cmake' and name 'adi_4dof_endeffector_xyz'
+[0.551s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik) by extensions ['ignore', 'ignore_ament_install']
+[0.551s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik) by extension 'ignore'
+[0.551s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik) by extension 'ignore_ament_install'
+[0.551s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik) by extensions ['colcon_pkg']
+[0.551s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik) by extension 'colcon_pkg'
+[0.551s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik) by extensions ['colcon_meta']
+[0.551s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik) by extension 'colcon_meta'
+[0.551s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik) by extensions ['ros']
+[0.551s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik) by extension 'ros'
+[0.551s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik) by extensions ['cmake', 'python']
+[0.551s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik) by extension 'cmake'
+[0.551s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik) by extension 'python'
+[0.551s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik) by extensions ['python_setup_py']
+[0.551s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik) by extension 'python_setup_py'
+[0.551s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik/adi_4dof_ik) by extensions ['ignore', 'ignore_ament_install']
+[0.551s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik/adi_4dof_ik) by extension 'ignore'
+[0.551s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik/adi_4dof_ik) by extension 'ignore_ament_install'
+[0.552s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik/adi_4dof_ik) by extensions ['colcon_pkg']
+[0.552s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik/adi_4dof_ik) by extension 'colcon_pkg'
+[0.552s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik/adi_4dof_ik) by extensions ['colcon_meta']
+[0.552s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik/adi_4dof_ik) by extension 'colcon_meta'
+[0.552s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik/adi_4dof_ik) by extensions ['ros']
+[0.552s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik/adi_4dof_ik) by extension 'ros'
+[0.552s] DEBUG:colcon.colcon_core.package_identification:Package 'adi_4dof_ik/adi_4dof_ik' with type 'ros.ament_cmake' and name 'adi_4dof_ik'
+[0.553s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik/adi_4dof_ik_kinematics_plugin) by extensions ['ignore', 'ignore_ament_install']
+[0.553s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik/adi_4dof_ik_kinematics_plugin) by extension 'ignore'
+[0.553s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik/adi_4dof_ik_kinematics_plugin) by extension 'ignore_ament_install'
+[0.553s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik/adi_4dof_ik_kinematics_plugin) by extensions ['colcon_pkg']
+[0.553s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik/adi_4dof_ik_kinematics_plugin) by extension 'colcon_pkg'
+[0.553s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik/adi_4dof_ik_kinematics_plugin) by extensions ['colcon_meta']
+[0.553s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik/adi_4dof_ik_kinematics_plugin) by extension 'colcon_meta'
+[0.553s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik/adi_4dof_ik_kinematics_plugin) by extensions ['ros']
+[0.553s] Level 1:colcon.colcon_core.package_identification:_identify(adi_4dof_ik/adi_4dof_ik_kinematics_plugin) by extension 'ros'
+[0.554s] DEBUG:colcon.colcon_core.package_identification:Package 'adi_4dof_ik/adi_4dof_ik_kinematics_plugin' with type 'ros.ament_cmake' and name 'adi_4dof_ik_kinematics_plugin'
+[0.554s] Level 1:colcon.colcon_core.package_identification:_identify(adi_robotarm) by extensions ['ignore', 'ignore_ament_install']
+[0.554s] Level 1:colcon.colcon_core.package_identification:_identify(adi_robotarm) by extension 'ignore'
+[0.554s] Level 1:colcon.colcon_core.package_identification:_identify(adi_robotarm) by extension 'ignore_ament_install'
+[0.554s] Level 1:colcon.colcon_core.package_identification:_identify(adi_robotarm) by extensions ['colcon_pkg']
+[0.554s] Level 1:colcon.colcon_core.package_identification:_identify(adi_robotarm) by extension 'colcon_pkg'
+[0.554s] Level 1:colcon.colcon_core.package_identification:_identify(adi_robotarm) by extensions ['colcon_meta']
+[0.554s] Level 1:colcon.colcon_core.package_identification:_identify(adi_robotarm) by extension 'colcon_meta'
+[0.554s] Level 1:colcon.colcon_core.package_identification:_identify(adi_robotarm) by extensions ['ros']
+[0.554s] Level 1:colcon.colcon_core.package_identification:_identify(adi_robotarm) by extension 'ros'
+[0.555s] DEBUG:colcon.colcon_core.package_identification:Package 'adi_robotarm' with type 'ros.ament_cmake' and name 'adi_robotarm'
+[0.555s] Level 1:colcon.colcon_core.package_identification:_identify(adi_robotarm_moveit_config) by extensions ['ignore', 'ignore_ament_install']
+[0.555s] Level 1:colcon.colcon_core.package_identification:_identify(adi_robotarm_moveit_config) by extension 'ignore'
+[0.555s] Level 1:colcon.colcon_core.package_identification:_identify(adi_robotarm_moveit_config) by extension 'ignore_ament_install'
+[0.555s] Level 1:colcon.colcon_core.package_identification:_identify(adi_robotarm_moveit_config) by extensions ['colcon_pkg']
+[0.555s] Level 1:colcon.colcon_core.package_identification:_identify(adi_robotarm_moveit_config) by extension 'colcon_pkg'
+[0.555s] Level 1:colcon.colcon_core.package_identification:_identify(adi_robotarm_moveit_config) by extensions ['colcon_meta']
+[0.555s] Level 1:colcon.colcon_core.package_identification:_identify(adi_robotarm_moveit_config) by extension 'colcon_meta'
+[0.555s] Level 1:colcon.colcon_core.package_identification:_identify(adi_robotarm_moveit_config) by extensions ['ros']
+[0.555s] Level 1:colcon.colcon_core.package_identification:_identify(adi_robotarm_moveit_config) by extension 'ros'
+[0.556s] DEBUG:colcon.colcon_core.package_identification:Package 'adi_robotarm_moveit_config' with type 'ros.ament_cmake' and name 'adi_robotarm_moveit_config'
+[0.556s] Level 1:colcon.colcon_core.package_identification:_identify(adi_tmcm_bb4) by extensions ['ignore', 'ignore_ament_install']
+[0.556s] Level 1:colcon.colcon_core.package_identification:_identify(adi_tmcm_bb4) by extension 'ignore'
+[0.556s] Level 1:colcon.colcon_core.package_identification:_identify(adi_tmcm_bb4) by extension 'ignore_ament_install'
+[0.556s] Level 1:colcon.colcon_core.package_identification:_identify(adi_tmcm_bb4) by extensions ['colcon_pkg']
+[0.556s] Level 1:colcon.colcon_core.package_identification:_identify(adi_tmcm_bb4) by extension 'colcon_pkg'
+[0.556s] Level 1:colcon.colcon_core.package_identification:_identify(adi_tmcm_bb4) by extensions ['colcon_meta']
+[0.557s] Level 1:colcon.colcon_core.package_identification:_identify(adi_tmcm_bb4) by extension 'colcon_meta'
+[0.557s] Level 1:colcon.colcon_core.package_identification:_identify(adi_tmcm_bb4) by extensions ['ros']
+[0.557s] Level 1:colcon.colcon_core.package_identification:_identify(adi_tmcm_bb4) by extension 'ros'
+[0.558s] DEBUG:colcon.colcon_core.package_identification:Package 'adi_tmcm_bb4' with type 'ros.ament_cmake' and name 'adi_tmcm_bb4'
+[0.558s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.558s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[0.558s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[0.558s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.558s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[0.558s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[0.558s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.558s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[0.558s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[0.558s] Level 1:colcon.colcon_core.package_identification:_identify(moveit_servo) by extensions ['ignore', 'ignore_ament_install']
+[0.558s] Level 1:colcon.colcon_core.package_identification:_identify(moveit_servo) by extension 'ignore'
+[0.558s] Level 1:colcon.colcon_core.package_identification:_identify(moveit_servo) by extension 'ignore_ament_install'
+[0.558s] Level 1:colcon.colcon_core.package_identification:_identify(moveit_servo) by extensions ['colcon_pkg']
+[0.558s] Level 1:colcon.colcon_core.package_identification:_identify(moveit_servo) by extension 'colcon_pkg'
+[0.558s] Level 1:colcon.colcon_core.package_identification:_identify(moveit_servo) by extensions ['colcon_meta']
+[0.558s] Level 1:colcon.colcon_core.package_identification:_identify(moveit_servo) by extension 'colcon_meta'
+[0.558s] Level 1:colcon.colcon_core.package_identification:_identify(moveit_servo) by extensions ['ros']
+[0.558s] Level 1:colcon.colcon_core.package_identification:_identify(moveit_servo) by extension 'ros'
+[0.559s] DEBUG:colcon.colcon_core.package_identification:Package 'moveit_servo' with type 'ros.ament_cmake' and name 'moveit_servo'
+[0.559s] Level 1:colcon.colcon_core.package_identification:_identify(point_motion) by extensions ['ignore', 'ignore_ament_install']
+[0.560s] Level 1:colcon.colcon_core.package_identification:_identify(point_motion) by extension 'ignore'
+[0.560s] Level 1:colcon.colcon_core.package_identification:_identify(point_motion) by extension 'ignore_ament_install'
+[0.560s] Level 1:colcon.colcon_core.package_identification:_identify(point_motion) by extensions ['colcon_pkg']
+[0.560s] Level 1:colcon.colcon_core.package_identification:_identify(point_motion) by extension 'colcon_pkg'
+[0.560s] Level 1:colcon.colcon_core.package_identification:_identify(point_motion) by extensions ['colcon_meta']
+[0.560s] Level 1:colcon.colcon_core.package_identification:_identify(point_motion) by extension 'colcon_meta'
+[0.560s] Level 1:colcon.colcon_core.package_identification:_identify(point_motion) by extensions ['ros']
+[0.560s] Level 1:colcon.colcon_core.package_identification:_identify(point_motion) by extension 'ros'
+[0.561s] DEBUG:colcon.colcon_core.package_identification:Package 'point_motion' with type 'ros.ament_cmake' and name 'point_motion'
+[0.561s] Level 1:colcon.colcon_core.package_identification:_identify(vision_tracker) by extensions ['ignore', 'ignore_ament_install']
+[0.561s] Level 1:colcon.colcon_core.package_identification:_identify(vision_tracker) by extension 'ignore'
+[0.561s] Level 1:colcon.colcon_core.package_identification:_identify(vision_tracker) by extension 'ignore_ament_install'
+[0.561s] Level 1:colcon.colcon_core.package_identification:_identify(vision_tracker) by extensions ['colcon_pkg']
+[0.561s] Level 1:colcon.colcon_core.package_identification:_identify(vision_tracker) by extension 'colcon_pkg'
+[0.561s] Level 1:colcon.colcon_core.package_identification:_identify(vision_tracker) by extensions ['colcon_meta']
+[0.561s] Level 1:colcon.colcon_core.package_identification:_identify(vision_tracker) by extension 'colcon_meta'
+[0.561s] Level 1:colcon.colcon_core.package_identification:_identify(vision_tracker) by extensions ['ros']
+[0.561s] Level 1:colcon.colcon_core.package_identification:_identify(vision_tracker) by extension 'ros'
+[0.562s] DEBUG:colcon.colcon_core.package_identification:Package 'vision_tracker' with type 'ros.ament_python' and name 'vision_tracker'
+[0.562s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.562s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.562s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.562s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.562s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.596s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.596s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.616s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 9 installed packages in /home/micha/RobotArm/ROS_WS/install
+[0.620s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 420 installed packages in /opt/ros/jazzy
+[0.622s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[0.785s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_endeffector_xyz' build argument 'cmake_args' from command line to 'None'
+[0.785s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_endeffector_xyz' build argument 'cmake_target' from command line to 'None'
+[0.785s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_endeffector_xyz' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.785s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_endeffector_xyz' build argument 'cmake_clean_cache' from command line to 'False'
+[0.785s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_endeffector_xyz' build argument 'cmake_clean_first' from command line to 'False'
+[0.785s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_endeffector_xyz' build argument 'cmake_force_configure' from command line to 'False'
+[0.785s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_endeffector_xyz' build argument 'ament_cmake_args' from command line to 'None'
+[0.785s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_endeffector_xyz' build argument 'catkin_cmake_args' from command line to 'None'
+[0.785s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_endeffector_xyz' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.785s] DEBUG:colcon.colcon_core.verb:Building package 'adi_4dof_endeffector_xyz' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz', 'merge_install': False, 'path': '/home/micha/RobotArm/ROS_WS/src/adi_4dof_endeffector_xyz', 'symlink_install': False, 'test_result_base': None}
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_ik_kinematics_plugin' build argument 'cmake_args' from command line to 'None'
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_ik_kinematics_plugin' build argument 'cmake_target' from command line to 'None'
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_ik_kinematics_plugin' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_ik_kinematics_plugin' build argument 'cmake_clean_cache' from command line to 'False'
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_ik_kinematics_plugin' build argument 'cmake_clean_first' from command line to 'False'
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_ik_kinematics_plugin' build argument 'cmake_force_configure' from command line to 'False'
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_ik_kinematics_plugin' build argument 'ament_cmake_args' from command line to 'None'
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_ik_kinematics_plugin' build argument 'catkin_cmake_args' from command line to 'None'
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_ik_kinematics_plugin' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.786s] DEBUG:colcon.colcon_core.verb:Building package 'adi_4dof_ik_kinematics_plugin' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin', 'merge_install': False, 'path': '/home/micha/RobotArm/ROS_WS/src/adi_4dof_ik/adi_4dof_ik_kinematics_plugin', 'symlink_install': False, 'test_result_base': None}
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_robotarm' build argument 'cmake_args' from command line to 'None'
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_robotarm' build argument 'cmake_target' from command line to 'None'
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_robotarm' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_robotarm' build argument 'cmake_clean_cache' from command line to 'False'
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_robotarm' build argument 'cmake_clean_first' from command line to 'False'
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_robotarm' build argument 'cmake_force_configure' from command line to 'False'
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_robotarm' build argument 'ament_cmake_args' from command line to 'None'
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_robotarm' build argument 'catkin_cmake_args' from command line to 'None'
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_robotarm' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.786s] DEBUG:colcon.colcon_core.verb:Building package 'adi_robotarm' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/micha/RobotArm/ROS_WS/src/build/adi_robotarm', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm', 'merge_install': False, 'path': '/home/micha/RobotArm/ROS_WS/src/adi_robotarm', 'symlink_install': False, 'test_result_base': None}
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_tmcm_bb4' build argument 'cmake_args' from command line to 'None'
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_tmcm_bb4' build argument 'cmake_target' from command line to 'None'
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_tmcm_bb4' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_tmcm_bb4' build argument 'cmake_clean_cache' from command line to 'False'
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_tmcm_bb4' build argument 'cmake_clean_first' from command line to 'False'
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_tmcm_bb4' build argument 'cmake_force_configure' from command line to 'False'
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_tmcm_bb4' build argument 'ament_cmake_args' from command line to 'None'
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_tmcm_bb4' build argument 'catkin_cmake_args' from command line to 'None'
+[0.786s] Level 5:colcon.colcon_core.verb:set package 'adi_tmcm_bb4' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.787s] DEBUG:colcon.colcon_core.verb:Building package 'adi_tmcm_bb4' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/micha/RobotArm/ROS_WS/src/build/adi_tmcm_bb4', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4', 'merge_install': False, 'path': '/home/micha/RobotArm/ROS_WS/src/adi_tmcm_bb4', 'symlink_install': False, 'test_result_base': None}
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'point_motion' build argument 'cmake_args' from command line to 'None'
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'point_motion' build argument 'cmake_target' from command line to 'None'
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'point_motion' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'point_motion' build argument 'cmake_clean_cache' from command line to 'False'
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'point_motion' build argument 'cmake_clean_first' from command line to 'False'
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'point_motion' build argument 'cmake_force_configure' from command line to 'False'
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'point_motion' build argument 'ament_cmake_args' from command line to 'None'
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'point_motion' build argument 'catkin_cmake_args' from command line to 'None'
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'point_motion' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.787s] DEBUG:colcon.colcon_core.verb:Building package 'point_motion' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/micha/RobotArm/ROS_WS/src/build/point_motion', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/micha/RobotArm/ROS_WS/src/install/point_motion', 'merge_install': False, 'path': '/home/micha/RobotArm/ROS_WS/src/point_motion', 'symlink_install': False, 'test_result_base': None}
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'vision_tracker' build argument 'cmake_args' from command line to 'None'
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'vision_tracker' build argument 'cmake_target' from command line to 'None'
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'vision_tracker' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'vision_tracker' build argument 'cmake_clean_cache' from command line to 'False'
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'vision_tracker' build argument 'cmake_clean_first' from command line to 'False'
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'vision_tracker' build argument 'cmake_force_configure' from command line to 'False'
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'vision_tracker' build argument 'ament_cmake_args' from command line to 'None'
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'vision_tracker' build argument 'catkin_cmake_args' from command line to 'None'
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'vision_tracker' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.787s] DEBUG:colcon.colcon_core.verb:Building package 'vision_tracker' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/micha/RobotArm/ROS_WS/src/build/vision_tracker', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/micha/RobotArm/ROS_WS/src/install/vision_tracker', 'merge_install': False, 'path': '/home/micha/RobotArm/ROS_WS/src/vision_tracker', 'symlink_install': False, 'test_result_base': None}
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_ik' build argument 'cmake_args' from command line to 'None'
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_ik' build argument 'cmake_target' from command line to 'None'
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_ik' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_ik' build argument 'cmake_clean_cache' from command line to 'False'
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_ik' build argument 'cmake_clean_first' from command line to 'False'
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_ik' build argument 'cmake_force_configure' from command line to 'False'
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_ik' build argument 'ament_cmake_args' from command line to 'None'
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_ik' build argument 'catkin_cmake_args' from command line to 'None'
+[0.787s] Level 5:colcon.colcon_core.verb:set package 'adi_4dof_ik' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.787s] DEBUG:colcon.colcon_core.verb:Building package 'adi_4dof_ik' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik', 'merge_install': False, 'path': '/home/micha/RobotArm/ROS_WS/src/adi_4dof_ik/adi_4dof_ik', 'symlink_install': False, 'test_result_base': None}
+[0.788s] Level 5:colcon.colcon_core.verb:set package 'adi_robotarm_moveit_config' build argument 'cmake_args' from command line to 'None'
+[0.788s] Level 5:colcon.colcon_core.verb:set package 'adi_robotarm_moveit_config' build argument 'cmake_target' from command line to 'None'
+[0.788s] Level 5:colcon.colcon_core.verb:set package 'adi_robotarm_moveit_config' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.788s] Level 5:colcon.colcon_core.verb:set package 'adi_robotarm_moveit_config' build argument 'cmake_clean_cache' from command line to 'False'
+[0.788s] Level 5:colcon.colcon_core.verb:set package 'adi_robotarm_moveit_config' build argument 'cmake_clean_first' from command line to 'False'
+[0.788s] Level 5:colcon.colcon_core.verb:set package 'adi_robotarm_moveit_config' build argument 'cmake_force_configure' from command line to 'False'
+[0.788s] Level 5:colcon.colcon_core.verb:set package 'adi_robotarm_moveit_config' build argument 'ament_cmake_args' from command line to 'None'
+[0.788s] Level 5:colcon.colcon_core.verb:set package 'adi_robotarm_moveit_config' build argument 'catkin_cmake_args' from command line to 'None'
+[0.788s] Level 5:colcon.colcon_core.verb:set package 'adi_robotarm_moveit_config' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.788s] DEBUG:colcon.colcon_core.verb:Building package 'adi_robotarm_moveit_config' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/micha/RobotArm/ROS_WS/src/build/adi_robotarm_moveit_config', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config', 'merge_install': False, 'path': '/home/micha/RobotArm/ROS_WS/src/adi_robotarm_moveit_config', 'symlink_install': False, 'test_result_base': None}
+[0.788s] Level 5:colcon.colcon_core.verb:set package 'moveit_servo' build argument 'cmake_args' from command line to 'None'
+[0.788s] Level 5:colcon.colcon_core.verb:set package 'moveit_servo' build argument 'cmake_target' from command line to 'None'
+[0.788s] Level 5:colcon.colcon_core.verb:set package 'moveit_servo' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.788s] Level 5:colcon.colcon_core.verb:set package 'moveit_servo' build argument 'cmake_clean_cache' from command line to 'False'
+[0.788s] Level 5:colcon.colcon_core.verb:set package 'moveit_servo' build argument 'cmake_clean_first' from command line to 'False'
+[0.788s] Level 5:colcon.colcon_core.verb:set package 'moveit_servo' build argument 'cmake_force_configure' from command line to 'False'
+[0.788s] Level 5:colcon.colcon_core.verb:set package 'moveit_servo' build argument 'ament_cmake_args' from command line to 'None'
+[0.788s] Level 5:colcon.colcon_core.verb:set package 'moveit_servo' build argument 'catkin_cmake_args' from command line to 'None'
+[0.788s] Level 5:colcon.colcon_core.verb:set package 'moveit_servo' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.788s] DEBUG:colcon.colcon_core.verb:Building package 'moveit_servo' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/micha/RobotArm/ROS_WS/src/build/moveit_servo', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo', 'merge_install': False, 'path': '/home/micha/RobotArm/ROS_WS/src/moveit_servo', 'symlink_install': False, 'test_result_base': None}
+[0.788s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.789s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.790s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/micha/RobotArm/ROS_WS/src/adi_robotarm' with build type 'ament_cmake'
+[0.790s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/micha/RobotArm/ROS_WS/src/adi_robotarm'
+[0.799s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.799s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.800s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.805s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/micha/RobotArm/ROS_WS/src/adi_4dof_ik/adi_4dof_ik_kinematics_plugin' with build type 'ament_cmake'
+[0.805s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/micha/RobotArm/ROS_WS/src/adi_4dof_ik/adi_4dof_ik_kinematics_plugin'
+[0.806s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.806s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.811s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/micha/RobotArm/ROS_WS/src/adi_4dof_endeffector_xyz' with build type 'ament_cmake'
+[0.811s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/micha/RobotArm/ROS_WS/src/adi_4dof_endeffector_xyz'
+[0.811s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.811s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.816s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/micha/RobotArm/ROS_WS/src/adi_tmcm_bb4' with build type 'ament_cmake'
+[0.816s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/micha/RobotArm/ROS_WS/src/adi_tmcm_bb4'
+[0.816s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.816s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.821s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/micha/RobotArm/ROS_WS/src/point_motion' with build type 'ament_cmake'
+[0.821s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/micha/RobotArm/ROS_WS/src/point_motion'
+[0.821s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.821s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.826s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/micha/RobotArm/ROS_WS/src/vision_tracker' with build type 'ament_python'
+[0.826s] Level 1:colcon.colcon_core.shell:create_environment_hook('vision_tracker', 'ament_prefix_path')
+[0.826s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/vision_tracker/share/vision_tracker/hook/ament_prefix_path.ps1'
+[0.828s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/micha/RobotArm/ROS_WS/src/install/vision_tracker/share/vision_tracker/hook/ament_prefix_path.dsv'
+[0.829s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/vision_tracker/share/vision_tracker/hook/ament_prefix_path.sh'
+[0.831s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.831s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.842s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/adi_robotarm': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/micha/RobotArm/ROS_WS/src/build/adi_robotarm -- -j8 -l8
+[0.854s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin -- -j8 -l8
+[0.857s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz -- -j8 -l8
+[0.861s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/adi_tmcm_bb4': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/micha/RobotArm/ROS_WS/src/build/adi_tmcm_bb4 -- -j8 -l8
+[0.867s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/point_motion': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/micha/RobotArm/ROS_WS/src/build/point_motion -- -j8 -l8
+[1.152s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/micha/RobotArm/ROS_WS/src/vision_tracker'
+[1.152s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.153s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.160s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/adi_robotarm' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/micha/RobotArm/ROS_WS/src/build/adi_robotarm -- -j8 -l8
+[1.170s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/adi_robotarm': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/micha/RobotArm/ROS_WS/src/build/adi_robotarm
+[1.171s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin -- -j8 -l8
+[1.172s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin
+[1.173s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/point_motion' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/micha/RobotArm/ROS_WS/src/build/point_motion -- -j8 -l8
+[1.174s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/point_motion': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/micha/RobotArm/ROS_WS/src/build/point_motion
+[1.175s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz -- -j8 -l8
+[1.178s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz
+[1.180s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/adi_tmcm_bb4' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/micha/RobotArm/ROS_WS/src/build/adi_tmcm_bb4 -- -j8 -l8
+[1.203s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/adi_tmcm_bb4': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/micha/RobotArm/ROS_WS/src/build/adi_tmcm_bb4
+[1.215s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(adi_robotarm)
+[1.216s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/adi_robotarm' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/micha/RobotArm/ROS_WS/src/build/adi_robotarm
+[1.224s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm' for CMake module files
+[1.224s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm' for CMake config files
+[1.224s] Level 1:colcon.colcon_core.shell:create_environment_hook('adi_robotarm', 'cmake_prefix_path')
+[1.224s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/hook/cmake_prefix_path.ps1'
+[1.225s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/hook/cmake_prefix_path.dsv'
+[1.225s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/hook/cmake_prefix_path.sh'
+[1.226s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/bin'
+[1.226s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/lib/pkgconfig/adi_robotarm.pc'
+[1.226s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/lib/python3.12/site-packages'
+[1.226s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/bin'
+[1.226s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/package.ps1'
+[1.228s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/package.dsv'
+[1.228s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/package.sh'
+[1.229s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/package.bash'
+[1.230s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/package.zsh'
+[1.231s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/colcon-core/packages/adi_robotarm)
+[1.231s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(adi_robotarm)
+[1.231s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm' for CMake module files
+[1.232s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm' for CMake config files
+[1.232s] Level 1:colcon.colcon_core.shell:create_environment_hook('adi_robotarm', 'cmake_prefix_path')
+[1.232s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/hook/cmake_prefix_path.ps1'
+[1.232s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/hook/cmake_prefix_path.dsv'
+[1.233s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/hook/cmake_prefix_path.sh'
+[1.233s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/bin'
+[1.233s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/lib/pkgconfig/adi_robotarm.pc'
+[1.234s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/lib/python3.12/site-packages'
+[1.234s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/bin'
+[1.234s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/package.ps1'
+[1.235s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/package.dsv'
+[1.235s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/package.sh'
+[1.236s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/package.bash'
+[1.236s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/package.zsh'
+[1.237s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/colcon-core/packages/adi_robotarm)
+[1.237s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(adi_4dof_ik_kinematics_plugin)
+[1.237s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin' for CMake module files
+[1.240s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin
+[1.240s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin' for CMake config files
+[1.240s] Level 1:colcon.colcon_core.shell:create_environment_hook('adi_4dof_ik_kinematics_plugin', 'cmake_prefix_path')
+[1.241s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/hook/cmake_prefix_path.ps1'
+[1.241s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/hook/cmake_prefix_path.dsv'
+[1.242s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/hook/cmake_prefix_path.sh'
+[1.242s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/lib'
+[1.242s] Level 1:colcon.colcon_core.shell:create_environment_hook('adi_4dof_ik_kinematics_plugin', 'ld_library_path_lib')
+[1.243s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/hook/ld_library_path_lib.ps1'
+[1.243s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/hook/ld_library_path_lib.dsv'
+[1.243s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/hook/ld_library_path_lib.sh'
+[1.243s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/bin'
+[1.243s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/lib/pkgconfig/adi_4dof_ik_kinematics_plugin.pc'
+[1.244s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/lib/python3.12/site-packages'
+[1.244s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/bin'
+[1.244s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/package.ps1'
+[1.245s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/package.dsv'
+[1.245s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/package.sh'
+[1.245s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/package.bash'
+[1.246s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/package.zsh'
+[1.246s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/colcon-core/packages/adi_4dof_ik_kinematics_plugin)
+[1.246s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(adi_4dof_ik_kinematics_plugin)
+[1.246s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin' for CMake module files
+[1.247s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin' for CMake config files
+[1.247s] Level 1:colcon.colcon_core.shell:create_environment_hook('adi_4dof_ik_kinematics_plugin', 'cmake_prefix_path')
+[1.247s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/hook/cmake_prefix_path.ps1'
+[1.248s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/hook/cmake_prefix_path.dsv'
+[1.248s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/hook/cmake_prefix_path.sh'
+[1.249s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/lib'
+[1.249s] Level 1:colcon.colcon_core.shell:create_environment_hook('adi_4dof_ik_kinematics_plugin', 'ld_library_path_lib')
+[1.249s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/hook/ld_library_path_lib.ps1'
+[1.250s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/hook/ld_library_path_lib.dsv'
+[1.250s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/hook/ld_library_path_lib.sh'
+[1.251s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/bin'
+[1.251s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/lib/pkgconfig/adi_4dof_ik_kinematics_plugin.pc'
+[1.251s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/lib/python3.12/site-packages'
+[1.251s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/bin'
+[1.252s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/package.ps1'
+[1.252s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/package.dsv'
+[1.252s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/package.sh'
+[1.253s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/package.bash'
+[1.253s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/adi_4dof_ik_kinematics_plugin/package.zsh'
+[1.253s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/share/colcon-core/packages/adi_4dof_ik_kinematics_plugin)
+[1.254s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(adi_4dof_endeffector_xyz)
+[1.254s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz' for CMake module files
+[1.256s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz
+[1.256s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz' for CMake config files
+[1.256s] Level 1:colcon.colcon_core.shell:create_environment_hook('adi_4dof_endeffector_xyz', 'cmake_prefix_path')
+[1.257s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/hook/cmake_prefix_path.ps1'
+[1.257s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/hook/cmake_prefix_path.dsv'
+[1.257s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/hook/cmake_prefix_path.sh'
+[1.258s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/lib'
+[1.258s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/bin'
+[1.258s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/lib/pkgconfig/adi_4dof_endeffector_xyz.pc'
+[1.258s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/lib/python3.12/site-packages'
+[1.259s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/bin'
+[1.259s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/package.ps1'
+[1.259s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/package.dsv'
+[1.260s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/package.sh'
+[1.260s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/package.bash'
+[1.260s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/package.zsh'
+[1.260s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/colcon-core/packages/adi_4dof_endeffector_xyz)
+[1.261s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(adi_4dof_endeffector_xyz)
+[1.261s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz' for CMake module files
+[1.261s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz' for CMake config files
+[1.261s] Level 1:colcon.colcon_core.shell:create_environment_hook('adi_4dof_endeffector_xyz', 'cmake_prefix_path')
+[1.262s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/hook/cmake_prefix_path.ps1'
+[1.262s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/hook/cmake_prefix_path.dsv'
+[1.262s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/hook/cmake_prefix_path.sh'
+[1.263s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/lib'
+[1.263s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/bin'
+[1.263s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/lib/pkgconfig/adi_4dof_endeffector_xyz.pc'
+[1.263s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/lib/python3.12/site-packages'
+[1.263s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/bin'
+[1.263s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/package.ps1'
+[1.264s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/package.dsv'
+[1.265s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/package.sh'
+[1.265s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/package.bash'
+[1.266s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/package.zsh'
+[1.266s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/colcon-core/packages/adi_4dof_endeffector_xyz)
+[1.266s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(point_motion)
+[1.267s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/point_motion' for CMake module files
+[1.269s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/point_motion' for CMake config files
+[1.270s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/point_motion' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/micha/RobotArm/ROS_WS/src/build/point_motion
+[1.270s] Level 1:colcon.colcon_core.shell:create_environment_hook('point_motion', 'cmake_prefix_path')
+[1.270s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/hook/cmake_prefix_path.ps1'
+[1.270s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/hook/cmake_prefix_path.dsv'
+[1.271s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/hook/cmake_prefix_path.sh'
+[1.271s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/point_motion/lib'
+[1.271s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/point_motion/bin'
+[1.271s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/point_motion/lib/pkgconfig/point_motion.pc'
+[1.272s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/point_motion/lib/python3.12/site-packages'
+[1.272s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/point_motion/bin'
+[1.272s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/package.ps1'
+[1.272s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/package.dsv'
+[1.273s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/package.sh'
+[1.273s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/package.bash'
+[1.273s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/package.zsh'
+[1.274s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/micha/RobotArm/ROS_WS/src/install/point_motion/share/colcon-core/packages/point_motion)
+[1.274s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(point_motion)
+[1.274s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/point_motion' for CMake module files
+[1.275s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/point_motion' for CMake config files
+[1.275s] Level 1:colcon.colcon_core.shell:create_environment_hook('point_motion', 'cmake_prefix_path')
+[1.275s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/hook/cmake_prefix_path.ps1'
+[1.275s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/hook/cmake_prefix_path.dsv'
+[1.275s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/hook/cmake_prefix_path.sh'
+[1.276s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/point_motion/lib'
+[1.276s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/point_motion/bin'
+[1.276s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/point_motion/lib/pkgconfig/point_motion.pc'
+[1.276s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/point_motion/lib/python3.12/site-packages'
+[1.276s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/point_motion/bin'
+[1.277s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/package.ps1'
+[1.277s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/package.dsv'
+[1.277s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/package.sh'
+[1.278s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/package.bash'
+[1.278s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/package.zsh'
+[1.278s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/micha/RobotArm/ROS_WS/src/install/point_motion/share/colcon-core/packages/point_motion)
+[1.279s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(adi_tmcm_bb4)
+[1.279s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4' for CMake module files
+[1.281s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4' for CMake config files
+[1.282s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/adi_tmcm_bb4' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/micha/RobotArm/ROS_WS/src/build/adi_tmcm_bb4
+[1.283s] Level 1:colcon.colcon_core.shell:create_environment_hook('adi_tmcm_bb4', 'cmake_prefix_path')
+[1.283s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/hook/cmake_prefix_path.ps1'
+[1.283s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/hook/cmake_prefix_path.dsv'
+[1.284s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/hook/cmake_prefix_path.sh'
+[1.284s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/lib'
+[1.284s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/bin'
+[1.284s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/lib/pkgconfig/adi_tmcm_bb4.pc'
+[1.284s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/lib/python3.12/site-packages'
+[1.285s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/bin'
+[1.285s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/package.ps1'
+[1.285s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/package.dsv'
+[1.286s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/package.sh'
+[1.286s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/package.bash'
+[1.286s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/package.zsh'
+[1.287s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/colcon-core/packages/adi_tmcm_bb4)
+[1.287s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(adi_tmcm_bb4)
+[1.287s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4' for CMake module files
+[1.288s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4' for CMake config files
+[1.288s] Level 1:colcon.colcon_core.shell:create_environment_hook('adi_tmcm_bb4', 'cmake_prefix_path')
+[1.288s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/hook/cmake_prefix_path.ps1'
+[1.288s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/hook/cmake_prefix_path.dsv'
+[1.288s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/hook/cmake_prefix_path.sh'
+[1.289s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/lib'
+[1.289s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/bin'
+[1.289s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/lib/pkgconfig/adi_tmcm_bb4.pc'
+[1.289s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/lib/python3.12/site-packages'
+[1.290s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/bin'
+[1.290s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/package.ps1'
+[1.291s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/package.dsv'
+[1.291s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/package.sh'
+[1.291s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/package.bash'
+[1.292s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/package.zsh'
+[1.292s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/colcon-core/packages/adi_tmcm_bb4)
+[1.293s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/micha/RobotArm/ROS_WS/src/adi_4dof_ik/adi_4dof_ik' with build type 'ament_cmake'
+[1.293s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/micha/RobotArm/ROS_WS/src/adi_4dof_ik/adi_4dof_ik'
+[1.293s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.293s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.313s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/micha/RobotArm/ROS_WS/src/adi_robotarm_moveit_config' with build type 'ament_cmake'
+[1.314s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/micha/RobotArm/ROS_WS/src/adi_robotarm_moveit_config'
+[1.314s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.314s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.321s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/micha/RobotArm/ROS_WS/src/moveit_servo' with build type 'ament_cmake'
+[1.321s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/micha/RobotArm/ROS_WS/src/moveit_servo'
+[1.321s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.322s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.387s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/adi_robotarm_moveit_config': AMENT_PREFIX_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm:/home/micha/RobotArm/ROS_WS/install/point_motion:/home/micha/RobotArm/ROS_WS/install/adi_tmcm_bb4:/home/micha/RobotArm/ROS_WS/install/adi_robotarm_moveit_config:/home/micha/RobotArm/ROS_WS/install/adi_robotarm:/home/micha/RobotArm/ROS_WS/install/adi_4dof_ik:/home/micha/RobotArm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/micha/RobotArm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/gz_sim_vendor:/opt/ros/jazzy/opt/gz_sensors_vendor:/opt/ros/jazzy/opt/gz_physics_vendor:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_gui_vendor:/opt/ros/jazzy/opt/gz_transport_vendor:/opt/ros/jazzy/opt/gz_rendering_vendor:/opt/ros/jazzy/opt/gz_plugin_vendor:/opt/ros/jazzy/opt/gz_fuel_tools_vendor:/opt/ros/jazzy/opt/gz_msgs_vendor:/opt/ros/jazzy/opt/gz_common_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_ogre_next_vendor:/opt/ros/jazzy/opt/gz_dartsim_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/micha/RobotArm/ROS_WS/src/build/adi_robotarm_moveit_config -- -j8 -l8
+[1.393s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/moveit_servo': AMENT_PREFIX_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm:/home/micha/RobotArm/ROS_WS/install/point_motion:/home/micha/RobotArm/ROS_WS/install/adi_tmcm_bb4:/home/micha/RobotArm/ROS_WS/install/adi_robotarm_moveit_config:/home/micha/RobotArm/ROS_WS/install/adi_robotarm:/home/micha/RobotArm/ROS_WS/install/adi_4dof_ik:/home/micha/RobotArm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/micha/RobotArm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/gz_sim_vendor:/opt/ros/jazzy/opt/gz_sensors_vendor:/opt/ros/jazzy/opt/gz_physics_vendor:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_gui_vendor:/opt/ros/jazzy/opt/gz_transport_vendor:/opt/ros/jazzy/opt/gz_rendering_vendor:/opt/ros/jazzy/opt/gz_plugin_vendor:/opt/ros/jazzy/opt/gz_fuel_tools_vendor:/opt/ros/jazzy/opt/gz_msgs_vendor:/opt/ros/jazzy/opt/gz_common_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_ogre_next_vendor:/opt/ros/jazzy/opt/gz_dartsim_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/micha/RobotArm/ROS_WS/src/build/moveit_servo -- -j8 -l8
+[1.438s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/adi_robotarm_moveit_config' returned '0': AMENT_PREFIX_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm:/home/micha/RobotArm/ROS_WS/install/point_motion:/home/micha/RobotArm/ROS_WS/install/adi_tmcm_bb4:/home/micha/RobotArm/ROS_WS/install/adi_robotarm_moveit_config:/home/micha/RobotArm/ROS_WS/install/adi_robotarm:/home/micha/RobotArm/ROS_WS/install/adi_4dof_ik:/home/micha/RobotArm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/micha/RobotArm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/gz_sim_vendor:/opt/ros/jazzy/opt/gz_sensors_vendor:/opt/ros/jazzy/opt/gz_physics_vendor:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_gui_vendor:/opt/ros/jazzy/opt/gz_transport_vendor:/opt/ros/jazzy/opt/gz_rendering_vendor:/opt/ros/jazzy/opt/gz_plugin_vendor:/opt/ros/jazzy/opt/gz_fuel_tools_vendor:/opt/ros/jazzy/opt/gz_msgs_vendor:/opt/ros/jazzy/opt/gz_common_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_ogre_next_vendor:/opt/ros/jazzy/opt/gz_dartsim_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/micha/RobotArm/ROS_WS/src/build/adi_robotarm_moveit_config -- -j8 -l8
+[1.439s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/adi_robotarm_moveit_config': AMENT_PREFIX_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm:/home/micha/RobotArm/ROS_WS/install/point_motion:/home/micha/RobotArm/ROS_WS/install/adi_tmcm_bb4:/home/micha/RobotArm/ROS_WS/install/adi_robotarm_moveit_config:/home/micha/RobotArm/ROS_WS/install/adi_robotarm:/home/micha/RobotArm/ROS_WS/install/adi_4dof_ik:/home/micha/RobotArm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/micha/RobotArm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/gz_sim_vendor:/opt/ros/jazzy/opt/gz_sensors_vendor:/opt/ros/jazzy/opt/gz_physics_vendor:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_gui_vendor:/opt/ros/jazzy/opt/gz_transport_vendor:/opt/ros/jazzy/opt/gz_rendering_vendor:/opt/ros/jazzy/opt/gz_plugin_vendor:/opt/ros/jazzy/opt/gz_fuel_tools_vendor:/opt/ros/jazzy/opt/gz_msgs_vendor:/opt/ros/jazzy/opt/gz_common_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_ogre_next_vendor:/opt/ros/jazzy/opt/gz_dartsim_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/micha/RobotArm/ROS_WS/src/build/adi_robotarm_moveit_config
+[1.447s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik': AMENT_PREFIX_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin:/home/micha/RobotArm/ROS_WS/install/point_motion:/home/micha/RobotArm/ROS_WS/install/adi_tmcm_bb4:/home/micha/RobotArm/ROS_WS/install/adi_robotarm_moveit_config:/home/micha/RobotArm/ROS_WS/install/adi_robotarm:/home/micha/RobotArm/ROS_WS/install/adi_4dof_ik:/home/micha/RobotArm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/micha/RobotArm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/gz_sim_vendor:/opt/ros/jazzy/opt/gz_sensors_vendor:/opt/ros/jazzy/opt/gz_physics_vendor:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_gui_vendor:/opt/ros/jazzy/opt/gz_transport_vendor:/opt/ros/jazzy/opt/gz_rendering_vendor:/opt/ros/jazzy/opt/gz_plugin_vendor:/opt/ros/jazzy/opt/gz_fuel_tools_vendor:/opt/ros/jazzy/opt/gz_msgs_vendor:/opt/ros/jazzy/opt/gz_common_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_ogre_next_vendor:/opt/ros/jazzy/opt/gz_dartsim_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy LD_LIBRARY_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/lib:${LD_LIBRARY_PATH} /usr/bin/cmake --build /home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik -- -j8 -l8
+[1.447s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/moveit_servo' returned '0': AMENT_PREFIX_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm:/home/micha/RobotArm/ROS_WS/install/point_motion:/home/micha/RobotArm/ROS_WS/install/adi_tmcm_bb4:/home/micha/RobotArm/ROS_WS/install/adi_robotarm_moveit_config:/home/micha/RobotArm/ROS_WS/install/adi_robotarm:/home/micha/RobotArm/ROS_WS/install/adi_4dof_ik:/home/micha/RobotArm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/micha/RobotArm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/gz_sim_vendor:/opt/ros/jazzy/opt/gz_sensors_vendor:/opt/ros/jazzy/opt/gz_physics_vendor:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_gui_vendor:/opt/ros/jazzy/opt/gz_transport_vendor:/opt/ros/jazzy/opt/gz_rendering_vendor:/opt/ros/jazzy/opt/gz_plugin_vendor:/opt/ros/jazzy/opt/gz_fuel_tools_vendor:/opt/ros/jazzy/opt/gz_msgs_vendor:/opt/ros/jazzy/opt/gz_common_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_ogre_next_vendor:/opt/ros/jazzy/opt/gz_dartsim_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/micha/RobotArm/ROS_WS/src/build/moveit_servo -- -j8 -l8
+[1.449s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/moveit_servo': AMENT_PREFIX_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm:/home/micha/RobotArm/ROS_WS/install/point_motion:/home/micha/RobotArm/ROS_WS/install/adi_tmcm_bb4:/home/micha/RobotArm/ROS_WS/install/adi_robotarm_moveit_config:/home/micha/RobotArm/ROS_WS/install/adi_robotarm:/home/micha/RobotArm/ROS_WS/install/adi_4dof_ik:/home/micha/RobotArm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/micha/RobotArm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/gz_sim_vendor:/opt/ros/jazzy/opt/gz_sensors_vendor:/opt/ros/jazzy/opt/gz_physics_vendor:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_gui_vendor:/opt/ros/jazzy/opt/gz_transport_vendor:/opt/ros/jazzy/opt/gz_rendering_vendor:/opt/ros/jazzy/opt/gz_plugin_vendor:/opt/ros/jazzy/opt/gz_fuel_tools_vendor:/opt/ros/jazzy/opt/gz_msgs_vendor:/opt/ros/jazzy/opt/gz_common_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_ogre_next_vendor:/opt/ros/jazzy/opt/gz_dartsim_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/micha/RobotArm/ROS_WS/src/build/moveit_servo
+[1.465s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(adi_robotarm_moveit_config)
+[1.465s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config' for CMake module files
+[1.471s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/adi_robotarm_moveit_config' returned '0': AMENT_PREFIX_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm:/home/micha/RobotArm/ROS_WS/install/point_motion:/home/micha/RobotArm/ROS_WS/install/adi_tmcm_bb4:/home/micha/RobotArm/ROS_WS/install/adi_robotarm_moveit_config:/home/micha/RobotArm/ROS_WS/install/adi_robotarm:/home/micha/RobotArm/ROS_WS/install/adi_4dof_ik:/home/micha/RobotArm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/micha/RobotArm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/gz_sim_vendor:/opt/ros/jazzy/opt/gz_sensors_vendor:/opt/ros/jazzy/opt/gz_physics_vendor:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_gui_vendor:/opt/ros/jazzy/opt/gz_transport_vendor:/opt/ros/jazzy/opt/gz_rendering_vendor:/opt/ros/jazzy/opt/gz_plugin_vendor:/opt/ros/jazzy/opt/gz_fuel_tools_vendor:/opt/ros/jazzy/opt/gz_msgs_vendor:/opt/ros/jazzy/opt/gz_common_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_ogre_next_vendor:/opt/ros/jazzy/opt/gz_dartsim_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/micha/RobotArm/ROS_WS/src/build/adi_robotarm_moveit_config
+[1.472s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config' for CMake config files
+[1.472s] Level 1:colcon.colcon_core.shell:create_environment_hook('adi_robotarm_moveit_config', 'cmake_prefix_path')
+[1.472s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config/share/adi_robotarm_moveit_config/hook/cmake_prefix_path.ps1'
+[1.472s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config/share/adi_robotarm_moveit_config/hook/cmake_prefix_path.dsv'
+[1.473s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config/share/adi_robotarm_moveit_config/hook/cmake_prefix_path.sh'
+[1.473s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config/bin'
+[1.474s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config/lib/pkgconfig/adi_robotarm_moveit_config.pc'
+[1.474s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config/lib/python3.12/site-packages'
+[1.474s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config/bin'
+[1.474s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config/share/adi_robotarm_moveit_config/package.ps1'
+[1.475s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config/share/adi_robotarm_moveit_config/package.dsv'
+[1.475s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config/share/adi_robotarm_moveit_config/package.sh'
+[1.476s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config/share/adi_robotarm_moveit_config/package.bash'
+[1.476s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config/share/adi_robotarm_moveit_config/package.zsh'
+[1.476s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config/share/colcon-core/packages/adi_robotarm_moveit_config)
+[1.477s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(adi_robotarm_moveit_config)
+[1.477s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config' for CMake module files
+[1.477s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config' for CMake config files
+[1.477s] Level 1:colcon.colcon_core.shell:create_environment_hook('adi_robotarm_moveit_config', 'cmake_prefix_path')
+[1.477s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config/share/adi_robotarm_moveit_config/hook/cmake_prefix_path.ps1'
+[1.478s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config/share/adi_robotarm_moveit_config/hook/cmake_prefix_path.dsv'
+[1.478s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config/share/adi_robotarm_moveit_config/hook/cmake_prefix_path.sh'
+[1.479s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config/bin'
+[1.479s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config/lib/pkgconfig/adi_robotarm_moveit_config.pc'
+[1.479s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config/lib/python3.12/site-packages'
+[1.479s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config/bin'
+[1.479s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config/share/adi_robotarm_moveit_config/package.ps1'
+[1.480s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config/share/adi_robotarm_moveit_config/package.dsv'
+[1.480s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config/share/adi_robotarm_moveit_config/package.sh'
+[1.481s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config/share/adi_robotarm_moveit_config/package.bash'
+[1.481s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config/share/adi_robotarm_moveit_config/package.zsh'
+[1.481s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm_moveit_config/share/colcon-core/packages/adi_robotarm_moveit_config)
+[1.484s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(moveit_servo)
+[1.484s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo' for CMake module files
+[1.486s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/moveit_servo' returned '0': AMENT_PREFIX_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_robotarm:/home/micha/RobotArm/ROS_WS/install/point_motion:/home/micha/RobotArm/ROS_WS/install/adi_tmcm_bb4:/home/micha/RobotArm/ROS_WS/install/adi_robotarm_moveit_config:/home/micha/RobotArm/ROS_WS/install/adi_robotarm:/home/micha/RobotArm/ROS_WS/install/adi_4dof_ik:/home/micha/RobotArm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/micha/RobotArm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/gz_sim_vendor:/opt/ros/jazzy/opt/gz_sensors_vendor:/opt/ros/jazzy/opt/gz_physics_vendor:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_gui_vendor:/opt/ros/jazzy/opt/gz_transport_vendor:/opt/ros/jazzy/opt/gz_rendering_vendor:/opt/ros/jazzy/opt/gz_plugin_vendor:/opt/ros/jazzy/opt/gz_fuel_tools_vendor:/opt/ros/jazzy/opt/gz_msgs_vendor:/opt/ros/jazzy/opt/gz_common_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_ogre_next_vendor:/opt/ros/jazzy/opt/gz_dartsim_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/micha/RobotArm/ROS_WS/src/build/moveit_servo
+[1.486s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo' for CMake config files
+[1.487s] Level 1:colcon.colcon_core.shell:create_environment_hook('moveit_servo', 'cmake_prefix_path')
+[1.487s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/hook/cmake_prefix_path.ps1'
+[1.487s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/hook/cmake_prefix_path.dsv'
+[1.487s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/hook/cmake_prefix_path.sh'
+[1.488s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo/bin'
+[1.488s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo/lib/pkgconfig/moveit_servo.pc'
+[1.488s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo/lib/python3.12/site-packages'
+[1.489s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo/bin'
+[1.489s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/package.ps1'
+[1.489s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/package.dsv'
+[1.490s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/package.sh'
+[1.490s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/package.bash'
+[1.491s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/package.zsh'
+[1.491s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/colcon-core/packages/moveit_servo)
+[1.492s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(moveit_servo)
+[1.492s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo' for CMake module files
+[1.492s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo' for CMake config files
+[1.492s] Level 1:colcon.colcon_core.shell:create_environment_hook('moveit_servo', 'cmake_prefix_path')
+[1.492s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/hook/cmake_prefix_path.ps1'
+[1.493s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/hook/cmake_prefix_path.dsv'
+[1.493s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/hook/cmake_prefix_path.sh'
+[1.494s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo/bin'
+[1.494s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo/lib/pkgconfig/moveit_servo.pc'
+[1.494s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo/lib/python3.12/site-packages'
+[1.494s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo/bin'
+[1.494s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/package.ps1'
+[1.495s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/package.dsv'
+[1.495s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/package.sh'
+[1.496s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/package.bash'
+[1.496s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/package.zsh'
+[1.496s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/colcon-core/packages/moveit_servo)
+[1.498s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik' returned '0': AMENT_PREFIX_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin:/home/micha/RobotArm/ROS_WS/install/point_motion:/home/micha/RobotArm/ROS_WS/install/adi_tmcm_bb4:/home/micha/RobotArm/ROS_WS/install/adi_robotarm_moveit_config:/home/micha/RobotArm/ROS_WS/install/adi_robotarm:/home/micha/RobotArm/ROS_WS/install/adi_4dof_ik:/home/micha/RobotArm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/micha/RobotArm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/gz_sim_vendor:/opt/ros/jazzy/opt/gz_sensors_vendor:/opt/ros/jazzy/opt/gz_physics_vendor:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_gui_vendor:/opt/ros/jazzy/opt/gz_transport_vendor:/opt/ros/jazzy/opt/gz_rendering_vendor:/opt/ros/jazzy/opt/gz_plugin_vendor:/opt/ros/jazzy/opt/gz_fuel_tools_vendor:/opt/ros/jazzy/opt/gz_msgs_vendor:/opt/ros/jazzy/opt/gz_common_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_ogre_next_vendor:/opt/ros/jazzy/opt/gz_dartsim_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy LD_LIBRARY_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/lib:${LD_LIBRARY_PATH} /usr/bin/cmake --build /home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik -- -j8 -l8
+[1.500s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik': AMENT_PREFIX_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin:/home/micha/RobotArm/ROS_WS/install/point_motion:/home/micha/RobotArm/ROS_WS/install/adi_tmcm_bb4:/home/micha/RobotArm/ROS_WS/install/adi_robotarm_moveit_config:/home/micha/RobotArm/ROS_WS/install/adi_robotarm:/home/micha/RobotArm/ROS_WS/install/adi_4dof_ik:/home/micha/RobotArm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/micha/RobotArm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/gz_sim_vendor:/opt/ros/jazzy/opt/gz_sensors_vendor:/opt/ros/jazzy/opt/gz_physics_vendor:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_gui_vendor:/opt/ros/jazzy/opt/gz_transport_vendor:/opt/ros/jazzy/opt/gz_rendering_vendor:/opt/ros/jazzy/opt/gz_plugin_vendor:/opt/ros/jazzy/opt/gz_fuel_tools_vendor:/opt/ros/jazzy/opt/gz_msgs_vendor:/opt/ros/jazzy/opt/gz_common_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_ogre_next_vendor:/opt/ros/jazzy/opt/gz_dartsim_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy LD_LIBRARY_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/lib:${LD_LIBRARY_PATH} /usr/bin/cmake --install /home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik
+[1.515s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(adi_4dof_ik)
+[1.515s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik' returned '0': AMENT_PREFIX_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin:/home/micha/RobotArm/ROS_WS/install/point_motion:/home/micha/RobotArm/ROS_WS/install/adi_tmcm_bb4:/home/micha/RobotArm/ROS_WS/install/adi_robotarm_moveit_config:/home/micha/RobotArm/ROS_WS/install/adi_robotarm:/home/micha/RobotArm/ROS_WS/install/adi_4dof_ik:/home/micha/RobotArm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/micha/RobotArm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/gz_sim_vendor:/opt/ros/jazzy/opt/gz_sensors_vendor:/opt/ros/jazzy/opt/gz_physics_vendor:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_gui_vendor:/opt/ros/jazzy/opt/gz_transport_vendor:/opt/ros/jazzy/opt/gz_rendering_vendor:/opt/ros/jazzy/opt/gz_plugin_vendor:/opt/ros/jazzy/opt/gz_fuel_tools_vendor:/opt/ros/jazzy/opt/gz_msgs_vendor:/opt/ros/jazzy/opt/gz_common_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_ogre_next_vendor:/opt/ros/jazzy/opt/gz_dartsim_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy LD_LIBRARY_PATH=/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik_kinematics_plugin/lib:${LD_LIBRARY_PATH} /usr/bin/cmake --install /home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik
+[1.516s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik' for CMake module files
+[1.516s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik' for CMake config files
+[1.516s] Level 1:colcon.colcon_core.shell:create_environment_hook('adi_4dof_ik', 'cmake_prefix_path')
+[1.516s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/hook/cmake_prefix_path.ps1'
+[1.517s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/hook/cmake_prefix_path.dsv'
+[1.517s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/hook/cmake_prefix_path.sh'
+[1.518s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/bin'
+[1.518s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/lib/pkgconfig/adi_4dof_ik.pc'
+[1.518s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/lib/python3.12/site-packages'
+[1.519s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/bin'
+[1.519s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/package.ps1'
+[1.520s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/package.dsv'
+[1.520s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/package.sh'
+[1.520s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/package.bash'
+[1.521s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/package.zsh'
+[1.521s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/colcon-core/packages/adi_4dof_ik)
+[1.521s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(adi_4dof_ik)
+[1.521s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik' for CMake module files
+[1.522s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik' for CMake config files
+[1.522s] Level 1:colcon.colcon_core.shell:create_environment_hook('adi_4dof_ik', 'cmake_prefix_path')
+[1.522s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/hook/cmake_prefix_path.ps1'
+[1.522s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/hook/cmake_prefix_path.dsv'
+[1.523s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/hook/cmake_prefix_path.sh'
+[1.523s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/bin'
+[1.523s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/lib/pkgconfig/adi_4dof_ik.pc'
+[1.523s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/lib/python3.12/site-packages'
+[1.524s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/bin'
+[1.524s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/package.ps1'
+[1.524s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/package.dsv'
+[1.525s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/package.sh'
+[1.525s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/package.bash'
+[1.525s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/package.zsh'
+[1.526s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/colcon-core/packages/adi_4dof_ik)
+[2.228s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/micha/RobotArm/ROS_WS/src/vision_tracker': PYTHONPATH=/home/micha/RobotArm/ROS_WS/src/build/vision_tracker/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/micha/RobotArm/ROS_WS/src/install/vision_tracker/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/vision_tracker build --build-base /home/micha/RobotArm/ROS_WS/src/build/vision_tracker/build install --record /home/micha/RobotArm/ROS_WS/src/build/vision_tracker/install.log --single-version-externally-managed install_data
+[2.728s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/vision_tracker' for CMake module files
+[2.729s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/micha/RobotArm/ROS_WS/src/vision_tracker' returned '0': PYTHONPATH=/home/micha/RobotArm/ROS_WS/src/build/vision_tracker/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/micha/RobotArm/ROS_WS/src/install/vision_tracker/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/vision_tracker build --build-base /home/micha/RobotArm/ROS_WS/src/build/vision_tracker/build install --record /home/micha/RobotArm/ROS_WS/src/build/vision_tracker/install.log --single-version-externally-managed install_data
+[2.729s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/vision_tracker' for CMake config files
+[2.730s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/vision_tracker/lib'
+[2.730s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/vision_tracker/bin'
+[2.730s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/vision_tracker/lib/pkgconfig/vision_tracker.pc'
+[2.730s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/vision_tracker/lib/python3.12/site-packages'
+[2.730s] Level 1:colcon.colcon_core.shell:create_environment_hook('vision_tracker', 'pythonpath')
+[2.730s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/vision_tracker/share/vision_tracker/hook/pythonpath.ps1'
+[2.731s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/micha/RobotArm/ROS_WS/src/install/vision_tracker/share/vision_tracker/hook/pythonpath.dsv'
+[2.731s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/micha/RobotArm/ROS_WS/src/install/vision_tracker/share/vision_tracker/hook/pythonpath.sh'
+[2.732s] Level 1:colcon.colcon_core.environment:checking '/home/micha/RobotArm/ROS_WS/src/install/vision_tracker/bin'
+[2.732s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(vision_tracker)
+[2.732s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/vision_tracker/share/vision_tracker/package.ps1'
+[2.732s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/micha/RobotArm/ROS_WS/src/install/vision_tracker/share/vision_tracker/package.dsv'
+[2.733s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/vision_tracker/share/vision_tracker/package.sh'
+[2.733s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/vision_tracker/share/vision_tracker/package.bash'
+[2.734s] INFO:colcon.colcon_core.shell:Creating package script '/home/micha/RobotArm/ROS_WS/src/install/vision_tracker/share/vision_tracker/package.zsh'
+[2.734s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/micha/RobotArm/ROS_WS/src/install/vision_tracker/share/colcon-core/packages/vision_tracker)
+[2.734s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[2.735s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[2.735s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[2.735s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[2.806s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.notify_send': Could not find 'notify-send'
+[2.806s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[2.806s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[2.806s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[2.808s] DEBUG:colcon.colcon_notification.desktop_notification.notify2:Failed to initialize notify2: org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.Notifications was not provided by any .service files
+[2.808s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[2.808s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/micha/RobotArm/ROS_WS/src/install/local_setup.ps1'
+[2.809s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/micha/RobotArm/ROS_WS/src/install/_local_setup_util_ps1.py'
+[2.810s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/micha/RobotArm/ROS_WS/src/install/setup.ps1'
+[2.812s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/micha/RobotArm/ROS_WS/src/install/local_setup.sh'
+[2.813s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/micha/RobotArm/ROS_WS/src/install/_local_setup_util_sh.py'
+[2.813s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/micha/RobotArm/ROS_WS/src/install/setup.sh'
+[2.815s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/micha/RobotArm/ROS_WS/src/install/local_setup.bash'
+[2.815s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/micha/RobotArm/ROS_WS/src/install/setup.bash'
+[2.817s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/micha/RobotArm/ROS_WS/src/install/local_setup.zsh'
+[2.817s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/micha/RobotArm/ROS_WS/src/install/setup.zsh'

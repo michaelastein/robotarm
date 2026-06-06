@@ -1,0 +1,8 @@
+source;share/adi_4dof_ik/hook/cmake_prefix_path.ps1
+source;share/adi_4dof_ik/hook/cmake_prefix_path.dsv
+source;share/adi_4dof_ik/hook/cmake_prefix_path.sh
+source;share/adi_4dof_ik/local_setup.bash
+source;share/adi_4dof_ik/local_setup.dsv
+source;share/adi_4dof_ik/local_setup.ps1
+source;share/adi_4dof_ik/local_setup.sh
+source;share/adi_4dof_ik/local_setup.zsh

@@ -1,0 +1,4 @@
+source;share/adi_robotarm/local_setup.bash
+source;share/adi_robotarm/local_setup.dsv
+source;share/adi_robotarm/local_setup.sh
+source;share/adi_robotarm/local_setup.zsh

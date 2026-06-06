@@ -1,0 +1,13 @@
+In file included from [01m[K/home/micha/RobotArm/ROS_WS/src/adi_4dof_ik/adi_4dof_ik_kinematics_plugin/include/adi_4dof_ik/adi_4dof_ik_kinematics_plugin.hpp:35[m[K,
+                 from [01m[K/home/micha/RobotArm/ROS_WS/src/adi_4dof_ik/adi_4dof_ik_kinematics_plugin/src/adi_4dof_ik_kinematics_plugin.cpp:24[m[K:
+[01m[K/opt/ros/jazzy/include/moveit_core/moveit/kinematics_base/kinematics_base.h:50:77:[m[K [01;36m[Knote: [m[K‘[01m[K#pragma message: .h header is obsolete. Please use the .hpp header instead.[m[K’
+   50 | #pragma message(".h header is obsolete. Please use the .hpp header instead."[01;36m[K)[m[K
+      |                                                                             [01;36m[K^[m[K
+In file included from [01m[K/home/micha/RobotArm/ROS_WS/src/adi_4dof_ik/adi_4dof_ik_kinematics_plugin/include/adi_4dof_ik/adi_4dof_ik_kinematics_plugin.hpp:36[m[K:
+[01m[K/opt/ros/jazzy/include/moveit_core/moveit/robot_model/robot_model.h:51:77:[m[K [01;36m[Knote: [m[K‘[01m[K#pragma message: .h header is obsolete. Please use the .hpp header instead.[m[K’
+   51 | #pragma message(".h header is obsolete. Please use the .hpp header instead."[01;36m[K)[m[K
+      |                                                                             [01;36m[K^[m[K
+In file included from [01m[K/home/micha/RobotArm/ROS_WS/src/adi_4dof_ik/adi_4dof_ik_kinematics_plugin/src/adi_4dof_ik_kinematics_plugin.cpp:32[m[K:
+[01m[K/opt/ros/jazzy/include/moveit_core/moveit/robot_state/robot_state.h:51:77:[m[K [01;36m[Knote: [m[K‘[01m[K#pragma message: .h header is obsolete. Please use the .hpp header instead.[m[K’
+   51 | #pragma message(".h header is obsolete. Please use the .hpp header instead."[01;36m[K)[m[K
+      |                                                                             [01;36m[K^[m[K

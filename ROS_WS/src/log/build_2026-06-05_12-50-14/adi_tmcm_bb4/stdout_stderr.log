@@ -1,0 +1,20 @@
+[  0%] Built target tmcm_bb4_canopen_autogen_timestamp_deps
+[ 12%] Built target tmcm_bb4_canopen_autogen
+[100%] Built target tmcm_bb4_canopen
+-- Install configuration: ""
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/lib/adi_tmcm_bb4/tmcm_bb4_canopen
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/ament_index/resource_index/package_run_dependencies/adi_tmcm_bb4
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/ament_index/resource_index/parent_prefix_path/adi_tmcm_bb4
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/environment/ament_prefix_path.sh
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/environment/ament_prefix_path.dsv
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/environment/path.sh
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/environment/path.dsv
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/local_setup.bash
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/local_setup.sh
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/local_setup.zsh
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/local_setup.dsv
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/package.dsv
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/ament_index/resource_index/packages/adi_tmcm_bb4
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/cmake/adi_tmcm_bb4Config.cmake
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/cmake/adi_tmcm_bb4Config-version.cmake
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/package.xml

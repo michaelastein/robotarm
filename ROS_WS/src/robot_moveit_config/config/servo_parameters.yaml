@@ -1,0 +1,13 @@
+servo_node:
+  ros__parameters:
+    moveit_servo.move_group_name: arm
+    moveit_servo.planning_frame: base_link
+    moveit_servo.ee_frame_name: end_effector_link
+    moveit_servo.reference_frame: base_link
+
+    moveit_servo.publish_period: 0.01
+    moveit_servo.command_in_type: "speed_units"
+    moveit_servo.publish_joint_positions: true
+    moveit_servo.publish_joint_velocities: true
+    moveit_servo.publish_joint_accelerations: false
+    moveit_servo.low_latency_mode: false

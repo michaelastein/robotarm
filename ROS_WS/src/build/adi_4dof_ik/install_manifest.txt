@@ -1,0 +1,15 @@
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/ament_index/resource_index/package_run_dependencies/adi_4dof_ik
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/ament_index/resource_index/parent_prefix_path/adi_4dof_ik
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/environment/ament_prefix_path.sh
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/environment/ament_prefix_path.dsv
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/environment/path.sh
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/environment/path.dsv
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/local_setup.bash
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/local_setup.sh
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/local_setup.zsh
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/local_setup.dsv
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/package.dsv
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/ament_index/resource_index/packages/adi_4dof_ik
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/cmake/adi_4dof_ikConfig.cmake
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/cmake/adi_4dof_ikConfig-version.cmake
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_ik/share/adi_4dof_ik/package.xml

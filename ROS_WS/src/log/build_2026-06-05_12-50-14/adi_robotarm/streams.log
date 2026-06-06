@@ -1,0 +1,26 @@
+[0.052s] Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/adi_robotarm': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/micha/RobotArm/ROS_WS/src/build/adi_robotarm -- -j8 -l8
+[0.369s] Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/adi_robotarm' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/micha/RobotArm/ROS_WS/src/build/adi_robotarm -- -j8 -l8
+[0.380s] Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/adi_robotarm': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/micha/RobotArm/ROS_WS/src/build/adi_robotarm
+[0.390s] -- Install configuration: ""
+[0.393s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/launch
+[0.393s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/launch/display.launch.py
+[0.393s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/rviz
+[0.394s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/rviz/urdf.rviz
+[0.394s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/urdf
+[0.394s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/urdf/adi_robotarm.urdf
+[0.395s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/ament_index/resource_index/package_run_dependencies/adi_robotarm
+[0.395s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/ament_index/resource_index/parent_prefix_path/adi_robotarm
+[0.395s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/environment/ament_prefix_path.sh
+[0.396s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/environment/ament_prefix_path.dsv
+[0.396s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/environment/path.sh
+[0.397s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/environment/path.dsv
+[0.397s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/local_setup.bash
+[0.397s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/local_setup.sh
+[0.397s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/local_setup.zsh
+[0.398s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/local_setup.dsv
+[0.398s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/package.dsv
+[0.399s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/ament_index/resource_index/packages/adi_robotarm
+[0.401s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/cmake/adi_robotarmConfig.cmake
+[0.401s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/cmake/adi_robotarmConfig-version.cmake
+[0.401s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/package.xml
+[0.425s] Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/adi_robotarm' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/micha/RobotArm/ROS_WS/src/build/adi_robotarm

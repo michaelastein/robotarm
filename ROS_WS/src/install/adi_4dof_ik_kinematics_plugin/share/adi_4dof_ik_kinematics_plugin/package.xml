@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>adi_4dof_ik_kinematics_plugin</name>
+  <version>0.0.1</version>
+  <description>Inverse kinematics solver for a 4DOF (4R) robot arm.</description>
+  <author>Mihai Ursu</author>
+  <maintainer email="mihai.ursu@analog.com">Mihai Ursu</maintainer>
+  <license>BSD</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>rclcpp</depend>
+  <depend>moveit_core</depend>
+  <depend>pluginlib</depend>
+  <depend>class_loader</depend>
+  <depend>urdf</depend>
+  <depend>tf2_kdl</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+    <moveit_core plugin="${prefix}/adi_4dof_ik_kinematics_description.xml"/>
+  </export>
+</package>
+

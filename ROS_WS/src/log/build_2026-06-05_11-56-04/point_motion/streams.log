@@ -1,0 +1,83 @@
+[0.034s] Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/point_motion': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake /home/micha/RobotArm/ROS_WS/src/point_motion -DCMAKE_INSTALL_PREFIX=/home/micha/RobotArm/ROS_WS/src/install/point_motion
+[0.196s] -- The C compiler identification is GNU 13.3.0
+[0.978s] -- The CXX compiler identification is GNU 13.3.0
+[1.766s] -- Detecting C compiler ABI info
+[2.120s] -- Detecting C compiler ABI info - done
+[2.132s] -- Check for working C compiler: /usr/bin/cc - skipped
+[2.132s] -- Detecting C compile features
+[2.133s] -- Detecting C compile features - done
+[2.248s] -- Detecting CXX compiler ABI info
+[2.624s] -- Detecting CXX compiler ABI info - done
+[2.635s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[2.635s] -- Detecting CXX compile features
+[2.636s] -- Detecting CXX compile features - done
+[2.643s] -- Found ament_cmake: 2.5.6 (/opt/ros/jazzy/share/ament_cmake/cmake)
+[2.861s] -- Found Python3: /usr/bin/python3 (found version "3.12.3") found components: Interpreter 
+[3.054s] -- Found rclcpp: 28.1.18 (/opt/ros/jazzy/share/rclcpp/cmake)
+[3.362s] -- Found rosidl_generator_c: 4.6.7 (/opt/ros/jazzy/share/rosidl_generator_c/cmake)
+[3.393s] -- Found rosidl_generator_cpp: 4.6.7 (/opt/ros/jazzy/share/rosidl_generator_cpp/cmake)
+[3.428s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[3.463s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[3.603s] -- Found rmw_implementation_cmake: 7.3.3 (/opt/ros/jazzy/share/rmw_implementation_cmake/cmake)
+[3.609s] -- Found rmw_fastrtps_cpp: 8.4.3 (/opt/ros/jazzy/share/rmw_fastrtps_cpp/cmake)
+[3.741s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.13")  
+[3.992s] -- Found FastRTPS: /opt/ros/jazzy/include (Required is at least version "2.13") 
+[4.125s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[4.368s] -- Found moveit_ros_planning_interface: 2.12.4 (/opt/ros/jazzy/share/moveit_ros_planning_interface/cmake)
+[4.687s] -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.83.0/BoostConfig.cmake (found version "1.83.0") found components: date_time filesystem program_options system thread 
+[5.251s] -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.83.0/BoostConfig.cmake (found version "1.83.0") found components: chrono date_time filesystem iostreams program_options regex serialization system thread 
+[7.991s] -- Found parameter_traits: 0.7.1 (/opt/ros/jazzy/share/parameter_traits/cmake)
+[8.033s] -- Found rclcpp_lifecycle: 28.1.18 (/opt/ros/jazzy/share/rclcpp_lifecycle/cmake)
+[8.130s] -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.83.0/BoostConfig.cmake (found version "1.83.0") found components: filesystem 
+[8.401s] -- Found Eigen3: TRUE (found version "3.4.0") 
+[8.401s] -- Ensuring Eigen3 include directory is part of orocos-kdl CMake target
+[8.916s] -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.83.0/BoostConfig.cmake (found version "1.83.0") found components: system filesystem date_time program_options thread chrono 
+[9.060s] -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.83.0/BoostConfig.cmake (found version "1.83.0") found components: thread system filesystem regex date_time program_options 
+[9.143s] -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.83.0/BoostConfig.cmake (found version "1.83.0") found components: system filesystem date_time program_options thread 
+[9.236s] -- Found ament_lint_auto: 0.17.5 (/opt/ros/jazzy/share/ament_lint_auto/cmake)
+[9.535s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[9.538s] -- Configured cppcheck include dirs: 
+[9.539s] -- Configured cppcheck exclude dirs and/or files: 
+[9.539s] -- Added test 'flake8' to check Python code syntax and style conventions
+[9.539s] -- Configured 'flake8' exclude dirs and/or files: 
+[9.542s] -- Added test 'lint_cmake' to check CMake code style
+[9.545s] -- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257
+[9.551s] -- Added test 'uncrustify' to check C / C++ code style
+[9.551s] -- Configured uncrustify additional arguments: 
+[9.558s] -- Added test 'xmllint' to check XML markup files
+[9.560s] -- Configuring done (9.5s)
+[9.638s] -- Generating done (0.0s)
+[9.655s] -- Build files have been written to: /home/micha/RobotArm/ROS_WS/src/build/point_motion
+[9.681s] Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/point_motion' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake /home/micha/RobotArm/ROS_WS/src/point_motion -DCMAKE_INSTALL_PREFIX=/home/micha/RobotArm/ROS_WS/src/install/point_motion
+[9.682s] Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/point_motion': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/micha/RobotArm/ROS_WS/src/build/point_motion -- -j8 -l8
+[9.793s] [ 25%] [32mBuilding CXX object CMakeFiles/point_motion.dir/src/point_motion.cpp.o[0m
+[9.810s] [ 50%] [32mBuilding CXX object CMakeFiles/point_following_2d.dir/src/point_following_2d.cpp.o[0m
+[21.802s] [ 75%] [32m[1mLinking CXX executable point_motion[0m
+[22.488s] [ 75%] Built target point_motion
+[22.899s] [100%] [32m[1mLinking CXX executable point_following_2d[0m
+[23.376s] [100%] Built target point_following_2d
+[23.390s] Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/point_motion' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/micha/RobotArm/ROS_WS/src/build/point_motion -- -j8 -l8
+[23.392s] Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/point_motion': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/micha/RobotArm/ROS_WS/src/build/point_motion
+[23.401s] -- Install configuration: ""
+[23.402s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/point_motion/lib/point_motion/point_motion
+[23.403s] -- Set non-toolchain portion of runtime path of "/home/micha/RobotArm/ROS_WS/src/install/point_motion/lib/point_motion/point_motion" to ""
+[23.403s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/point_motion/lib/point_motion/point_following_2d
+[23.408s] -- Set non-toolchain portion of runtime path of "/home/micha/RobotArm/ROS_WS/src/install/point_motion/lib/point_motion/point_following_2d" to ""
+[23.408s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/launch
+[23.409s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/launch/vision_servo.launch.py
+[23.410s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/point_motion/share/ament_index/resource_index/package_run_dependencies/point_motion
+[23.410s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/point_motion/share/ament_index/resource_index/parent_prefix_path/point_motion
+[23.410s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/environment/ament_prefix_path.sh
+[23.410s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/environment/ament_prefix_path.dsv
+[23.411s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/environment/path.sh
+[23.411s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/environment/path.dsv
+[23.411s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/local_setup.bash
+[23.411s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/local_setup.sh
+[23.412s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/local_setup.zsh
+[23.412s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/local_setup.dsv
+[23.412s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/package.dsv
+[23.412s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/point_motion/share/ament_index/resource_index/packages/point_motion
+[23.413s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/cmake/point_motionConfig.cmake
+[23.413s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/cmake/point_motionConfig-version.cmake
+[23.413s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/point_motion/share/point_motion/package.xml
+[23.417s] Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/point_motion' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/micha/RobotArm/ROS_WS/src/build/point_motion

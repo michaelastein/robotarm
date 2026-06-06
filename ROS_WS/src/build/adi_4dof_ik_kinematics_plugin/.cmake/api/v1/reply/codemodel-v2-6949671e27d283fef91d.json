@@ -1,0 +1,79 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-d06f531efd01e1907cb2.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.15"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "adi_4dof_ik_kinematics_plugin",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "adi_4dof_ik_kinematics_plugin::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-adi_4dof_ik_kinematics_plugin-8e6f20f9fb13938ee3b8.json",
+					"name" : "adi_4dof_ik_kinematics_plugin",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "adi_4dof_ik_kinematics_plugin_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-adi_4dof_ik_kinematics_plugin_uninstall-0e2a4e1a67bdc59b12dc.json",
+					"name" : "adi_4dof_ik_kinematics_plugin_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-f9327d7b5586ec2b394b.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik_kinematics_plugin",
+		"source" : "/home/micha/RobotArm/ROS_WS/src/adi_4dof_ik/adi_4dof_ik_kinematics_plugin"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 6
+	}
+}

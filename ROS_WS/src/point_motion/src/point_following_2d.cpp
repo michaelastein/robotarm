@@ -23,9 +23,8 @@ public:
       "/object_pixel", 10,
       std::bind(&ServoController::callback, this, std::placeholders::_1));
 
-    pub_ = this->create_publisher<geometry_msgs::msg::TwistStamped>(
-      "/servo_node/delta_twist_cmds", 10);
-
+   pub_ = this->create_publisher<geometry_msgs::msg::TwistStamped>(
+      "/servo_node/cartesian_command", 10);
     timer_ = this->create_wall_timer(
       std::chrono::milliseconds(20),
       std::bind(&ServoController::controlLoop, this));

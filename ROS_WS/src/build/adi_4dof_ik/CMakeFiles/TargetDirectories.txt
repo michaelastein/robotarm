@@ -1,0 +1,9 @@
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik/CMakeFiles/uninstall.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik/CMakeFiles/adi_4dof_ik_uninstall.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik/CMakeFiles/test.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik/CMakeFiles/edit_cache.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik/CMakeFiles/rebuild_cache.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik/CMakeFiles/list_install_components.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik/CMakeFiles/install.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik/CMakeFiles/install/local.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_ik/CMakeFiles/install/strip.dir

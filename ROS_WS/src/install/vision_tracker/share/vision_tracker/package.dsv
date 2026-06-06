@@ -1,0 +1,6 @@
+source;share/vision_tracker/hook/pythonpath.ps1
+source;share/vision_tracker/hook/pythonpath.dsv
+source;share/vision_tracker/hook/pythonpath.sh
+source;share/vision_tracker/hook/ament_prefix_path.ps1
+source;share/vision_tracker/hook/ament_prefix_path.dsv
+source;share/vision_tracker/hook/ament_prefix_path.sh

@@ -1,0 +1,4 @@
+source;share/adi_tmcm_bb4/local_setup.bash
+source;share/adi_tmcm_bb4/local_setup.dsv
+source;share/adi_tmcm_bb4/local_setup.sh
+source;share/adi_tmcm_bb4/local_setup.zsh

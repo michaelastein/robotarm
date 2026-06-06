@@ -1,0 +1,52 @@
+-- The C compiler identification is GNU 13.3.0
+-- The CXX compiler identification is GNU 13.3.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found ament_cmake: 2.5.6 (/opt/ros/jazzy/share/ament_cmake/cmake)
+-- Found Python3: /usr/bin/python3 (found version "3.12.3") found components: Interpreter 
+-- Configuring done (3.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/micha/RobotArm/ROS_WS/src/build/moveit_servo
+-- Install configuration: ""
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/ament_index/resource_index/package_run_dependencies/moveit_servo
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/ament_index/resource_index/parent_prefix_path/moveit_servo
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/environment/ament_prefix_path.sh
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/environment/ament_prefix_path.dsv
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/environment/path.sh
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/environment/path.dsv
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/local_setup.bash
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/local_setup.sh
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/local_setup.zsh
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/local_setup.dsv
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/package.dsv
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/ament_index/resource_index/packages/moveit_servo
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/cmake/moveit_servoConfig.cmake
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/cmake/moveit_servoConfig-version.cmake
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/package.xml
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/launch
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/launch/static_virtual_joint_tfs.launch.py
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/launch/spawn_controllers.launch.py
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/launch/move_group.launch.py
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/launch/moveit_rviz.launch.py
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/launch/rsp.launch.py
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/launch/demo.launch.py
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/config
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/config/kinematics.yaml
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/config/ros2_controllers.yaml
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/config/moveit.rviz
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/config/visual.urdf.xacro
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/config/initial_positions.yaml
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/config/visual.ros2_control.xacro
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/config/pilz_cartesian_limits.yaml
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/config/moveit_controllers.yaml
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/config/visual.srdf
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/config/joint_limits.yaml
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/moveit_servo/share/moveit_servo/.setup_assistant

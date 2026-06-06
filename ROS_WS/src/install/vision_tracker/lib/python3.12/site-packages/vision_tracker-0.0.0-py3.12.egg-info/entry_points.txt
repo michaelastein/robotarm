@@ -1,0 +1,2 @@
+[console_scripts]
+hotspot_tracker = vision_tracker.hotspot_tracker:main

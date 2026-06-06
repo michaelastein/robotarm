@@ -1,0 +1,11 @@
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz/CMakeFiles/uninstall.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz/CMakeFiles/adi_4dof_endeffector_xyz_uninstall.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz/CMakeFiles/endeffector_xyz.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz/CMakeFiles/endeffector_listener.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz/CMakeFiles/test.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz/CMakeFiles/edit_cache.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz/CMakeFiles/rebuild_cache.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz/CMakeFiles/list_install_components.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz/CMakeFiles/install.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz/CMakeFiles/install/local.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz/CMakeFiles/install/strip.dir

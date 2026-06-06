@@ -1,0 +1,4 @@
+source;share/adi_robotarm_moveit_config/local_setup.bash
+source;share/adi_robotarm_moveit_config/local_setup.dsv
+source;share/adi_robotarm_moveit_config/local_setup.sh
+source;share/adi_robotarm_moveit_config/local_setup.zsh

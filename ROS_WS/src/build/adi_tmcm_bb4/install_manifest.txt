@@ -1,0 +1,16 @@
+/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/lib/adi_tmcm_bb4/tmcm_bb4_canopen
+/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/ament_index/resource_index/package_run_dependencies/adi_tmcm_bb4
+/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/ament_index/resource_index/parent_prefix_path/adi_tmcm_bb4
+/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/environment/ament_prefix_path.sh
+/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/environment/ament_prefix_path.dsv
+/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/environment/path.sh
+/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/environment/path.dsv
+/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/local_setup.bash
+/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/local_setup.sh
+/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/local_setup.zsh
+/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/local_setup.dsv
+/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/package.dsv
+/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/ament_index/resource_index/packages/adi_tmcm_bb4
+/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/cmake/adi_tmcm_bb4Config.cmake
+/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/cmake/adi_tmcm_bb4Config-version.cmake
+/home/micha/RobotArm/ROS_WS/src/install/adi_tmcm_bb4/share/adi_tmcm_bb4/package.xml

@@ -1,0 +1,24 @@
+[0.045s] Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz -- -j8 -l8
+[0.231s] [ 50%] Built target endeffector_xyz
+[0.235s] [100%] Built target endeffector_listener
+[0.364s] Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz -- -j8 -l8
+[0.366s] Invoking command in '/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz
+[0.391s] -- Install configuration: ""
+[0.392s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/lib/adi_4dof_endeffector_xyz/endeffector_xyz
+[0.392s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/lib/adi_4dof_endeffector_xyz/endeffector_listener
+[0.392s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/ament_index/resource_index/package_run_dependencies/adi_4dof_endeffector_xyz
+[0.393s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/ament_index/resource_index/parent_prefix_path/adi_4dof_endeffector_xyz
+[0.393s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/environment/ament_prefix_path.sh
+[0.394s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/environment/ament_prefix_path.dsv
+[0.394s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/environment/path.sh
+[0.394s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/environment/path.dsv
+[0.394s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/local_setup.bash
+[0.394s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/local_setup.sh
+[0.395s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/local_setup.zsh
+[0.395s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/local_setup.dsv
+[0.395s] -- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/package.dsv
+[0.395s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/ament_index/resource_index/packages/adi_4dof_endeffector_xyz
+[0.395s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/cmake/adi_4dof_endeffector_xyzConfig.cmake
+[0.395s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/cmake/adi_4dof_endeffector_xyzConfig-version.cmake
+[0.396s] -- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/package.xml
+[0.444s] Invoked command in '/home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/micha/RobotArm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/micha/RobotArm/ROS_WS/src/build/adi_4dof_endeffector_xyz

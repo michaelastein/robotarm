@@ -1,0 +1,20 @@
+[ 50%] Built target endeffector_xyz
+[100%] Built target endeffector_listener
+-- Install configuration: ""
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/lib/adi_4dof_endeffector_xyz/endeffector_xyz
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/lib/adi_4dof_endeffector_xyz/endeffector_listener
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/ament_index/resource_index/package_run_dependencies/adi_4dof_endeffector_xyz
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/ament_index/resource_index/parent_prefix_path/adi_4dof_endeffector_xyz
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/environment/ament_prefix_path.sh
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/environment/ament_prefix_path.dsv
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/environment/path.sh
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/environment/path.dsv
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/local_setup.bash
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/local_setup.sh
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/local_setup.zsh
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/local_setup.dsv
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/package.dsv
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/ament_index/resource_index/packages/adi_4dof_endeffector_xyz
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/cmake/adi_4dof_endeffector_xyzConfig.cmake
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/cmake/adi_4dof_endeffector_xyzConfig-version.cmake
+-- Up-to-date: /home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/package.xml

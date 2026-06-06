@@ -1,0 +1,17 @@
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/lib/adi_4dof_endeffector_xyz/endeffector_xyz
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/lib/adi_4dof_endeffector_xyz/endeffector_listener
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/ament_index/resource_index/package_run_dependencies/adi_4dof_endeffector_xyz
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/ament_index/resource_index/parent_prefix_path/adi_4dof_endeffector_xyz
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/environment/ament_prefix_path.sh
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/environment/ament_prefix_path.dsv
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/environment/path.sh
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/environment/path.dsv
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/local_setup.bash
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/local_setup.sh
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/local_setup.zsh
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/local_setup.dsv
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/package.dsv
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/ament_index/resource_index/packages/adi_4dof_endeffector_xyz
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/cmake/adi_4dof_endeffector_xyzConfig.cmake
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/cmake/adi_4dof_endeffector_xyzConfig-version.cmake
+/home/micha/RobotArm/ROS_WS/src/install/adi_4dof_endeffector_xyz/share/adi_4dof_endeffector_xyz/package.xml

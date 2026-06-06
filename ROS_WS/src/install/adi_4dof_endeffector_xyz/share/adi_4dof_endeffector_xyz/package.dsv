@@ -1,0 +1,8 @@
+source;share/adi_4dof_endeffector_xyz/hook/cmake_prefix_path.ps1
+source;share/adi_4dof_endeffector_xyz/hook/cmake_prefix_path.dsv
+source;share/adi_4dof_endeffector_xyz/hook/cmake_prefix_path.sh
+source;share/adi_4dof_endeffector_xyz/local_setup.bash
+source;share/adi_4dof_endeffector_xyz/local_setup.dsv
+source;share/adi_4dof_endeffector_xyz/local_setup.ps1
+source;share/adi_4dof_endeffector_xyz/local_setup.sh
+source;share/adi_4dof_endeffector_xyz/local_setup.zsh

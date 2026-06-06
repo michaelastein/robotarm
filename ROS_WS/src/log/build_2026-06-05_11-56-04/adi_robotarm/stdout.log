@@ -1,0 +1,40 @@
+-- The C compiler identification is GNU 13.3.0
+-- The CXX compiler identification is GNU 13.3.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found ament_cmake: 2.5.6 (/opt/ros/jazzy/share/ament_cmake/cmake)
+-- Found Python3: /usr/bin/python3 (found version "3.12.3") found components: Interpreter 
+-- Found ament_lint_auto: 0.17.5 (/opt/ros/jazzy/share/ament_lint_auto/cmake)
+-- Configuring done (2.9s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/micha/RobotArm/ROS_WS/src/build/adi_robotarm
+-- Install configuration: ""
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/launch
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/launch/display.launch.py
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/rviz
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/rviz/urdf.rviz
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/urdf
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/urdf/adi_robotarm.urdf
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/ament_index/resource_index/package_run_dependencies/adi_robotarm
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/ament_index/resource_index/parent_prefix_path/adi_robotarm
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/environment/ament_prefix_path.sh
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/environment/ament_prefix_path.dsv
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/environment/path.sh
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/environment/path.dsv
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/local_setup.bash
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/local_setup.sh
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/local_setup.zsh
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/local_setup.dsv
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/package.dsv
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/ament_index/resource_index/packages/adi_robotarm
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/cmake/adi_robotarmConfig.cmake
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/cmake/adi_robotarmConfig-version.cmake
+-- Installing: /home/micha/RobotArm/ROS_WS/src/install/adi_robotarm/share/adi_robotarm/package.xml

@@ -1,0 +1,12 @@
+/home/micha/RobotArm/ROS_WS/src/build/adi_tmcm_bb4/CMakeFiles/uninstall.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_tmcm_bb4/CMakeFiles/adi_tmcm_bb4_uninstall.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_tmcm_bb4/CMakeFiles/tmcm_bb4_canopen.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_tmcm_bb4/CMakeFiles/test.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_tmcm_bb4/CMakeFiles/edit_cache.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_tmcm_bb4/CMakeFiles/rebuild_cache.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_tmcm_bb4/CMakeFiles/list_install_components.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_tmcm_bb4/CMakeFiles/install.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_tmcm_bb4/CMakeFiles/install/local.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_tmcm_bb4/CMakeFiles/install/strip.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_tmcm_bb4/CMakeFiles/tmcm_bb4_canopen_autogen_timestamp_deps.dir
+/home/micha/RobotArm/ROS_WS/src/build/adi_tmcm_bb4/CMakeFiles/tmcm_bb4_canopen_autogen.dir
