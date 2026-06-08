@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(robot_moveit_config)
+project(moveit_3dof)
 
 find_package(ament_cmake REQUIRED)
 
@@ -7,7 +7,7 @@ ament_package()
 
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/launch")
   install(
-    DIRECTORY launch urdf
+    DIRECTORY launch  urdf
     DESTINATION share/${PROJECT_NAME}
     PATTERN "setup_assistant.launch" EXCLUDE)
 endif()

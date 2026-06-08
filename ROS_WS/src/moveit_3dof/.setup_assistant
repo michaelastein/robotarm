@@ -1,0 +1,25 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: moveit_3dof
+    relative_path: urdf/robotarm.urdf
+  srdf:
+    relative_path: config/visual.srdf
+  package_settings:
+    author_name: Michaela Stein
+    author_email: michaela.stein@student.uni-luebeck.de
+    generated_timestamp: 1780914865
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity

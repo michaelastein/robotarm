@@ -1,0 +1,191 @@
+<?xml version="1.0"?>
+<robot name="robotarm">
+  <!-- Materials -->
+  <material name="blue">
+    <color rgba="0 0 0.8 1"/>
+  </material>
+
+  <material name="black">
+    <color rgba="0 0 0 1"/>
+  </material>
+
+  <!-- BASE -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <cylinder length="0.05" radius="0.05"/>
+      </geometry>
+      <origin xyz="0 0 0.025"/>
+      <material name="blue"/>
+    </visual>
+
+    <collision>
+      <geometry>
+        <cylinder length="0.05" radius="0.06"/>
+      </geometry>
+      <origin xyz="0 0 0.025"/>
+    </collision>
+
+    <inertial>
+      <mass value="10"/>
+      <origin xyz="0 0 0.025"/>
+      <inertia
+        ixx="0.00833333"
+        ixy="0"
+        ixz="0"
+        iyy="0.00833333"
+        iyz="0"
+        izz="0.0125"/>
+    </inertial>
+  </link>
+
+  <!-- COLUMN -->
+  <link name="column_link">
+    <visual>
+      <geometry>
+        <cylinder length="0.12" radius="0.025"/>
+      </geometry>
+      <origin xyz="0 0 0.06"/>
+      <material name="blue"/>
+    </visual>
+
+    <collision>
+      <geometry>
+        <cylinder length="0.12" radius="0.035"/>
+      </geometry>
+      <origin xyz="0 0 0.06"/>
+    </collision>
+
+    <inertial>
+      <mass value="0.235619"/>
+      <origin xyz="0 0 0.06"/>
+      <inertia
+        ixx="0.000319559"
+        ixy="0"
+        ixz="0"
+        iyy="0.000319559"
+        iyz="0"
+        izz="0.000073631"/>
+    </inertial>
+  </link>
+
+  <!-- BASE JOINT -->
+  <joint name="base_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="column_link"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0 0 0.05"/>
+    <limit effort="100"
+           lower="-0.78539819"
+           upper="0.78539819"
+           velocity="0.5"/>
+  </joint>
+
+  <!-- UPPER ARM -->
+  <link name="upper_arm_link">
+    <visual>
+      <geometry>
+        <cylinder length="0.14" radius="0.02"/>
+      </geometry>
+      <origin xyz="0 0 0.07"/>
+      <material name="blue"/>
+    </visual>
+
+    <collision>
+      <geometry>
+        <cylinder length="0.14" radius="0.03"/>
+      </geometry>
+      <origin xyz="0 0 0.07"/>
+    </collision>
+
+    <inertial>
+      <mass value="0.175929"/>
+      <origin xyz="0 0 0.07"/>
+      <inertia
+        ixx="0.000304944"
+        ixy="0"
+        ixz="0"
+        iyy="0.000304944"
+        iyz="0"
+        izz="0.000035186"/>
+    </inertial>
+  </link>
+
+  <!-- SHOULDER -->
+  <joint name="shoulder_joint" type="revolute">
+    <parent link="column_link"/>
+    <child link="upper_arm_link"/>
+    <axis xyz="0 1 0"/>
+    <origin xyz="0 0 0.12"/>
+    <limit effort="81"
+           lower="-1.5707964"
+           upper="1.5707964"
+           velocity="0.5"/>
+  </joint>
+
+  <!-- LOWER ARM -->
+  <link name="lower_arm_link">
+    <visual>
+      <geometry>
+        <cylinder length="0.15" radius="0.015"/>
+      </geometry>
+      <origin xyz="0 0 0.075"/>
+      <material name="blue"/>
+    </visual>
+
+    <collision>
+      <geometry>
+        <cylinder length="0.15" radius="0.025"/>
+      </geometry>
+      <origin xyz="0 0 0.075"/>
+    </collision>
+
+    <inertial>
+      <mass value="0.106029"/>
+      <origin xyz="0 0 0.075"/>
+      <inertia
+        ixx="0.000204768"
+        ixy="0"
+        ixz="0"
+        iyy="0.000204768"
+        iyz="0"
+        izz="0.000011928"/>
+    </inertial>
+  </link>
+
+  <!-- ELBOW -->
+  <joint name="elbow_joint" type="revolute">
+    <parent link="upper_arm_link"/>
+    <child link="lower_arm_link"/>
+    <axis xyz="0 1 0"/>
+    <origin xyz="0 0 0.14"/>
+    <limit effort="81"
+           lower="-1.5707964"
+           upper="1.5707964"
+           velocity="0.5"/>
+  </joint>
+
+  <ros2_control name="MockSystem" type="system">
+  <hardware>
+    <plugin>mock_components/GenericSystem</plugin>
+  </hardware>
+
+  <joint name="base_joint">
+    <command_interface name="position"/>
+    <state_interface name="position"/>
+    <state_interface name="velocity"/>
+  </joint>
+
+  <joint name="shoulder_joint">
+    <command_interface name="position"/>
+    <state_interface name="position"/>
+    <state_interface name="velocity"/>
+  </joint>
+
+  <joint name="elbow_joint">
+    <command_interface name="position"/>
+    <state_interface name="position"/>
+    <state_interface name="velocity"/>
+  </joint>
+</ros2_control>
+</robot>
