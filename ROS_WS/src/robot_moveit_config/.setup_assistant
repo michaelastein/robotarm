@@ -7,21 +7,4 @@ moveit_setup_assistant_config:
   package_settings:
     author_name: Michaela Stein
     author_email: michaela.stein@student.uni-luebeck.de
-    generated_timestamp: 1780657826
-  control_xacro:
-    command:
-      - position
-      - velocity
-    state:
-      - position
-      - velocity
-  modified_urdf:
-    xacros:
-      - control_xacro
-  control_xacro:
-    command:
-      - position
-      - velocity
-    state:
-      - position
-      - velocity
+    generated_timestamp: 1780903236

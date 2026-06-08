@@ -1,80 +1,42 @@
-import os 
+import os
 
-  
+from launch import LaunchDescription
+from launch_ros.actions import Node
 
-from launch import LaunchDescription 
+from moveit_configs_utils import MoveItConfigsBuilder
+from moveit_configs_utils.launches import generate_demo_launch
+from ament_index_python.packages import get_package_share_directory
 
-from launch_ros.actions import Node 
 
-from moveit_configs_utils import MoveItConfigsBuilder 
+def generate_launch_description():
 
-from moveit_configs_utils.launches import generate_demo_launch 
+    pkg_share = get_package_share_directory("robot_moveit_config")
 
-from ament_index_python.packages import get_package_share_directory 
+    moveit_config = (
+        MoveItConfigsBuilder(
+            "visual",
+            package_name="robot_moveit_config"
+        )
+        # THIS is the ONLY correct way in your version
+        .joint_limits("config/joint_limits.yaml")
+        .to_moveit_configs()
+    )
 
-  
+    demo = generate_demo_launch(moveit_config)
 
-  
-
-def generate_launch_description(): 
-
-  
-
-    pkg = get_package_share_directory("robot_moveit_config") 
-
-  
-
-    moveit_config = ( 
-
-        MoveItConfigsBuilder( 
-
-            "visual", 
-
-            package_name="robot_moveit_config" 
-
-        ) 
-
-        .to_moveit_configs() 
-
-    ) 
-
-  
-
-    moveit_config_dict = moveit_config.to_dict() 
-
-  
-
-    demo = generate_demo_launch(moveit_config) 
-
-  
-
-    servo_node = Node( 
-
-        package="moveit_servo", 
-
-        executable="servo_node", 
-
-        name="own_servo_node", 
-
-        output="screen", 
-
-        parameters=[ 
-
-            moveit_config_dict, 
-
-            os.path.join(pkg, "config", "servo_parameters.yaml"), 
-
-        ], 
-
-        remappings=[ 
-
-            ("/servo_node/delta_twist_cmds", "/servo_node/delta_twist_cmds"), 
-
-        ], 
-
-    ) 
-
-  
+    servo_node = Node(
+        package="moveit_servo",
+        executable="servo_node",
+        name="servo_node",
+        output="screen",
+        parameters=[
+            os.path.join(pkg_share, "config", "servo_parameters.yaml"),
+            moveit_config.to_dict()
+        ],
+        remappings=[
+            ("/servo_node/delta_twist_cmds", "/servo_node/delta_twist_cmds"),
+        ],
+    )
 
     return LaunchDescription( 
 
