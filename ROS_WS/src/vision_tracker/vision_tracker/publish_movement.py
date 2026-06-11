@@ -9,11 +9,11 @@ import cv2
 import numpy as np
 import threading
 
+
 CONF_THRESHOLD = 5.0
 
 
 def find_hotspot(img):
-
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY).astype(np.float32)
     gray = cv2.GaussianBlur(gray, (5, 5), 0)
 
@@ -58,7 +58,6 @@ class VisionTracker(Node):
     def __init__(self):
         super().__init__('vision_tracker')
 
-        # ---------------- SUB ----------------
         self.sub = self.create_subscription(
             CompressedImage,
             '/cam0/camera/image_raw/compressed',
@@ -66,17 +65,16 @@ class VisionTracker(Node):
             qos_profile_sensor_data
         )
 
-        # ---------------- PUB ----------------
+        # Publishes normalized error [-1, 1]
         self.pub = self.create_publisher(Point, '/object_pixel', 10)
 
-        # ---------------- STATE ----------------
         self.lock = threading.Lock()
         self.latest_msg = None
 
         self.last_valid = None
         self.lost_counter = 0
 
-        self.get_logger().info("Vision tracker started (clean normalized output mode)")
+        self.get_logger().info("Vision tracker started (NO MoveIt, vision only)")
 
     def callback(self, msg):
         with self.lock:
@@ -113,7 +111,6 @@ def main(args=None):
 
         h, w = img.shape[:2]
 
-        # ---------------- DETECTION ----------------
         meas, conf = find_hotspot(img)
 
         if meas is not None and conf >= CONF_THRESHOLD:
@@ -121,14 +118,13 @@ def main(args=None):
             x = meas[0]
             y = meas[1]
 
-            # ---------------- NORMALIZED COORDINATES ----------------
+            # Normalize [-1, 1]
             nx = (x - (w * 0.5)) / (w * 0.5)
             ny = (y - (h * 0.5)) / (h * 0.5)
 
             node.last_valid = (int(x), int(y))
             node.lost_counter = 0
 
-            # ---------------- PUBLISH ----------------
             out = Point()
             out.x = float(nx)
             out.y = float(ny)
@@ -142,10 +138,7 @@ def main(args=None):
         # ---------------- DEBUG VIEW ----------------
         vis = img.copy()
 
-        if node.last_valid is not None:
-            pt = node.last_valid
-        else:
-            pt = (w // 2, h // 2)
+        pt = node.last_valid if node.last_valid else (w // 2, h // 2)
 
         cv2.circle(vis, pt, 8, (0, 0, 255), -1)
 

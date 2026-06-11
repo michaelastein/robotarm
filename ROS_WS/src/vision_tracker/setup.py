@@ -19,6 +19,8 @@ setup(
     license='MIT',
     entry_points={
         'console_scripts': [
+	    'publish_movement = vision_tracker.publish_movement:main',
+ 	    'servo = vision_tracker.servo:main',
             'hotspot_tracker = vision_tracker.hotspot_tracker:main'
         ],
     },
