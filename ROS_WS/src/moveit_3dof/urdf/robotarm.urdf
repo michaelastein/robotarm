@@ -16,7 +16,6 @@
       <origin xyz="0 0 0.025"/>
       <material name="blue"/>
     </visual>
-
     <collision>
       <geometry>
         <cylinder length="0.05" radius="0.06"/>
@@ -33,7 +32,6 @@
       <origin xyz="0 0 0.06"/>
       <material name="blue"/>
     </visual>
-
     <collision>
       <geometry>
         <cylinder length="0.12" radius="0.035"/>
@@ -45,8 +43,8 @@
   <joint name="base_joint" type="revolute">
     <parent link="base_link"/>
     <child link="column_link"/>
-    <axis xyz="0 0 1"/>
     <origin xyz="0 0 0.05"/>
+    <axis xyz="0 0 1"/>
     <limit effort="100" lower="-0.78539819" upper="0.78539819" velocity="0.5"/>
   </joint>
 
@@ -58,7 +56,6 @@
       <origin xyz="0 0 0.07"/>
       <material name="blue"/>
     </visual>
-
     <collision>
       <geometry>
         <cylinder length="0.14" radius="0.03"/>
@@ -70,8 +67,8 @@
   <joint name="shoulder_joint" type="revolute">
     <parent link="column_link"/>
     <child link="upper_arm_link"/>
-    <axis xyz="0 1 0"/>
     <origin xyz="0 0 0.12"/>
+    <axis xyz="0 1 0"/>
     <limit effort="81" lower="-1.5707964" upper="1.5707964" velocity="0.5"/>
   </joint>
 
@@ -83,7 +80,6 @@
       <origin xyz="0 0 0.075"/>
       <material name="blue"/>
     </visual>
-
     <collision>
       <geometry>
         <cylinder length="0.15" radius="0.025"/>
@@ -95,8 +91,8 @@
   <joint name="elbow_joint" type="revolute">
     <parent link="upper_arm_link"/>
     <child link="lower_arm_link"/>
-    <axis xyz="0 1 0"/>
     <origin xyz="0 0 0.14"/>
+    <axis xyz="0 1 0"/>
     <limit effort="81" lower="-1.5707964" upper="1.5707964" velocity="0.5"/>
   </joint>
 
@@ -107,19 +103,25 @@
 
     <joint name="base_joint">
       <command_interface name="velocity"/>
-      <state_interface name="position"/>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
       <state_interface name="velocity"/>
     </joint>
 
     <joint name="shoulder_joint">
       <command_interface name="velocity"/>
-      <state_interface name="position"/>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
       <state_interface name="velocity"/>
     </joint>
 
     <joint name="elbow_joint">
       <command_interface name="velocity"/>
-      <state_interface name="position"/>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
       <state_interface name="velocity"/>
     </joint>
   </ros2_control>

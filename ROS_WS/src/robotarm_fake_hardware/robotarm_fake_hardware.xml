@@ -1,0 +1,11 @@
+<library path="robotarm_fake_hardware">
+  <class
+    name="robotarm_fake_hardware/VelocityFakeSystem"
+    type="robotarm_fake_hardware::VelocityFakeSystem"
+    base_class_type="hardware_interface::SystemInterface">
+    <description>
+      Fake velocity hardware that integrates velocity commands into positions.
+    </description>
+  </class>
+</library>
+
