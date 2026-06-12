@@ -96,33 +96,28 @@
     <limit effort="81" lower="-1.5707964" upper="1.5707964" velocity="0.5"/>
   </joint>
 
-  <ros2_control name="MockSystem" type="system">
-    <hardware>
-      <plugin>mock_components/GenericSystem</plugin>
-    </hardware>
+  <ros2_control name="RobotArmFakeSystem" type="system">
+  	<hardware>
+  	  <plugin>robotarm_fake_hardware/VelocityFakeSystem</plugin>
+  	</hardware>
 
-    <joint name="base_joint">
-      <command_interface name="velocity"/>
-      <state_interface name="position">
-        <param name="initial_value">0.0</param>
-      </state_interface>
-      <state_interface name="velocity"/>
-    </joint>
+  	<joint name="base_joint">
+  	  <command_interface name="velocity"/>
+  	  <state_interface name="position"/>
+  	  <state_interface name="velocity"/>
+  	</joint>
 
-    <joint name="shoulder_joint">
-      <command_interface name="velocity"/>
-      <state_interface name="position">
-        <param name="initial_value">0.0</param>
-      </state_interface>
-      <state_interface name="velocity"/>
-    </joint>
+  	<joint name="shoulder_joint">
+  	  <command_interface name="velocity"/>
+  	  <state_interface name="position"/>
+  	  <state_interface name="velocity"/>
+  	</joint>
 
-    <joint name="elbow_joint">
-      <command_interface name="velocity"/>
-      <state_interface name="position">
-        <param name="initial_value">0.0</param>
-      </state_interface>
-      <state_interface name="velocity"/>
-    </joint>
+  	<joint name="elbow_joint">
+  	  <command_interface name="velocity"/>
+  	  <state_interface name="position"/>
+  	  <state_interface name="velocity"/>
+  	</joint>
   </ros2_control>
+
 </robot>
