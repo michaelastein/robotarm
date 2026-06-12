@@ -1,0 +1,10 @@
+digraph G {
+"base_link" -> "column_link"[label=" Broadcaster: default_authority\nAverage rate: 17.984\nBuffer length: 5.06\nMost recent transform: 1781256848.234425\nOldest transform: 1781256843.174285\n"];
+"world" -> "base_link"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"upper_arm_link" -> "lower_arm_link"[label=" Broadcaster: default_authority\nAverage rate: 17.984\nBuffer length: 5.06\nMost recent transform: 1781256848.234425\nOldest transform: 1781256843.174285\n"];
+"column_link" -> "upper_arm_link"[label=" Broadcaster: default_authority\nAverage rate: 17.984\nBuffer length: 5.06\nMost recent transform: 1781256848.234425\nOldest transform: 1781256843.174285\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1781256848.2433329"[ shape=plaintext ] ;
+}->"world";
+}

@@ -1,13 +1,32 @@
 servo_node:
   ros__parameters:
-    moveit_servo.move_group_name: arm
-    moveit_servo.planning_frame: base_link
-    moveit_servo.ee_frame_name: end_effector_link
-    moveit_servo.reference_frame: base_link
+    moveit_servo:
+      move_group_name: arm
+      planning_frame: base_link
+      ee_frame_name: lower_arm_link
+      reference_frame: base_link
 
-    moveit_servo.publish_period: 0.01
-    moveit_servo.command_in_type: "speed_units"
-    moveit_servo.publish_joint_positions: true
-    moveit_servo.publish_joint_velocities: true
-    moveit_servo.publish_joint_accelerations: false
-    moveit_servo.low_latency_mode: false
+      command_in_type: speed_units
+
+      publish_period: 0.01
+      low_latency_mode: false
+
+      publish_joint_positions: false
+      publish_joint_velocities: true
+      publish_joint_accelerations: false
+
+      command_out_type: std_msgs/Float64MultiArray
+      command_out_topic: /servo_controller/commands
+
+      scale:
+        linear: 0.5
+        rotational: 0.5
+
+      cmd_in_deadband_pose: 0.01
+      cmd_in_deadband_twist: 0.01
+
+    robot_description_kinematics:
+      arm:
+        kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin
+        kinematics_solver_search_resolution: 0.005
+        kinematics_solver_timeout: 0.05

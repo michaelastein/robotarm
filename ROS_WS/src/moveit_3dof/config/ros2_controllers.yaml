@@ -1,25 +1,31 @@
-# This config file is used by ros2_control
 controller_manager:
   ros__parameters:
-    update_rate: 100  # Hz
-
-    arm_controller:
-      type: joint_trajectory_controller/JointTrajectoryController
-
+    update_rate: 100
 
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-arm_controller:
+    servo_controller:
+      type: velocity_controllers/JointGroupVelocityController
+
+
+joint_state_broadcaster:
+  ros__parameters: {}
+
+
+servo_controller:
   ros__parameters:
     joints:
       - base_joint
       - shoulder_joint
       - elbow_joint
+
     command_interfaces:
-      - position
       - velocity
+
     state_interfaces:
       - position
       - velocity
-    allow_nonzero_velocity_at_trajectory_end: true
+
+    command_timeout: 0.2
+    state_publish_rate: 50
