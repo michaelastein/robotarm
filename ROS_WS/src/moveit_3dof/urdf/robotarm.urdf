@@ -96,9 +96,9 @@
     <limit effort="81" lower="-1.5707964" upper="1.5707964" velocity="0.5"/>
   </joint>
 
-  <ros2_control name="RobotArmFakeSystem" type="system">
+  <ros2_control name="RobotArmSystem" type="system">
   	<hardware>
-  	  <plugin>robotarm_fake_hardware/VelocityFakeSystem</plugin>
+  	  <plugin>robotarm_hardware/RobotArmSystem</plugin>
   	</hardware>
 
   	<joint name="base_joint">

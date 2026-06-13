@@ -1,0 +1,11 @@
+<library path="robotarm_hardware">
+  <class
+    name="robotarm_hardware/RobotArmSystem"
+    type="robotarm_hardware::RobotArmSystem"
+    base_class_type="hardware_interface::SystemInterface">
+    <description>
+      Raspberry Pi hardware interface for 3-DOF robot arm.
+    </description>
+  </class>
+</library>
+
