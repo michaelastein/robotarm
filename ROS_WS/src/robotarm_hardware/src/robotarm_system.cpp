@@ -3,9 +3,8 @@
 #include <hardware_interface/types/hardware_interface_type_values.hpp>
 #include <pluginlib/class_list_macros.hpp>
 
-#include <cmath>
 #include <algorithm>
-#include <iostream>
+#include <cmath>
 
 namespace robotarm_hardware
 {
@@ -36,9 +35,50 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
   direction_ = {1.0, 1.0, 1.0};
   max_pwm_ = {0.6, 0.6, 0.6};
 
+  chip_ = gpiod_chip_open_by_name("gpiochip4");
+
+  if (!chip_)
+  {
+    RCLCPP_ERROR(
+      rclcpp::get_logger("RobotArmSystem"),
+      "Could not open gpiochip4"
+    );
+    return hardware_interface::CallbackReturn::ERROR;
+  }
+
+  for (size_t i = 0; i < n; ++i)
+  {
+    gpiod_line * fwd = gpiod_chip_get_line(chip_, forward_gpio_[i]);
+    gpiod_line * bwd = gpiod_chip_get_line(chip_, backward_gpio_[i]);
+
+    if (!fwd || !bwd)
+    {
+      RCLCPP_ERROR(
+        rclcpp::get_logger("RobotArmSystem"),
+        "Could not get GPIO lines"
+      );
+      return hardware_interface::CallbackReturn::ERROR;
+    }
+
+    if (
+      gpiod_line_request_output(fwd, "robotarm_hardware", 0) < 0 ||
+      gpiod_line_request_output(bwd, "robotarm_hardware", 0) < 0
+    )
+    {
+      RCLCPP_ERROR(
+        rclcpp::get_logger("RobotArmSystem"),
+        "Could not request GPIO outputs"
+      );
+      return hardware_interface::CallbackReturn::ERROR;
+    }
+
+    forward_lines_.push_back(fwd);
+    backward_lines_.push_back(bwd);
+  }
+
   RCLCPP_INFO(
     rclcpp::get_logger("RobotArmSystem"),
-    "RobotArmSystem initialized with 3 joints"
+    "RobotArmSystem initialized with GPIO outputs"
   );
 
   return hardware_interface::CallbackReturn::SUCCESS;
@@ -54,12 +94,14 @@ RobotArmSystem::export_state_interfaces()
     state_interfaces.emplace_back(
       info_.joints[i].name,
       hardware_interface::HW_IF_POSITION,
-      &position_[i]);
+      &position_[i]
+    );
 
     state_interfaces.emplace_back(
       info_.joints[i].name,
       hardware_interface::HW_IF_VELOCITY,
-      &velocity_[i]);
+      &velocity_[i]
+    );
   }
 
   return state_interfaces;
@@ -75,7 +117,8 @@ RobotArmSystem::export_command_interfaces()
     command_interfaces.emplace_back(
       info_.joints[i].name,
       hardware_interface::HW_IF_VELOCITY,
-      &command_[i]);
+      &command_[i]
+    );
   }
 
   return command_interfaces;
@@ -89,22 +132,23 @@ hardware_interface::return_type RobotArmSystem::read(
 
   for (size_t i = 0; i < info_.joints.size(); ++i)
   {
-    // TODO: hier später echte Encoder-Ticks lesen.
-    // Aktuell Simulations-Fallback:
+    // Temporary simulation until real encoder reading is added.
     encoder_ticks_[i] +=
-    	command_[i] * dt *
-  	counts_per_motor_output_rev_ *
-  	gear_ratio_[i] /
-  	(2.0 * M_PI);
+      command_[i] *
+      dt *
+      counts_per_motor_output_rev_ *
+      gear_ratio_[i] /
+      (2.0 * M_PI);
 
     const double delta_ticks =
-  	encoder_ticks_[i] - last_encoder_ticks_[i];
+      encoder_ticks_[i] - last_encoder_ticks_[i];
+
     const double counts_per_joint_rev =
       counts_per_motor_output_rev_ * gear_ratio_[i];
 
     const double delta_rad =
       direction_[i] *
-      static_cast<double>(delta_ticks) /
+      delta_ticks /
       counts_per_joint_rev *
       2.0 * M_PI;
 
@@ -140,21 +184,28 @@ hardware_interface::return_type RobotArmSystem::write(
 
 void RobotArmSystem::set_motor(size_t i, double pwm)
 {
-  // TODO: hier später echte GPIO/PWM setzen.
-  //
-  // if pwm > 0:
-  //   forward_gpio_[i] HIGH/PWM
-  //   backward_gpio_[i] LOW
-  //
-  // if pwm < 0:
-  //   forward_gpio_[i] LOW
-  //   backward_gpio_[i] HIGH/PWM
-  //
-  // if pwm == 0:
-  //   both LOW
+  if (i >= forward_lines_.size() || i >= backward_lines_.size())
+  {
+    return;
+  }
 
-  (void) pwm;
-  (void) i;
+  const double deadband = 0.03;
+
+  if (pwm > deadband)
+  {
+    gpiod_line_set_value(forward_lines_[i], 1);
+    gpiod_line_set_value(backward_lines_[i], 0);
+  }
+  else if (pwm < -deadband)
+  {
+    gpiod_line_set_value(forward_lines_[i], 0);
+    gpiod_line_set_value(backward_lines_[i], 1);
+  }
+  else
+  {
+    gpiod_line_set_value(forward_lines_[i], 0);
+    gpiod_line_set_value(backward_lines_[i], 0);
+  }
 }
 
 void RobotArmSystem::stop_all()

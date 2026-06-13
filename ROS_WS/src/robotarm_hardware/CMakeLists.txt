@@ -9,7 +9,9 @@ find_package(rclcpp REQUIRED)
 add_library(robotarm_hardware SHARED
   src/robotarm_system.cpp
 )
-
+target_link_libraries(robotarm_hardware
+  gpiod
+)
 target_include_directories(robotarm_hardware PUBLIC
   include
 )
