@@ -45,7 +45,7 @@
     <child link="column_link"/>
     <origin xyz="0 0 0.05"/>
     <axis xyz="0 0 1"/>
-    <limit effort="100" lower="-0.78539819" upper="0.78539819" velocity="0.5"/>
+    <limit effort="100" lower="-3.14159265" upper="3.14159265" velocity="0.5"/>
   </joint>
 
   <link name="upper_arm_link">
@@ -69,7 +69,7 @@
     <child link="upper_arm_link"/>
     <origin xyz="0 0 0.12"/>
     <axis xyz="0 1 0"/>
-    <limit effort="81" lower="-1.5707964" upper="1.5707964" velocity="0.5"/>
+    <limit effort="81" lower="-0.52359878" upper="1.39626340" velocity="0.5"/>
   </joint>
 
   <link name="lower_arm_link">
@@ -91,33 +91,32 @@
   <joint name="elbow_joint" type="revolute">
     <parent link="upper_arm_link"/>
     <child link="lower_arm_link"/>
-    <origin xyz="0 0 0.14"/>
+    <origin xyz="-0.025 0 0.14"/>
     <axis xyz="0 1 0"/>
-    <limit effort="81" lower="-1.5707964" upper="1.5707964" velocity="0.5"/>
+    <limit effort="81" lower="-0.69813170" upper="2.44346095" velocity="0.5"/>
   </joint>
 
   <ros2_control name="RobotArmSystem" type="system">
-  	<hardware>
-  	  <plugin>robotarm_hardware/RobotArmSystem</plugin>
-  	</hardware>
+    <hardware>
+      <plugin>robotarm_hardware/RobotArmSystem</plugin>
+    </hardware>
 
-  	<joint name="base_joint">
-  	  <command_interface name="velocity"/>
-  	  <state_interface name="position"/>
-  	  <state_interface name="velocity"/>
-  	</joint>
+    <joint name="base_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
 
-  	<joint name="shoulder_joint">
-  	  <command_interface name="velocity"/>
-  	  <state_interface name="position"/>
-  	  <state_interface name="velocity"/>
-  	</joint>
+    <joint name="shoulder_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
 
-  	<joint name="elbow_joint">
-  	  <command_interface name="velocity"/>
-  	  <state_interface name="position"/>
-  	  <state_interface name="velocity"/>
-  	</joint>
+    <joint name="elbow_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
   </ros2_control>
-
 </robot>

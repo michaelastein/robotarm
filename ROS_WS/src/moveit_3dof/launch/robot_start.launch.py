@@ -28,15 +28,26 @@ def generate_launch_description():
         default="false",
     )
 
-    servo_yaml = os.path.join(pkg_path, "config", "servo_parameters.yaml")
-    controllers_yaml = os.path.join(pkg_path, "config", "ros2_controllers.yaml")
+    servo_yaml = os.path.join(
+        pkg_path,
+        "config",
+        "servo_parameters.yaml",
+    )
+
+    controllers_yaml = os.path.join(
+        pkg_path,
+        "config",
+        "ros2_controllers.yaml",
+    )
 
     robot_state_publisher_node = launch_ros.actions.Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
         name="robot_state_publisher",
         output="screen",
-        parameters=[moveit_config.robot_description],
+        parameters=[
+            moveit_config.robot_description,
+        ],
     )
 
     ros2_control_node = launch_ros.actions.Node(
@@ -104,6 +115,27 @@ def generate_launch_description():
         output="screen",
     )
 
+    safety_node = launch_ros.actions.Node(
+        package="moveit_3dof",
+        executable="safety_node.py",
+        name="safety_node",
+        output="screen",
+    )
+
+    safety_supervisor_node = launch_ros.actions.Node(
+        package="moveit_3dof",
+        executable="safety_supervisor.py",
+        name="safety_supervisor",
+        output="screen",
+    )
+
+    hotspot_visual_servo_node = launch_ros.actions.Node(
+        package="moveit_3dof",
+        executable="hotspot_visual_servo.py",
+        name="hotspot_visual_servo",
+        output="screen",
+    )
+
     return launch.LaunchDescription(
         [
             robot_state_publisher_node,
@@ -111,5 +143,8 @@ def generate_launch_description():
             joint_state_spawner,
             servo_controller_spawner,
             container,
+            safety_node,
+            safety_supervisor_node,
+            hotspot_visual_servo_node,
         ]
     )

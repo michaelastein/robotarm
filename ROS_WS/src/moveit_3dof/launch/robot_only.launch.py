@@ -24,9 +24,33 @@ def generate_launch_description():
 
     demo = generate_demo_launch(moveit_config)
 
+    safety_node = Node(
+        package="moveit_3dof",
+        executable="safety_node.py",
+        name="safety_node",
+        output="screen",
+    )
 
-    return LaunchDescription( 
+    safety_supervisor = Node(
+        package="moveit_3dof",
+        executable="safety_supervisor.py",
+        name="safety_supervisor",
+        output="screen",
+    )
 
-        list(demo.entities)  
 
-    ) 
+    hotspot_visual_servo = Node(
+        package="moveit_3dof",
+        executable="hotspot_visual_servo.py",
+        name="hotspot_visual_servo",
+        output="screen",
+    )
+
+    return LaunchDescription(
+        list(demo.entities)
+        + [
+            safety_node,
+            safety_supervisor,
+            hotspot_visual_servo,
+        ]
+    )

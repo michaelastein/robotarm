@@ -3,14 +3,36 @@ project(moveit_3dof)
 
 find_package(ament_cmake REQUIRED)
 
-ament_package()
+install(
+  DIRECTORY
+    launch
+    urdf
+  DESTINATION share/${PROJECT_NAME}
+  PATTERN "setup_assistant.launch" EXCLUDE
+)
 
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/launch")
+install(
+  DIRECTORY
+    config
+  DESTINATION share/${PROJECT_NAME}
+)
+
+install(
+  PROGRAMS
+    scripts/safety_node.py
+    scripts/safety_supervisor.py
+    scripts/hotspot_visual_servo.py
+    scripts/keyboard.py
+    scripts/tip_velocity_control.py
+    scripts/send_twist.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.setup_assistant")
   install(
-    DIRECTORY launch  urdf
+    FILES .setup_assistant
     DESTINATION share/${PROJECT_NAME}
-    PATTERN "setup_assistant.launch" EXCLUDE)
+  )
 endif()
 
-install(DIRECTORY config DESTINATION share/${PROJECT_NAME})
-install(FILES .setup_assistant DESTINATION share/${PROJECT_NAME})
+ament_package()
