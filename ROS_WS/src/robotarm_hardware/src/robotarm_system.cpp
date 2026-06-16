@@ -31,9 +31,24 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
   backward_gpio_ = {22, 24, 12};
   encoder_gpio_ = {5, 16, 18};
 
-  gear_ratio_ = {1.0, 1.0, 1.0};
+  gear_ratio_ = {90.0, 20.0, 20.0};
+
+  // base, shoulder, elbow
   direction_ = {1.0, 1.0, 1.0};
-  max_pwm_ = {0.6, 0.6, 0.6};
+
+  max_pwm_ = {0.25, 0.25, 0.25};
+
+  lower_limit_ = {
+    -3.14159265,
+    -0.52359878,
+    -0.69813170
+  };
+
+  upper_limit_ = {
+    3.14159265,
+    1.39626340,
+    2.44346095
+  };
 
   chip_ = gpiod_chip_open_by_name("gpiochip4");
 
@@ -78,7 +93,7 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
 
   RCLCPP_INFO(
     rclcpp::get_logger("RobotArmSystem"),
-    "RobotArmSystem initialized with GPIO outputs"
+    "RobotArmSystem initialized with GPIO outputs and joint limits"
   );
 
   return hardware_interface::CallbackReturn::SUCCESS;
@@ -132,7 +147,6 @@ hardware_interface::return_type RobotArmSystem::read(
 
   for (size_t i = 0; i < info_.joints.size(); ++i)
   {
-    // Temporary simulation until real encoder reading is added.
     encoder_ticks_[i] +=
       command_[i] *
       dt *
@@ -154,6 +168,12 @@ hardware_interface::return_type RobotArmSystem::read(
 
     position_[i] += delta_rad;
 
+    position_[i] = std::clamp(
+      position_[i],
+      lower_limit_[i],
+      upper_limit_[i]
+    );
+
     if (dt > 0.0)
     {
       velocity_[i] = delta_rad / dt;
@@ -173,8 +193,23 @@ hardware_interface::return_type RobotArmSystem::write(
   {
     double pwm = command_[i];
 
+    if (position_[i] <= lower_limit_[i] && pwm < 0.0)
+    {
+      pwm = 0.0;
+    }
+
+    if (position_[i] >= upper_limit_[i] && pwm > 0.0)
+    {
+      pwm = 0.0;
+    }
+
     pwm *= direction_[i];
-    pwm = std::clamp(pwm, -max_pwm_[i], max_pwm_[i]);
+
+    pwm = std::clamp(
+      pwm,
+      -max_pwm_[i],
+      max_pwm_[i]
+    );
 
     set_motor(i, pwm);
   }

@@ -3,7 +3,10 @@
 #include <hardware_interface/system_interface.hpp>
 #include <hardware_interface/types/hardware_interface_return_values.hpp>
 #include <rclcpp/rclcpp.hpp>
+
 #include <gpiod.h>
+
+#include <atomic>
 #include <vector>
 #include <string>
 
@@ -35,6 +38,9 @@ private:
   std::vector<double> velocity_;
   std::vector<double> command_;
 
+  std::vector<double> lower_limit_;
+  std::vector<double> upper_limit_;
+
   std::vector<int> forward_gpio_;
   std::vector<int> backward_gpio_;
   std::vector<int> encoder_gpio_;
@@ -45,14 +51,21 @@ private:
 
   std::vector<double> encoder_ticks_;
   std::vector<double> last_encoder_ticks_;
+
   gpiod_chip * chip_ = nullptr;
 
   std::vector<gpiod_line *> forward_lines_;
   std::vector<gpiod_line *> backward_lines_;
+
+  int emergency_gpio_ = 6;
+  gpiod_line * emergency_line_ = nullptr;
+  std::atomic<bool> emergency_stop_{false};
+
   double counts_per_motor_output_rev_ = 127.8;
 
   void stop_all();
   void set_motor(size_t i, double pwm);
+  bool is_emergency_pressed();
 };
 
 }

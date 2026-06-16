@@ -13,6 +13,12 @@ from rclpy.qos import (
     DurabilityPolicy,
     HistoryPolicy,
 )
+from rclpy.signals import SignalHandlerOptions
+
+try:
+    from rclpy._rclpy_pybind11 import RCLError
+except ImportError:
+    RCLError = RuntimeError
 
 from control_msgs.msg import JointJog
 from sensor_msgs.msg import JointState
@@ -27,8 +33,8 @@ JOINT_NAMES = [
 
 START_POSITION = {
     "base_joint": 0.0,
-    "shoulder_joint": 0.7203,
-    "elbow_joint": 1.1889,
+    "shoulder_joint": -0.3,
+    "elbow_joint": -0.3,
 }
 
 ZERO_POSITION = {
@@ -47,7 +53,19 @@ AUTO_TOLERANCE = 0.025
 PUBLISH_RATE = 50.0
 
 
-HELP = """
+def clamp(value, low, high):
+    return max(low, min(high, value))
+
+
+def format_target(target):
+    return "\n".join(
+        f"{joint:<14} = {target[joint]:.4f}"
+        for joint in JOINT_NAMES
+    )
+
+
+def get_help_text():
+    return f"""
 Keyboard MoveIt Servo Joint Jog
 --------------------------------
 Manual:
@@ -65,19 +83,11 @@ p      : print current position
 x      : quit
 
 Start target:
-base_joint     = 0.0
-shoulder_joint = 0.7203
-elbow_joint    = 1.1889
+{format_target(START_POSITION)}
 
 Zero target:
-base_joint     = 0.0
-shoulder_joint = 0.0
-elbow_joint    = 0.0
+{format_target(ZERO_POSITION)}
 """
-
-
-def clamp(value, low, high):
-    return max(low, min(high, value))
 
 
 class KeyboardJointServo(Node):
@@ -127,13 +137,16 @@ class KeyboardJointServo(Node):
             self.publish_command,
         )
 
-        print(HELP)
+        print(get_help_text())
 
     def switch_to_joint_jog(self):
-        while not self.client.wait_for_service(timeout_sec=1.0):
+        while rclpy.ok() and not self.client.wait_for_service(timeout_sec=1.0):
             self.get_logger().info(
                 "Waiting for /servo_node/switch_command_type..."
             )
+
+        if not rclpy.ok():
+            return
 
         req = ServoCommandType.Request()
         req.command_type = ServoCommandType.Request.JOINT_JOG
@@ -232,19 +245,22 @@ class KeyboardJointServo(Node):
             self.active_velocities["base_joint"] = VEL
 
         elif key == "w":
-            self.active_velocities["shoulder_joint"] = VEL
-        elif key == "s":
             self.active_velocities["shoulder_joint"] = -VEL
+        elif key == "s":
+            self.active_velocities["shoulder_joint"] = VEL
 
         elif key == "e":
-            self.active_velocities["elbow_joint"] = VEL
-        elif key == "d":
             self.active_velocities["elbow_joint"] = -VEL
+        elif key == "d":
+            self.active_velocities["elbow_joint"] = VEL
 
         elif key == " ":
             self.stop()
 
     def publish_command(self):
+        if not rclpy.ok():
+            return
+
         if self.auto_target is not None:
             self.update_auto_velocities()
 
@@ -262,7 +278,18 @@ class KeyboardJointServo(Node):
 
         msg.duration = 0.1
 
-        self.pub.publish(msg)
+        try:
+            self.pub.publish(msg)
+        except RCLError:
+            pass
+
+    def publish_stop_commands(self, count=10):
+        self.stop()
+
+        for _ in range(count):
+            if not rclpy.ok():
+                return
+            self.publish_command()
 
     def print_positions(self):
         print("\nCurrent joint positions:")
@@ -296,15 +323,29 @@ def get_key(timeout=0.05):
     return None
 
 
+def restore_terminal(old_settings):
+    if old_settings is not None:
+        termios.tcsetattr(
+            sys.stdin,
+            termios.TCSADRAIN,
+            old_settings,
+        )
+
+
 def main():
-    rclpy.init()
-
-    old_settings = termios.tcgetattr(sys.stdin)
-    tty.setcbreak(sys.stdin.fileno())
-
-    node = KeyboardJointServo()
+    node = None
+    old_settings = None
 
     try:
+        rclpy.init(
+            signal_handler_options=SignalHandlerOptions.NO,
+        )
+
+        old_settings = termios.tcgetattr(sys.stdin)
+        tty.setcbreak(sys.stdin.fileno())
+
+        node = KeyboardJointServo()
+
         while rclpy.ok():
             rclpy.spin_once(
                 node,
@@ -317,9 +358,7 @@ def main():
                 continue
 
             if key == "x":
-                node.stop()
-                for _ in range(10):
-                    node.publish_command()
+                node.publish_stop_commands()
                 break
 
             if key == "p":
@@ -344,22 +383,24 @@ def main():
             node.print_positions()
 
     except KeyboardInterrupt:
-        pass
+        print("\nCtrl+C received. Stopping and restoring terminal...")
 
     finally:
-        node.stop()
+        restore_terminal(old_settings)
 
-        for _ in range(10):
-            node.publish_command()
+        if node is not None:
+            try:
+                node.publish_stop_commands()
+            except Exception:
+                pass
 
-        termios.tcsetattr(
-            sys.stdin,
-            termios.TCSADRAIN,
-            old_settings,
-        )
+            try:
+                node.destroy_node()
+            except Exception:
+                pass
 
-        node.destroy_node()
-        rclpy.shutdown()
+        if rclpy.ok():
+            rclpy.shutdown()
 
 
 if __name__ == "__main__":
