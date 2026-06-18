@@ -33,8 +33,8 @@ JOINT_NAMES = [
 
 START_POSITION = {
     "base_joint": 0.0,
-    "shoulder_joint": -0.3,
-    "elbow_joint": -0.3,
+    "shoulder_joint": 0.8,
+    "elbow_joint": 1.0,
 }
 
 ZERO_POSITION = {
@@ -43,7 +43,7 @@ ZERO_POSITION = {
     "elbow_joint": 0.0,
 }
 
-VEL = 0.12
+VEL = 0.3
 
 AUTO_KP = 0.8
 AUTO_MAX_VEL = 0.12
@@ -240,9 +240,9 @@ class KeyboardJointServo(Node):
             self.active_velocities[joint] = 0.0
 
         if key == "q":
-            self.active_velocities["base_joint"] = -VEL
+            self.active_velocities["base_joint"] = -0.3 *VEL
         elif key == "a":
-            self.active_velocities["base_joint"] = VEL
+            self.active_velocities["base_joint"] = 0.3 *VEL
 
         elif key == "w":
             self.active_velocities["shoulder_joint"] = -VEL

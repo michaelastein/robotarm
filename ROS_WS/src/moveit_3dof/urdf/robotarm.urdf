@@ -45,7 +45,7 @@
     <child link="column_link"/>
     <origin xyz="0 0 0.05"/>
     <axis xyz="0 0 1"/>
-    <limit effort="100" lower="-3.14159265" upper="3.14159265" velocity="0.5"/>
+    <limit effort="100" lower="-3.0" upper="3.0" velocity="0.5"/>
   </joint>
 
   <link name="upper_arm_link">

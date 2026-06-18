@@ -129,12 +129,12 @@ def generate_launch_description():
         output="screen",
     )
 
-    hotspot_visual_servo_node = launch_ros.actions.Node(
-        package="moveit_3dof",
-        executable="hotspot_visual_servo.py",
-        name="hotspot_visual_servo",
-        output="screen",
-    )
+#    hotspot_visual_servo_node = launch_ros.actions.Node(
+ #       package="moveit_3dof",
+  #      executable="hotspot_visual_servo.py",
+   #     name="hotspot_visual_servo",
+    #    output="screen",
+   # )
 
     return launch.LaunchDescription(
         [
@@ -145,6 +145,6 @@ def generate_launch_description():
             container,
             safety_node,
             safety_supervisor_node,
-            hotspot_visual_servo_node,
+    #        hotspot_visual_servo_node,
         ]
     )
