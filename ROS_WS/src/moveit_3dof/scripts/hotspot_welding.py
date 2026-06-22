@@ -16,13 +16,14 @@ from moveit_msgs.srv import ServoCommandType
 CONF_THRESHOLD = 5.0
 
 CONTROL_RATE = 50.0
-DEADBAND = 0.04
+DEADBAND = 0.07
 
-KP_X = 0.06
-KP_Y = 0.06
+KP_X = 0.02
+KP_Y = 0.02
 
-MAX_VEL = 0.08
-SMOOTHING_ALPHA = 0.20
+MAX_VEL = 0.025
+SMOOTHING_ALPHA = 0.10
+LOST_ALPHA = 0.35
 
 LOST_TIMEOUT = 10
 
@@ -45,10 +46,12 @@ def find_hotspot(img):
     mask = gray >= global_thr
 
     count = np.sum(mask)
+
     if count < 3 or count > 0.01 * gray.size:
         return None, 0.0
 
     ys, xs = np.where(mask)
+
     if len(xs) == 0:
         return None, 0.0
 
@@ -79,6 +82,12 @@ class HotspotVisualServo(Node):
             CompressedImage,
             "/cam0/camera/image_raw/compressed",
             self.image_callback,
+            qos_profile_sensor_data,
+        )
+
+        self.annotated_pub = self.create_publisher(
+            CompressedImage,
+            "/hotspot_visual_servo/annotated_image/compressed",
             qos_profile_sensor_data,
         )
 
@@ -116,10 +125,17 @@ class HotspotVisualServo(Node):
         )
 
         self.get_logger().info("Hotspot visual servo started")
+        self.get_logger().info(
+            "Annotated image topic: "
+            "/hotspot_visual_servo/annotated_image/compressed"
+        )
 
     def switch_to_twist_mode(self):
-        while not self.servo_client.wait_for_service(timeout_sec=1.0):
+        while rclpy.ok() and not self.servo_client.wait_for_service(timeout_sec=1.0):
             self.get_logger().info("Waiting for Servo command-type service...")
+
+        if not rclpy.ok():
+            return
 
         req = ServoCommandType.Request()
         req.command_type = ServoCommandType.Request.TWIST
@@ -136,7 +152,7 @@ class HotspotVisualServo(Node):
         with self.lock:
             self.latest_msg = msg
 
-    def update_from_image(self, img):
+    def update_from_image(self, img, input_msg):
         h, w = img.shape[:2]
         meas, conf = find_hotspot(img)
 
@@ -163,34 +179,83 @@ class HotspotVisualServo(Node):
                 self.current_error_x = 0.0
                 self.current_error_y = 0.0
 
+        annotated = self.make_annotated_image(img)
+        self.publish_annotated_image(annotated, input_msg)
+
+    def make_annotated_image(self, img):
+        h, w = img.shape[:2]
         vis = img.copy()
 
-        if self.last_valid is not None:
-            pt = self.last_valid
-        else:
-            pt = (w // 2, h // 2)
+        center = (w // 2, h // 2)
 
-        cv2.circle(vis, pt, 8, (0, 0, 255), -1)
-        cv2.circle(vis, (w // 2, h // 2), 8, (0, 255, 0), 2)
+        if self.last_valid is not None and self.target_visible:
+            pt = self.last_valid
+            target_color = (0, 0, 255)
+        elif self.last_valid is not None:
+            pt = self.last_valid
+            target_color = (0, 165, 255)
+        else:
+            pt = center
+            target_color = (0, 165, 255)
+
+        cv2.circle(vis, pt, 8, target_color, -1)
+        cv2.circle(vis, center, 8, (0, 255, 0), 2)
+
+        if self.last_valid is not None:
+            cv2.line(vis, center, pt, (255, 255, 0), 2)
 
         status = (
-            f"err=({self.current_error_x:.2f}, {self.current_error_y:.2f}) "
+            f"visible={self.target_visible} "
+            f"err=({self.current_error_x:+.2f}, {self.current_error_y:+.2f}) "
             f"conf={self.current_conf:.2f} "
             f"lost={self.lost_counter}"
+        )
+
+        velocity_status = (
+            f"vel=({self.filtered_vx:+.3f}, "
+            f"{self.filtered_vy:+.3f}, "
+            f"{self.filtered_vz:+.3f})"
         )
 
         cv2.putText(
             vis,
             status,
-            (20, 30),
+            (10, 25),
             cv2.FONT_HERSHEY_SIMPLEX,
-            0.6,
+            0.55,
             (255, 255, 255),
             2,
         )
 
-        cv2.imshow("Hotspot Visual Servo", vis)
-        cv2.waitKey(1)
+        cv2.putText(
+            vis,
+            velocity_status,
+            (10, 50),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.55,
+            (255, 255, 255),
+            2,
+        )
+
+        return vis
+
+    def publish_annotated_image(self, img, input_msg):
+        ok, encoded = cv2.imencode(
+            ".jpg",
+            img,
+            [int(cv2.IMWRITE_JPEG_QUALITY), 80],
+        )
+
+        if not ok:
+            self.get_logger().warn("Could not encode annotated image")
+            return
+
+        out = CompressedImage()
+        out.header = input_msg.header
+        out.format = "jpeg"
+        out.data = encoded.tobytes()
+
+        self.annotated_pub.publish(out)
 
     def publish_servo_command(self):
         with self.lock:
@@ -202,11 +267,16 @@ class HotspotVisualServo(Node):
             img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
 
             if img is not None:
-                self.update_from_image(img)
+                self.update_from_image(img, msg)
 
         raw_vx = 0.0
         raw_vy = 0.0
         raw_vz = 0.0
+
+        alpha = SMOOTHING_ALPHA
+
+        if not self.target_visible:
+            alpha = LOST_ALPHA
 
         if self.target_visible:
             err_x = self.current_error_x
@@ -230,18 +300,18 @@ class HotspotVisualServo(Node):
             raw_vz = clamp(raw_vz, -MAX_VEL, MAX_VEL)
 
         self.filtered_vx = (
-            SMOOTHING_ALPHA * raw_vx
-            + (1.0 - SMOOTHING_ALPHA) * self.filtered_vx
+            alpha * raw_vx
+            + (1.0 - alpha) * self.filtered_vx
         )
 
         self.filtered_vy = (
-            SMOOTHING_ALPHA * raw_vy
-            + (1.0 - SMOOTHING_ALPHA) * self.filtered_vy
+            alpha * raw_vy
+            + (1.0 - alpha) * self.filtered_vy
         )
 
         self.filtered_vz = (
-            SMOOTHING_ALPHA * raw_vz
-            + (1.0 - SMOOTHING_ALPHA) * self.filtered_vz
+            alpha * raw_vz
+            + (1.0 - alpha) * self.filtered_vz
         )
 
         twist = TwistStamped()
@@ -269,7 +339,6 @@ def main(args=None):
     except KeyboardInterrupt:
         pass
 
-    cv2.destroyAllWindows()
     node.destroy_node()
     rclpy.shutdown()
 

@@ -129,12 +129,39 @@ def generate_launch_description():
         output="screen",
     )
 
+    cam0_params = {
+        "camera": 0,
+
+        # Low resolution
+        "width": 320,
+        "height": 240,
+
+        #focus
+        "AfMode": 2,  # autofocus
+        #"LensPosition": 2.0,
+
+        # Auto white balance / exposure
+        "AwbEnable": True,
+        "AeEnable": True,
+    }
+
+    cam0_node = launch_ros.actions.Node(
+        package="camera_ros",
+        executable="camera_node",
+        name="camera",
+        namespace="cam0",
+        parameters=[
+            cam0_params,
+        ],
+        output="screen",
+    )
+
 #    hotspot_visual_servo_node = launch_ros.actions.Node(
- #       package="moveit_3dof",
-  #      executable="hotspot_visual_servo.py",
-   #     name="hotspot_visual_servo",
-    #    output="screen",
-   # )
+#         package="moveit_3dof",
+ #        executable="hotspot_visual_servo.py",
+  #       name="hotspot_visual_servo",
+   #      output="screen",
+    #)
 
     return launch.LaunchDescription(
         [
@@ -145,6 +172,7 @@ def generate_launch_description():
             container,
             safety_node,
             safety_supervisor_node,
-    #        hotspot_visual_servo_node,
+            cam0_node,
+     #       hotspot_visual_servo_node,
         ]
     )

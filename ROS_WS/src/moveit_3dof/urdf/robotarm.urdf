@@ -8,6 +8,10 @@
     <color rgba="0 0 0 1"/>
   </material>
 
+  <material name="red">
+    <color rgba="0.8 0 0 1"/>
+  </material>
+
   <link name="base_link">
     <visual>
       <geometry>
@@ -94,6 +98,31 @@
     <origin xyz="-0.025 0 0.14"/>
     <axis xyz="0 1 0"/>
     <limit effort="81" lower="-0.69813170" upper="2.44346095" velocity="0.5"/>
+  </joint>
+
+  <!-- Tool tip frame at the physical end of the lower arm.
+       lower_arm_link visual length is 0.15 m along local +Z,
+       so the tip is at z = 0.15 in lower_arm_link frame. -->
+  <link name="tool_tip_link">
+    <visual>
+      <geometry>
+        <sphere radius="0.01"/>
+      </geometry>
+      <origin xyz="0 0 0"/>
+      <material name="red"/>
+    </visual>
+    <collision>
+      <geometry>
+        <sphere radius="0.012"/>
+      </geometry>
+      <origin xyz="0 0 0"/>
+    </collision>
+  </link>
+
+  <joint name="tool_tip_fixed_joint" type="fixed">
+    <parent link="lower_arm_link"/>
+    <child link="tool_tip_link"/>
+    <origin xyz="0 0 0.15" rpy="0 0 0"/>
   </joint>
 
   <ros2_control name="RobotArmSystem" type="system">

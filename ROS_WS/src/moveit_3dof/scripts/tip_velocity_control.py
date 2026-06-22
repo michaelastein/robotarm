@@ -14,13 +14,11 @@ from tf2_ros import TransformException
 
 
 BASE_FRAME = "base_link"
-TIP_FRAME = "lower_arm_link"
+TIP_FRAME = "tool_tip_link"
 
 PUBLISH_PERIOD = 0.01
 
-KP_Z = 1.2
-MAX_VZ = 0.06
-Z_DEADBAND = 0.003
+MAX_VEL = 0.04
 
 
 def clamp(value, low, high):
@@ -51,9 +49,7 @@ class TipVelocityControl(Node):
 
         self.vx = 0.0
         self.vy = 0.0
-        self.vz_correction = 0.0
-
-        self.target_z = None
+        self.vz = 0.0
 
         self.switch_to_twist()
 
@@ -63,12 +59,19 @@ class TipVelocityControl(Node):
         )
 
         self.get_logger().info(
-            "Input format: vx vy   | example: 0 0.05   | q to quit"
+            "Input format: vx vy vz | example: 0.01 0 0 | "
+            "s stop | p print tip | q quit"
+        )
+        self.get_logger().info(
+            "No height guard, no correction. Publishing raw Cartesian twist."
         )
 
     def switch_to_twist(self):
-        while not self.client.wait_for_service(timeout_sec=1.0):
+        while rclpy.ok() and not self.client.wait_for_service(timeout_sec=1.0):
             self.get_logger().info("Waiting for servo...")
+
+        if not rclpy.ok():
+            return
 
         req = ServoCommandType.Request()
         req.command_type = ServoCommandType.Request.TWIST
@@ -85,7 +88,7 @@ class TipVelocityControl(Node):
         else:
             self.get_logger().error("Could not switch Servo to TWIST mode")
 
-    def get_tip_z(self):
+    def get_tip_position(self):
         try:
             transform = self.tf_buffer.lookup_transform(
                 BASE_FRAME,
@@ -93,7 +96,13 @@ class TipVelocityControl(Node):
                 rclpy.time.Time(),
             )
 
-            return transform.transform.translation.z
+            t = transform.transform.translation
+
+            return (
+                float(t.x),
+                float(t.y),
+                float(t.z),
+            )
 
         except TransformException as ex:
             self.get_logger().warn(
@@ -102,44 +111,44 @@ class TipVelocityControl(Node):
             )
             return None
 
-    def compute_z_correction(self):
-        current_z = self.get_tip_z()
+    def print_tip_position(self):
+        pos = self.get_tip_position()
 
-        if current_z is None:
-            return 0.0
+        if pos is None:
+            print("Tip position unknown")
+            return
 
-        if self.target_z is None:
-            self.target_z = current_z
-            self.get_logger().info(
-                f"Locked target height z = {self.target_z:.4f} m"
-            )
-            return 0.0
+        x, y, z = pos
 
-        z_error = self.target_z - current_z
-
-        if abs(z_error) < Z_DEADBAND:
-            return 0.0
-
-        vz = KP_Z * z_error
-        vz = clamp(
-            vz,
-            -MAX_VZ,
-            MAX_VZ,
+        print(
+            f"tip x={x:+.4f} y={y:+.4f} z={z:+.4f} | "
+            f"cmd vx={self.vx:+.3f} vy={self.vy:+.3f} vz={self.vz:+.3f}"
         )
 
-        return vz
+    def publish_zero(self):
+        msg = TwistStamped()
+        msg.header.stamp = self.get_clock().now().to_msg()
+        msg.header.frame_id = BASE_FRAME
+
+        msg.twist.linear.x = 0.0
+        msg.twist.linear.y = 0.0
+        msg.twist.linear.z = 0.0
+
+        msg.twist.angular.x = 0.0
+        msg.twist.angular.y = 0.0
+        msg.twist.angular.z = 0.0
+
+        self.pub.publish(msg)
 
     def publish_twist(self):
-        self.vz_correction = self.compute_z_correction()
-
         msg = TwistStamped()
 
         msg.header.stamp = self.get_clock().now().to_msg()
         msg.header.frame_id = BASE_FRAME
 
-        msg.twist.linear.x = self.vx
-        msg.twist.linear.y = self.vy
-        msg.twist.linear.z = self.vz_correction
+        msg.twist.linear.x = clamp(self.vx, -MAX_VEL, MAX_VEL)
+        msg.twist.linear.y = clamp(self.vy, -MAX_VEL, MAX_VEL)
+        msg.twist.linear.z = clamp(self.vz, -MAX_VEL, MAX_VEL)
 
         msg.twist.angular.x = 0.0
         msg.twist.angular.y = 0.0
@@ -150,37 +159,49 @@ class TipVelocityControl(Node):
     def input_loop(self):
         while rclpy.ok():
             text = input(
-                "\nEnter vx vy (q quit, z reset height): "
+                "\nEnter vx vy vz (s stop, p print tip, q quit): "
             ).strip()
 
             if text == "q":
+                self.vx = 0.0
+                self.vy = 0.0
+                self.vz = 0.0
+                self.publish_zero()
                 rclpy.shutdown()
                 return
 
-            if text == "z":
-                self.target_z = None
-                print("Height target reset to current tip height")
+            if text == "s":
+                self.vx = 0.0
+                self.vy = 0.0
+                self.vz = 0.0
+                self.publish_zero()
+                print("Stopped")
+                continue
+
+            if text == "p":
+                self.print_tip_position()
                 continue
 
             try:
                 vals = [float(v) for v in text.split()]
 
-                if len(vals) != 2:
-                    print("Need exactly 2 numbers: vx vy")
-                    print("Example: 0 0.05")
+                if len(vals) != 3:
+                    print("Need exactly 3 numbers: vx vy vz")
+                    print("Example: 0.01 0 0")
                     continue
 
-                self.vx = vals[0]
-                self.vy = vals[1]
+                self.vx = clamp(vals[0], -MAX_VEL, MAX_VEL)
+                self.vy = clamp(vals[1], -MAX_VEL, MAX_VEL)
+                self.vz = clamp(vals[2], -MAX_VEL, MAX_VEL)
 
                 print(
-                    f"Sending vx={self.vx:.3f}, "
-                    f"vy={self.vy:.3f}, "
-                    f"auto vz={self.vz_correction:.3f}"
+                    f"Sending vx={self.vx:+.3f}, "
+                    f"vy={self.vy:+.3f}, "
+                    f"vz={self.vz:+.3f}"
                 )
 
             except Exception:
-                print("Example: 0 0.05")
+                print("Example: 0.01 0 0")
 
 
 def main():
@@ -193,7 +214,15 @@ def main():
         daemon=True,
     ).start()
 
-    rclpy.spin(node)
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        node.publish_zero()
+
+    node.destroy_node()
+
+    if rclpy.ok():
+        rclpy.shutdown()
 
 
 if __name__ == "__main__":

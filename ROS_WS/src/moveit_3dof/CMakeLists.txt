@@ -21,7 +21,7 @@ install(
   PROGRAMS
     scripts/safety_node.py
     scripts/safety_supervisor.py
-    scripts/hotspot_visual_servo.py
+    scripts/hotspot.py
     scripts/keyboard.py
     scripts/tip_velocity_control.py
     scripts/send_twist.py

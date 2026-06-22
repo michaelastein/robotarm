@@ -31,10 +31,15 @@ JOINT_NAMES = [
     "elbow_joint",
 ]
 
+ARM_JOINTS = [
+    "shoulder_joint",
+    "elbow_joint",
+]
+
 START_POSITION = {
     "base_joint": 0.0,
-    "shoulder_joint": 0.8,
-    "elbow_joint": 1.0,
+    "shoulder_joint": 0.6,
+    "elbow_joint": 1.5,
 }
 
 ZERO_POSITION = {
@@ -45,10 +50,20 @@ ZERO_POSITION = {
 
 VEL = 0.3
 
+# Shoulder / elbow automatic movement
 AUTO_KP = 0.8
 AUTO_MAX_VEL = 0.12
 AUTO_MIN_VEL = 0.025
 AUTO_TOLERANCE = 0.025
+
+# Base automatic movement: separate, slow phase
+AUTO_BASE_KP = 0.08
+AUTO_BASE_MAX_VEL = 0.006
+AUTO_BASE_MIN_VEL = 0.0
+AUTO_BASE_TOLERANCE = 0.04
+
+DEBUG_AUTO = True
+DEBUG_PRINT_INTERVAL = 0.25  # seconds
 
 PUBLISH_RATE = 50.0
 
@@ -87,6 +102,13 @@ Start target:
 
 Zero target:
 {format_target(ZERO_POSITION)}
+
+Automatic movement uses separate phases:
+1. ARM phase  : shoulder + elbow move, base frozen
+2. BASE phase : base moves alone, shoulder + elbow frozen
+
+Debug:
+DEBUG_AUTO = {DEBUG_AUTO}
 """
 
 
@@ -129,6 +151,9 @@ class KeyboardJointServo(Node):
 
         self.auto_target = None
         self.auto_name = None
+        self.auto_phase = None
+
+        self.last_debug_time = self.get_clock().now()
 
         self.switch_to_joint_jog()
 
@@ -170,6 +195,7 @@ class KeyboardJointServo(Node):
     def stop(self):
         self.auto_target = None
         self.auto_name = None
+        self.auto_phase = None
 
         for joint in JOINT_NAMES:
             self.active_velocities[joint] = 0.0
@@ -183,10 +209,39 @@ class KeyboardJointServo(Node):
 
         self.auto_target = target
         self.auto_name = name
+        self.auto_phase = "arm"
+        self.last_debug_time = self.get_clock().now()
+
+        for joint in JOINT_NAMES:
+            self.active_velocities[joint] = 0.0
 
         self.get_logger().warn(
-            f"Automatic move started: {name}"
+            f"Automatic move started: {name} | phase=ARM"
         )
+
+    def calculate_joint_velocity(
+        self,
+        joint,
+        error,
+        kp,
+        max_vel,
+        min_vel,
+        tolerance,
+    ):
+        if abs(error) <= tolerance:
+            return 0.0, True
+
+        vel = kp * error
+        vel = clamp(
+            vel,
+            -max_vel,
+            max_vel,
+        )
+
+        if min_vel > 0.0 and abs(vel) < min_vel:
+            vel = min_vel if vel > 0.0 else -min_vel
+
+        return vel, False
 
     def update_auto_velocities(self):
         if self.auto_target is None:
@@ -199,50 +254,120 @@ class KeyboardJointServo(Node):
             )
             return False
 
-        all_reached = True
+        debug_lines = []
 
         for joint in JOINT_NAMES:
-            error = self.auto_target[joint] - self.current_positions[joint]
+            self.active_velocities[joint] = 0.0
 
-            if abs(error) <= AUTO_TOLERANCE:
-                self.active_velocities[joint] = 0.0
-                continue
+        if self.auto_phase == "arm":
+            arm_reached = True
 
-            all_reached = False
+            # Phase 1:
+            # Move shoulder and elbow only.
+            # Base is frozen with velocity 0.
+            self.active_velocities["base_joint"] = 0.0
 
-            vel = AUTO_KP * error
-            vel = clamp(
-                vel,
-                -AUTO_MAX_VEL,
-                AUTO_MAX_VEL,
+            for joint in ARM_JOINTS:
+                current = self.current_positions[joint]
+                target = self.auto_target[joint]
+                error = target - current
+
+                vel, reached = self.calculate_joint_velocity(
+                    joint=joint,
+                    error=error,
+                    kp=AUTO_KP,
+                    max_vel=AUTO_MAX_VEL,
+                    min_vel=AUTO_MIN_VEL,
+                    tolerance=AUTO_TOLERANCE,
+                )
+
+                self.active_velocities[joint] = vel
+
+                if not reached:
+                    arm_reached = False
+
+            if arm_reached:
+                self.auto_phase = "base"
+
+                for joint in JOINT_NAMES:
+                    self.active_velocities[joint] = 0.0
+
+                self.get_logger().warn(
+                    f"ARM phase reached for {self.auto_name}. "
+                    "Switching to BASE phase."
+                )
+
+        elif self.auto_phase == "base":
+            # Phase 2:
+            # Move base only.
+            # Shoulder and elbow are frozen.
+            current = self.current_positions["base_joint"]
+            target = self.auto_target["base_joint"]
+            error = target - current
+
+            vel, base_reached = self.calculate_joint_velocity(
+                joint="base_joint",
+                error=error,
+                kp=AUTO_BASE_KP,
+                max_vel=AUTO_BASE_MAX_VEL,
+                min_vel=AUTO_BASE_MIN_VEL,
+                tolerance=AUTO_BASE_TOLERANCE,
             )
 
-            if abs(vel) < AUTO_MIN_VEL:
-                vel = AUTO_MIN_VEL if vel > 0.0 else -AUTO_MIN_VEL
+            self.active_velocities["base_joint"] = vel
+            self.active_velocities["shoulder_joint"] = 0.0
+            self.active_velocities["elbow_joint"] = 0.0
 
-            self.active_velocities[joint] = vel
+            if base_reached:
+                self.get_logger().warn(
+                    f"Automatic move reached target: {self.auto_name}"
+                )
+                self.stop()
+                self.print_positions()
+                return False
 
-        if all_reached:
-            self.get_logger().warn(
-                f"Automatic move reached target: {self.auto_name}"
-            )
+        else:
             self.stop()
-            self.print_positions()
             return False
+
+        if DEBUG_AUTO:
+            for joint in JOINT_NAMES:
+                current = self.current_positions[joint]
+                target = self.auto_target[joint]
+                error = target - current
+                cmd_vel = self.active_velocities[joint]
+
+                debug_lines.append(
+                    f"{joint:<14} "
+                    f"pos={current:+.4f}  "
+                    f"target={target:+.4f}  "
+                    f"error={error:+.4f}  "
+                    f"cmd_vel={cmd_vel:+.4f}"
+                )
+
+            now = self.get_clock().now()
+            elapsed = (now - self.last_debug_time).nanoseconds / 1e9
+
+            if elapsed >= DEBUG_PRINT_INTERVAL:
+                self.last_debug_time = now
+                print(f"\nAUTO DEBUG | phase={self.auto_phase.upper()}:")
+                for line in debug_lines:
+                    print("  " + line)
 
         return True
 
     def set_key_command(self, key):
         self.auto_target = None
         self.auto_name = None
+        self.auto_phase = None
 
         for joint in JOINT_NAMES:
             self.active_velocities[joint] = 0.0
 
         if key == "q":
-            self.active_velocities["base_joint"] = -0.3 *VEL
+            self.active_velocities["base_joint"] = -0.1 * VEL
         elif key == "a":
-            self.active_velocities["base_joint"] = 0.3 *VEL
+            self.active_velocities["base_joint"] = 0.1 * VEL
 
         elif key == "w":
             self.active_velocities["shoulder_joint"] = -VEL
