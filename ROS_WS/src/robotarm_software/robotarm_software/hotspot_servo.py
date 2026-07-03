@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import math
 import threading
 import time
 
@@ -14,7 +15,7 @@ from std_msgs.msg import Float64MultiArray
 
 
 # ============================================================
-# Frames / joints
+# Joints / topics
 # ============================================================
 
 JOINT_NAMES = [
@@ -23,18 +24,18 @@ JOINT_NAMES = [
     "elbow_joint",
 ]
 
-COMMAND_TOPIC = "/servo_controller/commands"
 HOTSPOT_TOPIC = "/hotspot/target"
+COMMAND_TOPIC = "/servo_controller/commands"
 
 PUBLISH_PERIOD = 0.01  # 100 Hz
 
 
 # ============================================================
-# Hotspot tracking parameters
+# Hotspot input format
 # ============================================================
 #
 # /hotspot/target:
-#   data[0] = visible, >= 0.5 means target visible
+#   data[0] = visible, >= 0.5 means visible
 #   data[1] = err_x
 #   data[2] = err_y
 #   data[3] = confidence
@@ -53,54 +54,70 @@ PUBLISH_PERIOD = 0.01  # 100 Hz
 #   hotspot upper:
 #     err_y negative -> move arm front -> +base_link x
 
-KP_IMAGE_X_TO_BASE_Y = 0.003
-KP_IMAGE_Y_TO_BASE_X = 0.003
 
-HOTSPOT_X_SIGN = -1.0
-HOTSPOT_Y_SIGN = -1.0
+# ============================================================
+# Hotspot centering control
+# ============================================================
 
 CONF_MIN = 0.0
-
 TARGET_TIMEOUT = 0.25
-STOP_COMMANDS_AFTER_LOST = 10
 
-# Slower filtering = less overshoot and less twitch.
-SMOOTHING_ALPHA = 0.08
-LOST_ALPHA = 0.20
+# Larger hysteresis against circling around a stationary LED.
+CENTER_ENTER_DEADBAND_X = 0.30
+CENTER_EXIT_DEADBAND_X = 0.50
 
-COMMAND_EPSILON = 0.00002
-COMMAND_MULTIPLIER = 1.0
+CENTER_ENTER_DEADBAND_Y = 0.30
+CENTER_EXIT_DEADBAND_Y = 0.50
 
+# Slower than the aggressive version.
+# Faster than the too-weak 0.0012 version.
+MAX_CART_VEL_XY = 0.0025
+MIN_EFFECTIVE_CART_VEL_XY = 0.0007
 
-# ============================================================
-# Hysteresis center deadband
-# ============================================================
-#
-# Once centered, stay stopped until error leaves EXIT band.
-# This prevents oscillating around center.
+ERROR_FULL_SPEED = 1.00
 
-CENTER_ENTER_DEADBAND_X = 0.18
-CENTER_EXIT_DEADBAND_X = 0.28
-
-CENTER_ENTER_DEADBAND_Y = 0.18
-CENTER_EXIT_DEADBAND_Y = 0.28
-
-
-# ============================================================
-# Cartesian velocity limits
-# ============================================================
-
-MAX_CART_VEL = 0.0015
-
-# Important:
-# This deadband is only used for final "is command basically zero" checks.
-# Do NOT use it to zero filtered_base_v every cycle, otherwise smoothing
-# can never accumulate a small command.
-CART_DEADBAND = 0.00002
+HOTSPOT_X_SIGN_TO_BASE_Y = -1.0
+HOTSPOT_Y_SIGN_TO_BASE_X = -1.0
 
 ENABLE_BASE_X = True
 ENABLE_BASE_Y = True
-ENABLE_BASE_Z = False
+
+
+# ============================================================
+# Z height hold
+# ============================================================
+#
+# Z is only a slow drift correction.
+# It should not constantly fight tiny height changes.
+
+ENABLE_Z_HOLD = True
+
+# More relaxed Z hysteresis.
+Z_HOLD_DEADBAND = 0.035
+Z_HOLD_EXIT_DEADBAND = 0.065
+
+KZ_HOLD = 0.006
+MAX_Z_HOLD_VEL = 0.00035
+MIN_EFFECTIVE_Z_VEL = 0.0000
+
+Z_HOLD_SCALE_WHILE_XY_MOVING = 1.00
+
+# If Z drifts far, slow/stop XY so height can recover.
+Z_SOFT_ERROR = 0.055
+Z_HARD_ERROR = 0.080
+XY_SCALE_WHEN_Z_SOFT_ERROR = 0.25
+
+
+# ============================================================
+# Filtering / stopping
+# ============================================================
+
+SMOOTHING_ALPHA = 0.18
+LOST_ALPHA = 0.35
+
+STOP_COMMANDS_AFTER_LOST = 10
+
+COMMAND_EPSILON = 0.00001
 
 
 # ============================================================
@@ -114,21 +131,23 @@ JACOBIAN_EPS = 1e-4
 # ============================================================
 # Joint velocity output
 # ============================================================
+#
+# Hardware deadband is around 0.003 rad/s.
+# If Python sends tiny qdot values like 0.0003, nothing happens.
+#
+# Therefore we use a small VECTOR minimum.
+# This preserves the IK ratio, unlike per-joint minimum lifting.
+#
+# 0.006 was too aggressive and caused XY circling.
+# 0.0035 is softer but still above the hardware deadband.
 
 MAX_JOINT_VEL = 0.08
 
-# Important:
-# This must be low for hotspot following. Otherwise the small IK result
-# gets erased before it reaches the hardware.
-JOINT_VEL_DEADBAND = 0.0002
+USE_MIN_EFFECTIVE_QDOT_VECTOR = True
+MIN_EFFECTIVE_QDOT_VECTOR = 0.0035
 
-# Important for hotspot tracking:
-# Do NOT force small qdot to ±0.08 here.
-# Otherwise it overshoots the center all the time.
-FORCE_MIN_JOINT_VEL_IN_THIS_SCRIPT = False
-MIN_USEFUL_JOINT_VEL = 0.08
-
-JOINT_SMOOTHING_ALPHA = 0.10
+JOINT_VEL_DEADBAND = 0.00005
+JOINT_SMOOTHING_ALPHA = 0.20
 
 
 # ============================================================
@@ -159,8 +178,8 @@ def clamp(value, low, high):
 
 
 def rot_z(theta):
-    c = np.cos(theta)
-    s = np.sin(theta)
+    c = math.cos(theta)
+    s = math.sin(theta)
 
     return np.array(
         [
@@ -174,8 +193,8 @@ def rot_z(theta):
 
 
 def rot_y(theta):
-    c = np.cos(theta)
-    s = np.sin(theta)
+    c = math.cos(theta)
+    s = math.sin(theta)
 
     return np.array(
         [
@@ -209,25 +228,22 @@ def forward_kinematics(q):
       q[1] = shoulder_joint
       q[2] = elbow_joint
     """
+
     base = q[0]
     shoulder = q[1]
     elbow = q[2]
 
     T = np.eye(4, dtype=np.float64)
 
-    # base_link -> column_link
     T = T @ trans(0.0, 0.0, 0.05)
     T = T @ rot_z(base)
 
-    # column_link -> upper_arm_link
     T = T @ trans(0.0, 0.0, 0.12)
     T = T @ rot_y(shoulder)
 
-    # upper_arm_link -> lower_arm_link
     T = T @ trans(-0.025, 0.0, 0.14)
     T = T @ rot_y(elbow)
 
-    # lower_arm_link -> tool_tip_link
     T = T @ trans(0.0, 0.0, 0.15)
 
     return T
@@ -239,10 +255,6 @@ def tip_position(q):
 
 
 def numeric_position_jacobian(q):
-    """
-    3x3 position-only Jacobian:
-      tip_velocity = J * qdot
-    """
     J = np.zeros((3, 3), dtype=np.float64)
     p0 = tip_position(q)
 
@@ -256,9 +268,6 @@ def numeric_position_jacobian(q):
 
 
 def damped_least_squares(J, v):
-    """
-    qdot = J^T (J J^T + lambda^2 I)^-1 v
-    """
     lambda2 = DAMPING * DAMPING
     A = J @ J.T + lambda2 * np.eye(3, dtype=np.float64)
 
@@ -306,12 +315,15 @@ class HotspotDirectJointServo(Node):
         self.current_positions = {}
         self.have_all_joints = False
 
+        self.centered_x = False
+        self.centered_y = False
+        self.z_centered = True
+
+        self.hold_z = None
+
         self.filtered_base_v = np.zeros(3, dtype=np.float64)
         self.filtered_qdot = np.zeros(3, dtype=np.float64)
         self.cmd_qdot = np.zeros(3, dtype=np.float64)
-
-        self.centered_x = False
-        self.centered_y = False
 
         self.lost_stop_publish_count = STOP_COMMANDS_AFTER_LOST
 
@@ -332,11 +344,27 @@ class HotspotDirectJointServo(Node):
         self.get_logger().info(f"Listening to {HOTSPOT_TOPIC}")
         self.get_logger().info(f"Publishing direct joint velocities to {COMMAND_TOPIC}")
         self.get_logger().warn("MoveIt Servo is bypassed/removed.")
-        self.get_logger().warn("Soft hotspot mode: no forced min joint velocity.")
+        self.get_logger().warn("Centering controller active.")
+        self.get_logger().warn("Z-hold is slow drift correction only.")
+        self.get_logger().warn("No pulse mode.")
+        self.get_logger().warn("Small qdot vector minimum enabled to cross hardware deadband.")
+        self.get_logger().warn(
+            f"XY hysteresis: x enter={CENTER_ENTER_DEADBAND_X:.2f}, "
+            f"x exit={CENTER_EXIT_DEADBAND_X:.2f}, "
+            f"y enter={CENTER_ENTER_DEADBAND_Y:.2f}, "
+            f"y exit={CENTER_EXIT_DEADBAND_Y:.2f}"
+        )
+        self.get_logger().warn(
+            f"Z hysteresis: enter={Z_HOLD_DEADBAND:.3f} m, "
+            f"exit={Z_HOLD_EXIT_DEADBAND:.3f} m"
+        )
+        self.get_logger().warn(
+            f"qdot vector minimum: enabled={USE_MIN_EFFECTIVE_QDOT_VECTOR}, "
+            f"min={MIN_EFFECTIVE_QDOT_VECTOR:.4f}, max={MAX_JOINT_VEL:.4f}"
+        )
         self.get_logger().info("Command order is fixed: [base_joint, shoulder_joint, elbow_joint]")
         self.get_logger().info("Mapping: err_x negative -> +base_y left")
         self.get_logger().info("Mapping: err_y positive -> -base_x back")
-        self.get_logger().warn("base_link z tracking is disabled.")
 
     # ========================================================
     # Callbacks
@@ -398,6 +426,14 @@ class HotspotDirectJointServo(Node):
 
         return (time.monotonic() - self.last_target_time) <= TARGET_TIMEOUT
 
+    def reset_hold_z_if_needed(self, tip):
+        if self.hold_z is None:
+            self.hold_z = float(tip[2])
+            self.z_centered = True
+            self.get_logger().warn(
+                f"Z hold initialized: hold_z={self.hold_z:+.4f} m"
+            )
+
     # ========================================================
     # Command helpers
     # ========================================================
@@ -407,13 +443,13 @@ class HotspotDirectJointServo(Node):
         msg.data = [0.0, 0.0, 0.0]
         self.cmd_pub.publish(msg)
 
-    def apply_hysteresis_deadband(self, err_x, err_y):
-        """
-        Center hysteresis:
-        - If already centered, remain centered until EXIT threshold.
-        - If not centered, enter centered when below ENTER threshold.
-        """
+    def hard_stop(self):
+        self.filtered_base_v[:] = 0.0
+        self.filtered_qdot[:] = 0.0
+        self.cmd_qdot[:] = 0.0
+        self.publish_zero_once()
 
+    def apply_hysteresis_deadband(self, err_x, err_y):
         if self.centered_x:
             if abs(err_x) > CENTER_EXIT_DEADBAND_X:
                 self.centered_x = False
@@ -436,7 +472,33 @@ class HotspotDirectJointServo(Node):
 
         return err_x, err_y
 
-    def hotspot_to_base_velocity(self, active, err_x, err_y, conf):
+    def nonlinear_error_to_velocity(
+        self,
+        error,
+        enter_deadband,
+        max_vel,
+        min_effective_vel,
+    ):
+        if error == 0.0:
+            return 0.0
+
+        a = abs(error)
+
+        usable_range = max(1e-6, ERROR_FULL_SPEED - enter_deadband)
+        normalized = clamp((a - enter_deadband) / usable_range, 0.0, 1.0)
+
+        # Quadratic: soft near center, fast near edge.
+        shaped = normalized * normalized
+
+        vel_abs = min_effective_vel + (
+            max_vel - min_effective_vel
+        ) * shaped
+
+        vel_abs = clamp(vel_abs, min_effective_vel, max_vel)
+
+        return math.copysign(vel_abs, error)
+
+    def compute_xy_base_velocity(self, active, err_x, err_y, conf):
         raw_v = np.zeros(3, dtype=np.float64)
 
         if not active:
@@ -447,25 +509,27 @@ class HotspotDirectJointServo(Node):
         if conf < CONF_MIN:
             return raw_v
 
-        err_x, err_y = self.apply_hysteresis_deadband(err_x, err_y)
+        err_x_used, err_y_used = self.apply_hysteresis_deadband(
+            err_x,
+            err_y,
+        )
 
-        # Desired behavior:
-        #
-        #   hotspot left:
-        #     err_x negative -> +base_y left
-        #
-        #   hotspot right:
-        #     err_x positive -> -base_y right
-        #
-        #   hotspot lower:
-        #     err_y positive -> -base_x back
-        #
-        #   hotspot upper:
-        #     err_y negative -> +base_x front
+        vy_image = self.nonlinear_error_to_velocity(
+            err_x_used,
+            CENTER_ENTER_DEADBAND_X,
+            MAX_CART_VEL_XY,
+            MIN_EFFECTIVE_CART_VEL_XY,
+        )
 
-        vx = HOTSPOT_Y_SIGN * KP_IMAGE_Y_TO_BASE_X * err_y
-        vy = HOTSPOT_X_SIGN * KP_IMAGE_X_TO_BASE_Y * err_x
-        vz = 0.0
+        vx_image = self.nonlinear_error_to_velocity(
+            err_y_used,
+            CENTER_ENTER_DEADBAND_Y,
+            MAX_CART_VEL_XY,
+            MIN_EFFECTIVE_CART_VEL_XY,
+        )
+
+        vx = HOTSPOT_Y_SIGN_TO_BASE_X * vx_image
+        vy = HOTSPOT_X_SIGN_TO_BASE_Y * vy_image
 
         if not ENABLE_BASE_X:
             vx = 0.0
@@ -473,20 +537,59 @@ class HotspotDirectJointServo(Node):
         if not ENABLE_BASE_Y:
             vy = 0.0
 
-        if not ENABLE_BASE_Z:
-            vz = 0.0
-
-        vx = clamp(vx, -MAX_CART_VEL, MAX_CART_VEL)
-        vy = clamp(vy, -MAX_CART_VEL, MAX_CART_VEL)
-        vz = clamp(vz, -MAX_CART_VEL, MAX_CART_VEL)
-
-        # Do not apply CART_DEADBAND here.
-        # Hysteresis already decides if image error is centered.
-        # Small nonzero velocities must survive smoothing.
-
-        raw_v[:] = [vx, vy, vz]
+        raw_v[0] = clamp(vx, -MAX_CART_VEL_XY, MAX_CART_VEL_XY)
+        raw_v[1] = clamp(vy, -MAX_CART_VEL_XY, MAX_CART_VEL_XY)
+        raw_v[2] = 0.0
 
         return raw_v
+
+    def compute_z_hold_velocity(self, tip, xy_is_moving):
+        if not ENABLE_Z_HOLD:
+            return 0.0
+
+        if self.hold_z is None:
+            return 0.0
+
+        z_error = self.hold_z - float(tip[2])
+        abs_z_error = abs(z_error)
+
+        # Z hysteresis:
+        # If already centered, stay quiet until error is clearly large.
+        # If correcting, stop after returning into the smaller band.
+        if self.z_centered:
+            if abs_z_error > Z_HOLD_EXIT_DEADBAND:
+                self.z_centered = False
+            else:
+                return 0.0
+        else:
+            if abs_z_error < Z_HOLD_DEADBAND:
+                self.z_centered = True
+                return 0.0
+
+        vz = KZ_HOLD * z_error
+        vz = clamp(vz, -MAX_Z_HOLD_VEL, MAX_Z_HOLD_VEL)
+
+        # No minimum Z velocity. Minimum caused Z oscillation.
+        return vz
+
+    def apply_z_priority_to_xy(self, raw_base_v, tip):
+        if self.hold_z is None:
+            return raw_base_v
+
+        z_error = self.hold_z - float(tip[2])
+        z_error_abs = abs(z_error)
+
+        if z_error_abs > Z_HARD_ERROR:
+            raw_base_v[0] = 0.0
+            raw_base_v[1] = 0.0
+            return raw_base_v
+
+        if z_error_abs > Z_SOFT_ERROR:
+            raw_base_v[0] *= XY_SCALE_WHEN_Z_SOFT_ERROR
+            raw_base_v[1] *= XY_SCALE_WHEN_Z_SOFT_ERROR
+            return raw_base_v
+
+        return raw_base_v
 
     def apply_joint_limits(self, q, qdot):
         qdot_out = qdot.copy()
@@ -512,11 +615,13 @@ class HotspotDirectJointServo(Node):
 
     def postprocess_qdot(self, qdot):
         """
-        For hotspot following:
-        - clamp tiny qdot to zero
-        - optionally scale whole vector to useful speed
-        - but by default DO NOT force min joint speed
+        Preserve IK ratio.
+
+        Do not lift each joint individually.
+        If the whole vector is too small, scale the whole vector.
+        This keeps shoulder/elbow/base ratio intact.
         """
+
         out = qdot.copy()
 
         for i in range(3):
@@ -528,16 +633,14 @@ class HotspotDirectJointServo(Node):
         if max_abs <= 0.0:
             return out
 
-        if FORCE_MIN_JOINT_VEL_IN_THIS_SCRIPT:
-            if max_abs < MIN_USEFUL_JOINT_VEL:
-                scale = MIN_USEFUL_JOINT_VEL / max_abs
-                out *= scale
+        if USE_MIN_EFFECTIVE_QDOT_VECTOR:
+            if max_abs < MIN_EFFECTIVE_QDOT_VECTOR:
+                out *= MIN_EFFECTIVE_QDOT_VECTOR / max_abs
 
         max_abs = float(np.max(np.abs(out)))
 
         if max_abs > MAX_JOINT_VEL:
-            scale = MAX_JOINT_VEL / max_abs
-            out *= scale
+            out *= MAX_JOINT_VEL / max_abs
 
         return out
 
@@ -610,10 +713,17 @@ class HotspotDirectJointServo(Node):
         predicted_tip_v = J @ qdot_cmd
         observed_text = self.observed_joint_delta_text(q)
 
+        hold_z_text = "None" if self.hold_z is None else f"{self.hold_z:+.4f}"
+
+        z_error = 0.0
+        if self.hold_z is not None:
+            z_error = self.hold_z - float(tip[2])
+
         self.get_logger().info(
             "tip=[{:+.4f}, {:+.4f}, {:+.4f}] "
             "d_tip=[{:+.4f}, {:+.4f}, {:+.4f}] "
-            "active={} visible={} centered=({}, {}) "
+            "hold_z={} z_err={:+.4f} "
+            "active={} visible={} centered=({}, {}) z_centered={} "
             "err=({:+.3f},{:+.3f}) conf={:.2f} "
             "raw_base_v=[{:+.5f}, {:+.5f}, {:+.5f}] "
             "filtered_base_v=[{:+.5f}, {:+.5f}, {:+.5f}] "
@@ -625,10 +735,13 @@ class HotspotDirectJointServo(Node):
             "{} published={} reason={}".format(
                 tip[0], tip[1], tip[2],
                 dx, dy, dz,
+                hold_z_text,
+                z_error,
                 active,
                 self.target_visible,
                 self.centered_x,
                 self.centered_y,
+                self.z_centered,
                 self.err_x,
                 self.err_y,
                 self.conf,
@@ -665,12 +778,15 @@ class HotspotDirectJointServo(Node):
         q = self.get_q()
 
         if q is None:
-            self.publish_zero_once()
+            self.hard_stop()
             self.get_logger().warn(
                 "Waiting for joint states...",
                 throttle_duration_sec=1.0,
             )
             return
+
+        tip = tip_position(q)
+        self.reset_hold_z_if_needed(tip)
 
         with self.lock:
             target_visible = self.target_visible
@@ -681,74 +797,66 @@ class HotspotDirectJointServo(Node):
 
         active = target_visible and fresh and conf >= CONF_MIN
 
-        raw_base_v = self.hotspot_to_base_velocity(
-            active,
-            err_x,
-            err_y,
-            conf,
-        )
-
-        alpha = SMOOTHING_ALPHA if active else LOST_ALPHA
-
-        self.filtered_base_v = (
-            alpha * raw_base_v
-            + (1.0 - alpha) * self.filtered_base_v
-        )
-
-        # Clamp filtered velocity, but DO NOT deadband it here.
-        # Deadband here caused the command to stay zero forever.
-        for i in range(3):
-            self.filtered_base_v[i] = clamp(
-                self.filtered_base_v[i] * COMMAND_MULTIPLIER,
-                -MAX_CART_VEL,
-                MAX_CART_VEL,
-            )
-
-        tip = tip_position(q)
         J = numeric_position_jacobian(q)
 
         if not active:
             self.filtered_base_v[:] = 0.0
             self.filtered_qdot[:] = 0.0
             self.cmd_qdot[:] = 0.0
+            self.centered_x = False
+            self.centered_y = False
 
             if self.lost_stop_publish_count < STOP_COMMANDS_AFTER_LOST:
                 self.publish_zero_once()
                 self.lost_stop_publish_count += 1
-
-                self.maybe_debug_print(
-                    active,
-                    q,
-                    tip,
-                    raw_base_v,
-                    self.filtered_base_v,
-                    np.zeros(3, dtype=np.float64),
-                    np.zeros(3, dtype=np.float64),
-                    np.zeros(3, dtype=np.float64),
-                    J,
-                    True,
-                    "lost_or_stale_zero_stop",
-                )
+                did_publish = True
+                reason = "lost_or_stale_zero_stop"
             else:
-                self.maybe_debug_print(
-                    active,
-                    q,
-                    tip,
-                    raw_base_v,
-                    self.filtered_base_v,
-                    np.zeros(3, dtype=np.float64),
-                    np.zeros(3, dtype=np.float64),
-                    np.zeros(3, dtype=np.float64),
-                    J,
-                    False,
-                    "lost_or_stale_no_publish",
-                )
+                did_publish = False
+                reason = "lost_or_stale_no_publish"
 
+            self.maybe_debug_print(
+                active,
+                q,
+                tip,
+                np.zeros(3, dtype=np.float64),
+                self.filtered_base_v,
+                np.zeros(3, dtype=np.float64),
+                np.zeros(3, dtype=np.float64),
+                np.zeros(3, dtype=np.float64),
+                J,
+                did_publish,
+                reason,
+            )
             return
 
-        if float(np.linalg.norm(self.filtered_base_v)) <= CART_DEADBAND:
-            self.filtered_qdot[:] = 0.0
-            self.cmd_qdot[:] = 0.0
+        raw_base_v = self.compute_xy_base_velocity(
+            active,
+            err_x,
+            err_y,
+            conf,
+        )
+
+        xy_is_moving = (
+            abs(raw_base_v[0]) > 0.0
+            or abs(raw_base_v[1]) > 0.0
+        )
+
+        raw_base_v[2] = self.compute_z_hold_velocity(
+            tip,
+            xy_is_moving,
+        )
+
+        raw_base_v = self.apply_z_priority_to_xy(
+            raw_base_v,
+            tip,
+        )
+
+        # Critical anti-circling stop:
+        # Only hard-stop when image X, image Y, and Z are all centered.
+        # Do NOT hard-stop just because qdot is tiny while the target is still off-center.
+        if self.centered_x and self.centered_y and self.z_centered:
+            self.hard_stop()
 
             self.maybe_debug_print(
                 active,
@@ -760,8 +868,49 @@ class HotspotDirectJointServo(Node):
                 np.zeros(3, dtype=np.float64),
                 np.zeros(3, dtype=np.float64),
                 J,
+                True,
+                "all_centered_hard_stop",
+            )
+            return
+
+        alpha = SMOOTHING_ALPHA if active else LOST_ALPHA
+
+        self.filtered_base_v = (
+            alpha * raw_base_v
+            + (1.0 - alpha) * self.filtered_base_v
+        )
+
+        self.filtered_base_v[0] = clamp(
+            self.filtered_base_v[0],
+            -MAX_CART_VEL_XY,
+            MAX_CART_VEL_XY,
+        )
+
+        self.filtered_base_v[1] = clamp(
+            self.filtered_base_v[1],
+            -MAX_CART_VEL_XY,
+            MAX_CART_VEL_XY,
+        )
+
+        self.filtered_base_v[2] = clamp(
+            self.filtered_base_v[2],
+            -MAX_Z_HOLD_VEL,
+            MAX_Z_HOLD_VEL,
+        )
+
+        if float(np.linalg.norm(self.filtered_base_v)) <= COMMAND_EPSILON:
+            self.maybe_debug_print(
+                active,
+                q,
+                tip,
+                raw_base_v,
+                self.filtered_base_v,
+                np.zeros(3, dtype=np.float64),
+                np.zeros(3, dtype=np.float64),
+                np.zeros(3, dtype=np.float64),
+                J,
                 False,
-                "active_but_tiny_no_publish",
+                "active_but_zero_base_velocity_no_publish",
             )
             return
 
@@ -779,7 +928,6 @@ class HotspotDirectJointServo(Node):
         )
 
         self.filtered_qdot = self.postprocess_qdot(self.filtered_qdot)
-
         self.cmd_qdot = self.filtered_qdot.copy()
 
         if (
@@ -823,7 +971,7 @@ class HotspotDirectJointServo(Node):
             self.cmd_qdot,
             J,
             True,
-            "active_tracking_direct_joint",
+            "active_tracking_center_and_hold_z",
         )
 
 

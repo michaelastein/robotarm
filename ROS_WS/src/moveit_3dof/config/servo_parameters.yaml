@@ -5,79 +5,46 @@ servo_node:
 
       move_group_name: arm
 
-      planning_frame: base_link
-
-      ee_frame_name: tool_tip_link
-
-      reference_frame: base_link
-
-      robot_link_command_frame: base_link
-
       command_in_type: speed_units
 
       joint_command_in_topic: /servo_node/delta_joint_cmds
-
       cartesian_command_in_topic: /servo_node/delta_twist_cmds
-
       pose_command_in_topic: /servo_node/pose_target_cmds
-
       status_topic: /servo_node/status
 
       command_out_topic: /servo_controller/commands
-
       command_out_type: std_msgs/Float64MultiArray
 
       publish_joint_positions: false
-
       publish_joint_velocities: true
-
       publish_joint_accelerations: false
 
       publish_period: 0.01
-
       low_latency_mode: false
-
       incoming_command_timeout: 0.1
-
       num_outgoing_halt_msgs_to_publish: 8
 
       scale:
-        # speed_units means incoming linear Twist values are in m/s,
-        # but this still acts as a velocity cap/scaling parameter.
-        # Lower than before for safer tests.
-        linear: 0.2
-        rotational: 0.2
-        joint: 0.5
+        linear: 0.05
+        rotational: 0.05
+        joint: 0.3
 
-#      lower_singularity_threshold: 100.0
-#      hard_stop_singularity_threshold: 200.0
-#      leaving_singularity_threshold_multiplier: 2.0
+      lower_singularity_threshold: 100.0
+      hard_stop_singularity_threshold: 200.0
+      leaving_singularity_threshold_multiplier: 2.0
 
-      # Stop all joints if any joint reaches its limit in Cartesian mode.
-      # This is the important "stop at edge" behavior.
       halt_all_joints_in_cartesian_mode: true
-
       halt_all_joints_in_joint_mode: true
 
-      # Stay away from joint limits by this margin in radians.
-      # One value applies to all joints.
-      # 0.15 rad ≈ 8.6 deg.
-      # Increase to 0.20 if it still tries to push into limits.
       joint_limit_margins: [0.15]
 
-      # If Servo overrides velocity near limits/singularities,
-      # allow it to reduce motion strongly.
       override_velocity_scaling_factor: 0.0
 
       check_collisions: false
 
-
     robot_description_kinematics:
 
       arm:
-
         kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin
-
         kinematics_solver_search_resolution: 0.005
-
         kinematics_solver_timeout: 0.05

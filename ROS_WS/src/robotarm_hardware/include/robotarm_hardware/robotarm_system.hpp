@@ -43,14 +43,19 @@ public:
     const rclcpp::Duration & period) override;
 
 private:
-  void set_motor(size_t i, double command);
-  void stop_all();
-  void release_gpio();
-
   bool open_arduino_serial();
   void close_arduino_serial();
-  bool read_arduino_counts(std::array<long, 4> & counts);
-  bool parse_arduino_line(const std::string & line, std::array<long, 4> & counts);
+
+  bool parse_arduino_line(
+    const std::string & line,
+    std::array<long, 4> & counts);
+
+  bool read_arduino_counts(
+    std::array<long, 4> & counts);
+
+  void set_motor(size_t i, double pwm_command);
+  void stop_all();
+  void release_gpio();
 
   std::vector<double> position_;
   std::vector<double> velocity_;
@@ -61,28 +66,23 @@ private:
 
   std::vector<int> forward_gpio_;
   std::vector<int> backward_gpio_;
+  std::vector<int> arduino_channel_;
 
   std::vector<gpiod_line *> forward_lines_;
   std::vector<gpiod_line *> backward_lines_;
-
-  // Arduino channel index:
-  // Arduino prints: base,shoulder,elbow,extra
-  std::vector<int> arduino_channel_;
-
-  std::array<long, 4> last_arduino_counts_;
-  bool arduino_counts_initialized_;
-  std::string serial_buffer_;
-  int serial_fd_;
-  std::string serial_device_;
-
-  // Sign of the last actual physical motor movement:
-  // +1 = forward GPIO active
-  // -1 = backward GPIO active
-  //  0 = no known movement yet
   std::vector<double> last_motion_sign_;
-
+  std::vector<double> last_valid_motion_sign_;
+  std::vector<rclcpp::Time> last_active_command_time_;
+  double coast_time_after_command_s_;
   std::vector<double> direction_;
   std::vector<double> max_pwm_;
+  std::vector<double> min_pwm_;
+
+  std::vector<double> velocity_to_pwm_gain_;
+  std::vector<double> velocity_kp_;
+
+  std::vector<double> min_command_velocity_;
+  std::vector<double> max_joint_velocity_;
 
   std::vector<double> lower_limit_;
   std::vector<double> upper_limit_;
@@ -90,9 +90,18 @@ private:
   gpiod_chip * chip_;
 
   double software_pwm_frequency_hz_;
-  double deadband_;
+  double pwm_deadband_;
+  double velocity_deadband_rad_s_;
+  double velocity_filter_alpha_;
 
   std::chrono::steady_clock::time_point pwm_start_time_;
+
+  int serial_fd_;
+  std::string serial_device_;
+  std::string serial_buffer_;
+
+  bool arduino_counts_initialized_;
+  std::array<long, 4> last_arduino_counts_;
 };
 
 }  // namespace robotarm_hardware

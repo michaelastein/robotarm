@@ -20,13 +20,16 @@ namespace robotarm_hardware
 {
 
 RobotArmSystem::RobotArmSystem()
-: arduino_counts_initialized_(false),
+: chip_(nullptr),
+  software_pwm_frequency_hz_(25.0),
+  pwm_deadband_(0.002),
+  velocity_deadband_rad_s_(0.003),
+  velocity_filter_alpha_(0.25),
+  pwm_start_time_(std::chrono::steady_clock::now()),
   serial_fd_(-1),
   serial_device_("/dev/ttyACM0"),
-  chip_(nullptr),
-  software_pwm_frequency_hz_(20.0),
-  deadband_(0.005),
-  pwm_start_time_(std::chrono::steady_clock::now())
+  arduino_counts_initialized_(false),
+  coast_time_after_command_s_(0.20)
 {
   last_arduino_counts_.fill(0);
 }
@@ -61,9 +64,16 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
   arduino_channel_.assign(n, 0);
 
   last_motion_sign_.assign(n, 0.0);
+  last_valid_motion_sign_.assign(n, 0.0);
+  last_active_command_time_.assign(n, rclcpp::Time(0, 0, RCL_ROS_TIME));
 
   direction_.assign(n, 1.0);
   max_pwm_.assign(n, 0.08);
+  min_pwm_.assign(n, 0.0);
+  velocity_to_pwm_gain_.assign(n, 0.0);
+  velocity_kp_.assign(n, 0.0);
+  min_command_velocity_.assign(n, 0.08);
+  max_joint_velocity_.assign(n, 0.15);
 
   lower_limit_.assign(n, 0.0);
   upper_limit_.assign(n, 0.0);
@@ -76,14 +86,19 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
     {
       forward_gpio_[i] = 23;
       backward_gpio_[i] = 22;
-
-      // Arduino line format: base,shoulder,elbow,extra
       arduino_channel_[i] = 0;
 
       ticks_per_joint_rev_[i] = 595.0;
 
       direction_[i] = 1.0;
       max_pwm_[i] = 0.08;
+
+      min_pwm_[i] = 0.010;
+      velocity_to_pwm_gain_[i] = 0.006;
+      velocity_kp_[i] = 0.002;
+
+      min_command_velocity_[i] = 0.08;
+      max_joint_velocity_[i] = 0.20;
 
       lower_limit_[i] = -3.14159265;
       upper_limit_[i] = 3.14159265;
@@ -92,13 +107,19 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
     {
       forward_gpio_[i] = 25;
       backward_gpio_[i] = 24;
-
       arduino_channel_[i] = 1;
 
       ticks_per_joint_rev_[i] = 3000.0;
 
       direction_[i] = 1.0;
       max_pwm_[i] = 0.08;
+
+      min_pwm_[i] = 0.015;
+      velocity_to_pwm_gain_[i] = 0.001;
+      velocity_kp_[i] = 0.001;
+
+      min_command_velocity_[i] = 0.08;
+      max_joint_velocity_[i] = 0.20;
 
       lower_limit_[i] = -0.52359878;
       upper_limit_[i] = 1.39626340;
@@ -107,13 +128,19 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
     {
       forward_gpio_[i] = 13;
       backward_gpio_[i] = 12;
-
       arduino_channel_[i] = 2;
 
       ticks_per_joint_rev_[i] = 2400.0;
 
       direction_[i] = 1.0;
       max_pwm_[i] = 0.08;
+
+      min_pwm_[i] = 0.05;
+      velocity_to_pwm_gain_[i] = 0.060;
+      velocity_kp_[i] = 0.006;
+
+      min_command_velocity_[i] = 0.08;
+      max_joint_velocity_[i] = 0.30;
 
       lower_limit_[i] = -0.69813170;
       upper_limit_[i] = 2.44346095;
@@ -125,6 +152,7 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
         "Unknown joint name in hardware config: %s",
         name.c_str()
       );
+
       return hardware_interface::CallbackReturn::ERROR;
     }
   }
@@ -139,14 +167,22 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
   {
     RCLCPP_INFO(
       rclcpp::get_logger("RobotArmSystem"),
-      "Joint %zu: name=%s fwd=%d bwd=%d arduino_channel=%d ticks_per_rev=%.1f max_pwm=%.3f",
+      "Joint %zu: name=%s fwd=%d bwd=%d arduino_channel=%d "
+      "ticks_per_rev=%.1f dir=%.1f min_pwm=%.3f max_pwm=%.3f "
+      "vel_to_pwm=%.3f vel_kp=%.3f min_cmd_vel=%.3f max_vel=%.3f",
       i,
       info_.joints[i].name.c_str(),
       forward_gpio_[i],
       backward_gpio_[i],
       arduino_channel_[i],
       ticks_per_joint_rev_[i],
-      max_pwm_[i]
+      direction_[i],
+      min_pwm_[i],
+      max_pwm_[i],
+      velocity_to_pwm_gain_[i],
+      velocity_kp_[i],
+      min_command_velocity_[i],
+      max_joint_velocity_[i]
     );
   }
 
@@ -157,6 +193,7 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
       "Could not open Arduino serial device: %s",
       serial_device_.c_str()
     );
+
     return hardware_interface::CallbackReturn::ERROR;
   }
 
@@ -168,6 +205,7 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
       rclcpp::get_logger("RobotArmSystem"),
       "Could not open gpiochip4"
     );
+
     return hardware_interface::CallbackReturn::ERROR;
   }
 
@@ -183,6 +221,7 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
         "Could not get GPIO motor lines for joint %zu",
         i
       );
+
       return hardware_interface::CallbackReturn::ERROR;
     }
 
@@ -193,6 +232,7 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
         "Could not request forward GPIO output for joint %zu",
         i
       );
+
       return hardware_interface::CallbackReturn::ERROR;
     }
 
@@ -203,8 +243,12 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
         "Could not request backward GPIO output for joint %zu",
         i
       );
+
       return hardware_interface::CallbackReturn::ERROR;
     }
+
+    gpiod_line_set_value(fwd, 0);
+    gpiod_line_set_value(bwd, 0);
 
     forward_lines_.push_back(fwd);
     backward_lines_.push_back(bwd);
@@ -222,7 +266,7 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
 
   RCLCPP_INFO(
     rclcpp::get_logger("RobotArmSystem"),
-    "RobotArmSystem initialized with Arduino encoder ticks and Raspberry Pi GPIO motor PWM"
+    "RobotArmSystem initialized without debug logs"
   );
 
   return hardware_interface::CallbackReturn::SUCCESS;
@@ -283,6 +327,7 @@ bool RobotArmSystem::open_arduino_serial()
       serial_device_.c_str(),
       std::strerror(errno)
     );
+
     return false;
   }
 
@@ -296,6 +341,7 @@ bool RobotArmSystem::open_arduino_serial()
       "tcgetattr failed: %s",
       std::strerror(errno)
     );
+
     close_arduino_serial();
     return false;
   }
@@ -322,6 +368,7 @@ bool RobotArmSystem::open_arduino_serial()
       "tcsetattr failed: %s",
       std::strerror(errno)
     );
+
     close_arduino_serial();
     return false;
   }
@@ -409,6 +456,7 @@ bool RobotArmSystem::read_arduino_counts(std::array<long, 4> & counts)
         }
 
         std::array<long, 4> parsed_counts;
+
         if (parse_arduino_line(line, parsed_counts))
         {
           latest_counts = parsed_counts;
@@ -439,6 +487,7 @@ bool RobotArmSystem::read_arduino_counts(std::array<long, 4> & counts)
       "Arduino serial read error: %s",
       std::strerror(errno)
     );
+
     break;
   }
 
@@ -449,6 +498,7 @@ bool RobotArmSystem::read_arduino_counts(std::array<long, 4> & counts)
 
   return got_valid_line;
 }
+
 hardware_interface::return_type RobotArmSystem::read(
   const rclcpp::Time &,
   const rclcpp::Duration & period)
@@ -459,11 +509,6 @@ hardware_interface::return_type RobotArmSystem::read(
 
   if (!read_arduino_counts(current_counts))
   {
-    for (size_t i = 0; i < info_.joints.size(); ++i)
-    {
-      velocity_[i] = 0.0;
-    }
-
     return hardware_interface::return_type::OK;
   }
 
@@ -471,6 +516,16 @@ hardware_interface::return_type RobotArmSystem::read(
   {
     last_arduino_counts_ = current_counts;
     arduino_counts_initialized_ = true;
+
+    RCLCPP_WARN(
+      rclcpp::get_logger("RobotArmSystem"),
+      "Arduino counts initialized: [%ld, %ld, %ld, %ld]",
+      current_counts[0],
+      current_counts[1],
+      current_counts[2],
+      current_counts[3]
+    );
+
     return hardware_interface::return_type::OK;
   }
 
@@ -486,29 +541,37 @@ hardware_interface::return_type RobotArmSystem::read(
     long raw_delta_ticks =
       current_counts[channel] - last_arduino_counts_[channel];
 
-    // Arduino reset or counter wrap protection.
     if (raw_delta_ticks < 0)
     {
       raw_delta_ticks = 0;
     }
 
-    double signed_delta_ticks = 0.0;
+    double sign_for_ticks = 0.0;
 
     if (raw_delta_ticks > 0)
     {
-      if (last_motion_sign_[i] > 0.0)
+      if (last_motion_sign_[i] != 0.0)
       {
-        signed_delta_ticks = static_cast<double>(raw_delta_ticks);
-      }
-      else if (last_motion_sign_[i] < 0.0)
-      {
-        signed_delta_ticks = -static_cast<double>(raw_delta_ticks);
+        sign_for_ticks = last_motion_sign_[i];
       }
       else
       {
-        signed_delta_ticks = 0.0;
+        sign_for_ticks = 0.0;
+
+        if (raw_delta_ticks > 5)
+        {
+          RCLCPP_WARN(
+            rclcpp::get_logger("RobotArmSystem"),
+            "Ignoring encoder ticks for %s without active command: raw_delta=%ld",
+            info_.joints[i].name.c_str(),
+            raw_delta_ticks
+          );
+        }
       }
     }
+
+    const double signed_delta_ticks =
+      sign_for_ticks * static_cast<double>(raw_delta_ticks);
 
     encoder_ticks_[i] += signed_delta_ticks;
 
@@ -525,14 +588,16 @@ hardware_interface::return_type RobotArmSystem::read(
       upper_limit_[i]
     );
 
+    double measured_velocity = 0.0;
+
     if (dt > 0.0)
     {
-      velocity_[i] = delta_rad / dt;
+      measured_velocity = delta_rad / dt;
     }
-    else
-    {
-      velocity_[i] = 0.0;
-    }
+
+    velocity_[i] =
+      velocity_filter_alpha_ * measured_velocity +
+      (1.0 - velocity_filter_alpha_) * velocity_[i];
   }
 
   last_arduino_counts_ = current_counts;
@@ -541,39 +606,80 @@ hardware_interface::return_type RobotArmSystem::read(
 }
 
 hardware_interface::return_type RobotArmSystem::write(
-  const rclcpp::Time &,
+  const rclcpp::Time & time,
   const rclcpp::Duration &)
 {
   for (size_t i = 0; i < info_.joints.size(); ++i)
   {
-    double motor_command = command_[i];
+    double desired_velocity = command_[i];
 
-    if (position_[i] <= lower_limit_[i] && motor_command < 0.0)
+    desired_velocity = std::clamp(
+      desired_velocity,
+      -max_joint_velocity_[i],
+      max_joint_velocity_[i]
+    );
+
+    if (position_[i] <= lower_limit_[i] && desired_velocity < 0.0)
     {
-      motor_command = 0.0;
+      desired_velocity = 0.0;
     }
 
-    if (position_[i] >= upper_limit_[i] && motor_command > 0.0)
+    if (position_[i] >= upper_limit_[i] && desired_velocity > 0.0)
     {
-      motor_command = 0.0;
+      desired_velocity = 0.0;
     }
 
-    motor_command = std::clamp(
-      motor_command,
-      -max_pwm_[i],
+    if (std::abs(desired_velocity) <= velocity_deadband_rad_s_)
+    {
+      last_motion_sign_[i] = 0.0;
+      set_motor(i, 0.0);
+      continue;
+    }
+
+    const double sign = desired_velocity > 0.0 ? 1.0 : -1.0;
+
+    double desired_speed = std::abs(desired_velocity);
+
+    if (desired_speed < min_command_velocity_[i])
+    {
+      desired_speed = min_command_velocity_[i];
+    }
+
+    const double measured_speed_along_direction = velocity_[i] * sign;
+
+    const double velocity_error =
+      desired_speed - measured_speed_along_direction;
+
+    double pwm_abs =
+      min_pwm_[i] +
+      velocity_to_pwm_gain_[i] * desired_speed +
+      velocity_kp_[i] * velocity_error;
+
+    if (pwm_abs < 0.0)
+    {
+      pwm_abs = 0.0;
+    }
+
+    pwm_abs = std::clamp(
+      pwm_abs,
+      0.0,
       max_pwm_[i]
     );
 
-    const double physical_motor_command =
-      motor_command * direction_[i];
+    const double pwm_command = sign * pwm_abs;
+    const double physical_pwm_command = pwm_command * direction_[i];
 
-    set_motor(i, physical_motor_command);
+    last_motion_sign_[i] = sign;
+    last_valid_motion_sign_[i] = sign;
+    last_active_command_time_[i] = time;
+
+    set_motor(i, physical_pwm_command);
   }
 
   return hardware_interface::return_type::OK;
 }
 
-void RobotArmSystem::set_motor(size_t i, double command)
+void RobotArmSystem::set_motor(size_t i, double pwm_command)
 {
   if (
     i >= forward_lines_.size() ||
@@ -584,15 +690,17 @@ void RobotArmSystem::set_motor(size_t i, double command)
     return;
   }
 
-  if (std::abs(command) <= deadband_)
+  if (std::abs(pwm_command) <= pwm_deadband_)
   {
     gpiod_line_set_value(forward_lines_[i], 0);
     gpiod_line_set_value(backward_lines_[i], 0);
+
+    last_motion_sign_[i] = 0.0;
     return;
   }
 
   const double clamped_command =
-    std::clamp(command, -max_pwm_[i], max_pwm_[i]);
+    std::clamp(pwm_command, -max_pwm_[i], max_pwm_[i]);
 
   const double duty =
     std::clamp(std::abs(clamped_command) / max_pwm_[i], 0.0, 1.0);
@@ -609,20 +717,17 @@ void RobotArmSystem::set_motor(size_t i, double command)
   {
     gpiod_line_set_value(forward_lines_[i], 0);
     gpiod_line_set_value(backward_lines_[i], 0);
+
     return;
   }
 
   if (clamped_command > 0.0)
   {
-    last_motion_sign_[i] = 1.0;
-
     gpiod_line_set_value(forward_lines_[i], 1);
     gpiod_line_set_value(backward_lines_[i], 0);
   }
   else
   {
-    last_motion_sign_[i] = -1.0;
-
     gpiod_line_set_value(forward_lines_[i], 0);
     gpiod_line_set_value(backward_lines_[i], 1);
   }

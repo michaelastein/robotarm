@@ -38,8 +38,8 @@ ARM_JOINTS = [
 
 START_POSITION = {
     "base_joint": 0.0,
-    "shoulder_joint": 0.6,
-    "elbow_joint": 1.5,
+    "shoulder_joint": 0.5,
+    "elbow_joint": 1.2,
 }
 
 ZERO_POSITION = {
