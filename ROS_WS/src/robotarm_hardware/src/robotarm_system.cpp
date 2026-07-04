@@ -91,14 +91,14 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
       ticks_per_joint_rev_[i] = 575.1;
 
       direction_[i] = 1.0;
-      max_pwm_[i] = 0.2;
+      max_pwm_[i] = 0.08;
 
       min_pwm_[i] = 0.01;
       velocity_to_pwm_gain_[i] = 0.006;
       velocity_kp_[i] = 0.002;
 
-      min_command_velocity_[i] = 0.008;
-      max_joint_velocity_[i] = 0.30;
+      min_command_velocity_[i] = 0.02;
+      max_joint_velocity_[i] = 0.20;
 
       lower_limit_[i] = -3.14159265;
       upper_limit_[i] = 3.14159265;
@@ -112,14 +112,14 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
       ticks_per_joint_rev_[i] = 2556.0;
 
       direction_[i] = 1.0;
-      max_pwm_[i] = 0.5;
+      max_pwm_[i] = 0.08;
 
-      min_pwm_[i] = 0.025;
+      min_pwm_[i] = 0.02;
       velocity_to_pwm_gain_[i] = 0.001;
       velocity_kp_[i] = 0.001;
 
       min_command_velocity_[i] = 0.1;
-      max_joint_velocity_[i] = 0.60;
+      max_joint_velocity_[i] = 0.20;
 
       lower_limit_[i] = -0.52359878;
       upper_limit_[i] = 1.39626340;
@@ -133,14 +133,14 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
       ticks_per_joint_rev_[i] = 2556.0;
 
       direction_[i] = 1.0;
-      max_pwm_[i] = 0.5;
+      max_pwm_[i] = 0.08;
 
-      min_pwm_[i] = 0.025;
-      velocity_to_pwm_gain_[i] = 0.001;
-      velocity_kp_[i] = 0.001;
+      min_pwm_[i] = 0.05;
+      velocity_to_pwm_gain_[i] = 0.060;
+      velocity_kp_[i] = 0.006;
 
-      min_command_velocity_[i] = 0.1;
-      max_joint_velocity_[i] = 0.60;
+      min_command_velocity_[i] = 0.08;
+      max_joint_velocity_[i] = 0.30;
 
       lower_limit_[i] = -0.69813170;
       upper_limit_[i] = 2.44346095;
@@ -156,6 +156,7 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
       return hardware_interface::CallbackReturn::ERROR;
     }
   }
+
   RCLCPP_INFO(
     rclcpp::get_logger("RobotArmSystem"),
     "URDF hardware joint count = %zu",

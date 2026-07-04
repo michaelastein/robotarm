@@ -16,7 +16,7 @@ from std_msgs.msg import Float32MultiArray
 # Detection parameters
 # -----------------------------
 
-ROI_SIZE = 55
+ROI_SIZE = 120
 LOST_FRAMES_RESET = 8
 MAX_TRAIL = 120
 
@@ -31,6 +31,33 @@ MIN_HOTSPOT_PIXELS = 3
 # Publish annotated image only every Nth frame.
 ANNOTATION_EVERY_N_FRAMES = 5
 
+
+
+def fit_text_scale(
+    text,
+    max_width,
+    font=cv2.FONT_HERSHEY_SIMPLEX,
+    preferred_scale=0.55,
+    min_scale=0.28,
+    thickness=1,
+):
+    """Return the largest font scale that keeps text inside max_width."""
+    scale = preferred_scale
+
+    while scale > min_scale:
+        (text_width, _), _ = cv2.getTextSize(
+            text,
+            font,
+            scale,
+            thickness,
+        )
+
+        if text_width <= max_width:
+            break
+
+        scale -= 0.02
+
+    return max(scale, min_scale)
 
 def find_hotspot(img):
     """
@@ -386,24 +413,72 @@ class HotspotDetector(Node):
             f"valid={self.current_detection_valid}"
         )
 
+        # Scale each line to the current image width so compressed or
+        # low-resolution streams do not clip the annotation text.
+        text_margin = 10
+        max_text_width = max(1, w - (2 * text_margin))
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        text_thickness = 1
+
+        status_scale = fit_text_scale(
+            status_text,
+            max_text_width,
+            font=font,
+            preferred_scale=0.55,
+            min_scale=0.28,
+            thickness=text_thickness,
+        )
+        error_scale = fit_text_scale(
+            error_text,
+            max_text_width,
+            font=font,
+            preferred_scale=0.55,
+            min_scale=0.28,
+            thickness=text_thickness,
+        )
+
+        (_, status_height), status_baseline = cv2.getTextSize(
+            status_text, font, status_scale, text_thickness
+        )
+        (_, error_height), error_baseline = cv2.getTextSize(
+            error_text, font, error_scale, text_thickness
+        )
+
+        status_y = text_margin + status_height
+        error_y = status_y + status_baseline + error_height + 8
+
+        # A subtle dark panel keeps the smaller text readable.
+        panel_bottom = min(h, error_y + error_baseline + 6)
+        overlay = vis.copy()
+        cv2.rectangle(
+            overlay,
+            (0, 0),
+            (w, panel_bottom),
+            (0, 0, 0),
+            -1,
+        )
+        cv2.addWeighted(overlay, 0.40, vis, 0.60, 0, vis)
+
         cv2.putText(
             vis,
             status_text,
-            (10, 25),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.55,
+            (text_margin, status_y),
+            font,
+            status_scale,
             (255, 255, 255),
-            2,
+            text_thickness,
+            cv2.LINE_AA,
         )
 
         cv2.putText(
             vis,
             error_text,
-            (10, 50),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.55,
+            (text_margin, error_y),
+            font,
+            error_scale,
             (255, 255, 255),
-            2,
+            text_thickness,
+            cv2.LINE_AA,
         )
 
         return vis
