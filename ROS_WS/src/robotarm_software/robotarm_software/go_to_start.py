@@ -20,9 +20,9 @@ JOINT_NAMES = [
 COMMAND_TOPIC = "/servo_controller/commands"
 
 START_POSITION = {
-    "base_joint": 0.0,
-    "shoulder_joint": 0.43,
-    "elbow_joint": 1.3,
+    "base_joint": 0.1,
+    "shoulder_joint": 0.35,
+    "elbow_joint": 1.2,
 }
 
 ZERO_POSITION = {

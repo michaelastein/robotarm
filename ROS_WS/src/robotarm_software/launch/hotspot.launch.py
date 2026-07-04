@@ -21,11 +21,5 @@ def generate_launch_description():
                 output="screen",
             ),
 
-            Node(
-                package="robotarm_software",
-                executable="hotspot_web_stream.py",
-                name="hotspot_web_stream",
-                output="screen",
-            ),
         ]
     )

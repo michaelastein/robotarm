@@ -119,16 +119,12 @@ def generate_launch_description():
         ],
         output="screen",
     )
-
-    # Optional: automatically start custom controller.
-    # During testing, I recommend starting it manually first.
-    #
-    # tool_position_velocity_control_node = launch_ros.actions.Node(
-    #     package="robotarm_software",
-    #     executable="tool_position_velocity_control.py",
-    #     name="tool_position_velocity_control",
-    #     output="screen",
-    # )
+    hotspot_web_stream_node = launch_ros.actions.Node(
+        package="robotarm_software",
+        executable="hotspot_web_stream.py",
+        name="hotspot_web_stream",
+        output="screen",
+    )
 
     startup_message = LogInfo(
         msg=(
@@ -136,10 +132,6 @@ def generate_launch_description():
             "========================================\n"
             " robotarm_software started\n"
             "----------------------------------------\n"
-            " MoveIt Servo is NOT launched.\n"
-            " Active low-level command topic:\n"
-            "   /servo_controller/commands\n"
-            "\n"
             " Expected publishers while controller is running:\n"
             "   safety_supervisor\n"
             "   tool_position_velocity_control\n"
@@ -160,7 +152,7 @@ def generate_launch_description():
             safety_node,
             safety_supervisor_node,
             cam0_node,
+            hotspot_web_stream_node,     
             startup_message,
-            # tool_position_velocity_control_node,
         ]
     )

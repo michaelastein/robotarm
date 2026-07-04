@@ -16,7 +16,7 @@ from std_msgs.msg import Float32MultiArray
 # Detection parameters
 # -----------------------------
 
-ROI_SIZE = 120
+ROI_SIZE = 55
 LOST_FRAMES_RESET = 8
 MAX_TRAIL = 120
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import threading
+import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import rclpy
@@ -15,31 +16,106 @@ latest_frame_id = 0
 frame_condition = threading.Condition()
 
 
-class AnnotatedImageWebNode(Node):
+class HotspotImageWebNode(Node):
     def __init__(self):
-        super().__init__("hotspot_annotated_web_stream")
+        super().__init__("hotspot_web_stream")
 
-        self.sub = self.create_subscription(
+        self.annotated_timeout = 1.0
+        self.last_annotated_time = None
+        self.latest_raw_frame = None
+        self.using_annotated = False
+        self.received_first_frame = False
+
+        self.raw_sub = self.create_subscription(
             CompressedImage,
-            "/hotspot/annotated_image/compressed",
-            self.image_callback,
+            "/cam0/camera/image_raw/compressed",
+            self.raw_image_callback,
             qos_profile_sensor_data,
         )
 
-        self.get_logger().info(
-            "Serving annotated image at http://0.0.0.0:8000"
+        self.annotated_sub = self.create_subscription(
+            CompressedImage,
+            "/hotspot/annotated_image/compressed",
+            self.annotated_image_callback,
+            qos_profile_sensor_data,
         )
 
-    def image_callback(self, msg):
+        # Ensures fallback occurs even if the camera has a low frame rate.
+        self.fallback_timer = self.create_timer(
+            0.1,
+            self.check_annotated_timeout,
+        )
+
+        self.get_logger().info(
+            "Serving camera stream at http://0.0.0.0:8000"
+        )
+        self.get_logger().info(
+            "Using raw camera until annotated images are available"
+        )
+
+    def publish_web_frame(self, frame):
         global latest_frame, latest_frame_id
 
         with frame_condition:
-            latest_frame = bytes(msg.data)
+            latest_frame = frame
             latest_frame_id += 1
             frame_condition.notify_all()
 
-        if latest_frame_id == 1:
-            self.get_logger().info("Received first annotated image frame")
+        if not self.received_first_frame:
+            self.received_first_frame = True
+            self.get_logger().info("Received first image frame")
+
+    def annotated_is_active(self):
+        if self.last_annotated_time is None:
+            return False
+
+        return (
+            time.monotonic() - self.last_annotated_time
+            <= self.annotated_timeout
+        )
+
+    def raw_image_callback(self, msg):
+        frame = bytes(msg.data)
+        self.latest_raw_frame = frame
+
+        # Ignore raw frames while annotated frames are arriving.
+        if self.annotated_is_active():
+            return
+
+        if self.using_annotated:
+            self.using_annotated = False
+            self.get_logger().info(
+                "Annotated stream stopped; switching to raw camera"
+            )
+
+        self.publish_web_frame(frame)
+
+    def annotated_image_callback(self, msg):
+        self.last_annotated_time = time.monotonic()
+
+        if not self.using_annotated:
+            self.using_annotated = True
+            self.get_logger().info(
+                "Annotated stream available; switching to annotated images"
+            )
+
+        self.publish_web_frame(bytes(msg.data))
+
+    def check_annotated_timeout(self):
+        if not self.using_annotated:
+            return
+
+        if self.annotated_is_active():
+            return
+
+        self.using_annotated = False
+        self.get_logger().info(
+            "Annotated stream timed out; switching to raw camera"
+        )
+
+        # Immediately show the most recently received raw frame.
+        if self.latest_raw_frame is not None:
+            self.publish_web_frame(self.latest_raw_frame)
 
 
 class MJPEGHandler(BaseHTTPRequestHandler):
@@ -51,7 +127,7 @@ class MJPEGHandler(BaseHTTPRequestHandler):
             <!doctype html>
             <html>
                 <head>
-                    <title>Hotspot Annotated Image</title>
+                    <title>Hotspot Camera</title>
                     <style>
                         html, body {
                             margin: 0;
@@ -77,7 +153,10 @@ class MJPEGHandler(BaseHTTPRequestHandler):
             """.encode("utf-8")
 
             self.send_response(200)
-            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header(
+                "Content-Type",
+                "text/html; charset=utf-8",
+            )
             self.send_header("Content-Length", str(len(html)))
             self.send_header(
                 "Cache-Control",
@@ -85,7 +164,6 @@ class MJPEGHandler(BaseHTTPRequestHandler):
             )
             self.send_header("Connection", "close")
             self.end_headers()
-
             self.wfile.write(html)
             self.wfile.flush()
             return
@@ -110,28 +188,39 @@ class MJPEGHandler(BaseHTTPRequestHandler):
                 while True:
                     with frame_condition:
                         frame_condition.wait_for(
-                            lambda: latest_frame is not None
-                            and latest_frame_id != last_sent_frame_id
+                            lambda: (
+                                latest_frame is not None
+                                and latest_frame_id
+                                != last_sent_frame_id
+                            )
                         )
 
                         frame = latest_frame
                         last_sent_frame_id = latest_frame_id
 
                     self.wfile.write(b"--frame\r\n")
-                    self.wfile.write(b"Content-Type: image/jpeg\r\n")
                     self.wfile.write(
-                        f"Content-Length: {len(frame)}\r\n\r\n".encode("utf-8")
+                        b"Content-Type: image/jpeg\r\n"
+                    )
+                    self.wfile.write(
+                        (
+                            f"Content-Length: {len(frame)}\r\n\r\n"
+                        ).encode("utf-8")
                     )
                     self.wfile.write(frame)
                     self.wfile.write(b"\r\n")
                     self.wfile.flush()
 
-            except BrokenPipeError:
+            except (
+                BrokenPipeError,
+                ConnectionResetError,
+            ):
                 pass
-            except ConnectionResetError:
-                pass
-            except Exception as e:
-                print(f"Stream client disconnected/error: {e}")
+            except Exception as error:
+                print(
+                    "Stream client disconnected/error: "
+                    f"{error}"
+                )
 
             return
 
@@ -148,7 +237,10 @@ class MJPEGHandler(BaseHTTPRequestHandler):
 
 
 def start_http_server(host="0.0.0.0", port=8000):
-    server = ThreadingHTTPServer((host, port), MJPEGHandler)
+    server = ThreadingHTTPServer(
+        (host, port),
+        MJPEGHandler,
+    )
     server.daemon_threads = True
     server.serve_forever()
 
@@ -156,11 +248,14 @@ def start_http_server(host="0.0.0.0", port=8000):
 def main(args=None):
     rclpy.init(args=args)
 
-    node = AnnotatedImageWebNode()
+    node = HotspotImageWebNode()
 
     http_thread = threading.Thread(
         target=start_http_server,
-        kwargs={"host": "0.0.0.0", "port": 8000},
+        kwargs={
+            "host": "0.0.0.0",
+            "port": 8000,
+        },
         daemon=True,
     )
     http_thread.start()
@@ -169,9 +264,9 @@ def main(args=None):
         rclpy.spin(node)
     except KeyboardInterrupt:
         pass
-
-    node.destroy_node()
-    rclpy.shutdown()
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
 
 
 if __name__ == "__main__":
