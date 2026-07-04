@@ -48,48 +48,21 @@ arm_trajectory_controller:
       - position
       - velocity
 
-    interpolation_method: splines
-
     state_publish_rate: 50.0
     action_monitor_rate: 20.0
 
-    allow_partial_joints_goal: false
-    open_loop_control: false
-
-    constraints:
-      goal_time: 3.0
-      stopped_velocity_tolerance: 0.15
-
-      base_joint:
-        trajectory: 0.30
-        goal: 0.08
-
-      shoulder_joint:
-        trajectory: 0.4
-        goal: 0.10
-
-      elbow_joint:
-        trajectory: 0.45
-        goal: 0.1
-
     gains:
       base_joint:
-        p: 0.8
+        p: 4.0
         i: 0.0
-        d: 0.0
-        i_clamp: 0.0
-        ff_velocity_scale: 1.0
+        d: 0.1
 
       shoulder_joint:
-        p: 0.35
+        p: 4.0
         i: 0.0
-        d: 0.0
-        i_clamp: 0.0
-        ff_velocity_scale: 1.0
+        d: 0.1
 
       elbow_joint:
-        p: 0.35
+        p: 4.0
         i: 0.0
-        d: 0.0
-        i_clamp: 0.0
-        ff_velocity_scale: 1.0
+        d: 0.1

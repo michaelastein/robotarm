@@ -5,10 +5,7 @@
 #include <hardware_interface/hardware_info.hpp>
 #include <hardware_interface/system_interface.hpp>
 #include <hardware_interface/types/hardware_interface_return_values.hpp>
-#include <atomic>
-#include <condition_variable>
-#include <mutex>
-#include <thread>
+
 #include <rclcpp/rclcpp.hpp>
 
 #include <gpiod.h>
@@ -57,19 +54,9 @@ private:
     std::array<long, 4> & counts);
 
   void set_motor(size_t i, double pwm_command);
-  void start_pwm_thread();
-  void stop_pwm_thread();
-  void pwm_loop();
   void stop_all();
   void release_gpio();
-  std::mutex pwm_mutex_;
-  std::vector<double> pwm_targets_;
 
-  std::thread pwm_thread_;
-  std::atomic<bool> pwm_thread_running_;
-
-  std::mutex pwm_wait_mutex_;
-  std::condition_variable pwm_condition_;
   std::vector<double> position_;
   std::vector<double> velocity_;
   std::vector<double> command_;

@@ -10,9 +10,6 @@
 #include <cmath>
 #include <cstring>
 #include <fcntl.h>
-#include <mutex>
-#include <thread>
-#include <tuple>
 #include <sstream>
 #include <string>
 #include <termios.h>
@@ -24,23 +21,21 @@ namespace robotarm_hardware
 
 RobotArmSystem::RobotArmSystem()
 : chip_(nullptr),
-  software_pwm_frequency_hz_(100.0),
+  software_pwm_frequency_hz_(25.0),
   pwm_deadband_(0.002),
-  velocity_deadband_rad_s_(0.030),
+  velocity_deadband_rad_s_(0.003),
   velocity_filter_alpha_(0.25),
   pwm_start_time_(std::chrono::steady_clock::now()),
   serial_fd_(-1),
   serial_device_("/dev/ttyACM0"),
   arduino_counts_initialized_(false),
-  coast_time_after_command_s_(0.20),
-  pwm_thread_running_(false)
+  coast_time_after_command_s_(0.20)
 {
   last_arduino_counts_.fill(0);
 }
 
 RobotArmSystem::~RobotArmSystem()
 {
-  stop_pwm_thread();
   stop_all();
   release_gpio();
   close_arduino_serial();
@@ -60,7 +55,6 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
   position_.assign(n, 0.0);
   velocity_.assign(n, 0.0);
   command_.assign(n, 0.0);
-  pwm_targets_.assign(n, 0.0);
 
   encoder_ticks_.assign(n, 0.0);
   ticks_per_joint_rev_.assign(n, 0.0);
@@ -97,14 +91,14 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
       ticks_per_joint_rev_[i] = 575.1;
 
       direction_[i] = 1.0;
-      max_pwm_[i] = 0.50;
+      max_pwm_[i] = 0.4;
 
-      min_pwm_[i] = 0.12;
-      velocity_to_pwm_gain_[i] = 0.30;
-      velocity_kp_[i] = 0.06;
+      min_pwm_[i] = 0.015;
+      velocity_to_pwm_gain_[i] = 0.006;
+      velocity_kp_[i] = 0.002;
 
-      min_command_velocity_[i] = 0.025;
-      max_joint_velocity_[i] = 0.30;
+      min_command_velocity_[i] = 0.035;
+      max_joint_velocity_[i] = 0.40;
 
       lower_limit_[i] = -3.14159265;
       upper_limit_[i] = 3.14159265;
@@ -118,14 +112,14 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
       ticks_per_joint_rev_[i] = 2556.0;
 
       direction_[i] = 1.0;
-      max_pwm_[i] = 0.40;
+      max_pwm_[i] = 0.08;
 
-      min_pwm_[i] = 0.12;
-      velocity_to_pwm_gain_[i] = 0.35;
-      velocity_kp_[i] = 0.08;
+      min_pwm_[i] = 0.02;
+      velocity_to_pwm_gain_[i] = 0.001;
+      velocity_kp_[i] = 0.001;
 
-      min_command_velocity_[i] = 0.035;
-      max_joint_velocity_[i] = 0.18;
+      min_command_velocity_[i] = 0.1;
+      max_joint_velocity_[i] = 0.20;
 
       lower_limit_[i] = -0.52359878;
       upper_limit_[i] = 1.39626340;
@@ -139,14 +133,14 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
       ticks_per_joint_rev_[i] = 2556.0;
 
       direction_[i] = 1.0;
-      max_pwm_[i] = 0.40;
+      max_pwm_[i] = 0.08;
 
-      min_pwm_[i] = 0.14;
-      velocity_to_pwm_gain_[i] = 0.30;
-      velocity_kp_[i] = 0.08;
+      min_pwm_[i] = 0.05;
+      velocity_to_pwm_gain_[i] = 0.060;
+      velocity_kp_[i] = 0.006;
 
-      min_command_velocity_[i] = 0.035;
-      max_joint_velocity_[i] = 0.22;
+      min_command_velocity_[i] = 0.08;
+      max_joint_velocity_[i] = 0.30;
 
       lower_limit_[i] = -0.69813170;
       upper_limit_[i] = 2.44346095;
@@ -269,7 +263,6 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
   }
 
   pwm_start_time_ = std::chrono::steady_clock::now();
-  start_pwm_thread();
 
   RCLCPP_INFO(
     rclcpp::get_logger("RobotArmSystem"),
@@ -516,6 +509,8 @@ hardware_interface::return_type RobotArmSystem::read(
 
   if (!read_arduino_counts(current_counts))
   {
+    // No new complete encoder line in this cycle.
+    // Let the filtered velocity decay smoothly toward zero.
     for (size_t i = 0; i < velocity_.size(); ++i)
     {
       velocity_[i] *= (1.0 - velocity_filter_alpha_);
@@ -558,13 +553,20 @@ hardware_interface::return_type RobotArmSystem::read(
         channel,
         info_.joints[i].name.c_str()
       );
+
       continue;
     }
 
     const long previous_count = last_arduino_counts_[channel];
     const long current_count = current_counts[channel];
+
     long raw_delta_ticks = current_count - previous_count;
 
+    /*
+     * The Arduino encoder counters contain only a positive tick magnitude.
+     * A negative delta therefore indicates a reset, reconnect, or wrap.
+     * Rebase the counter without creating a false movement.
+     */
     if (raw_delta_ticks < 0)
     {
       RCLCPP_WARN(
@@ -574,14 +576,20 @@ hardware_interface::return_type RobotArmSystem::read(
         previous_count,
         current_count
       );
+
       raw_delta_ticks = 0;
     }
 
     /*
-     * The encoders provide tick magnitude only, without direction.
-     * Therefore use the active motor-command direction, or the most
-     * recently known direction while the motor coasts or settles.
-     * No positive encoder delta is discarded.
+     * The encoder has no direction information.
+     *
+     * Direction priority:
+     *   1. Current active motor-command direction.
+     *   2. Last known valid motor-command direction.
+     *   3. Positive direction before any command has ever been issued.
+     *
+     * This counts every received positive encoder delta. It also keeps
+     * counting motor coast and mechanical settling after a zero command.
      */
     double sign_for_ticks = last_motion_sign_[i];
 
@@ -605,6 +613,11 @@ hardware_interface::return_type RobotArmSystem::read(
       ticks_per_joint_rev_[i] *
       2.0 * M_PI;
 
+    /*
+     * Do not clamp measured encoder state here.
+     * Clamping would hide real encoder movement at or beyond a configured
+     * software limit. Motor commands are still limited in write().
+     */
     position_[i] += delta_rad;
 
     double measured_velocity = 0.0;
@@ -624,6 +637,10 @@ hardware_interface::return_type RobotArmSystem::read(
     }
   }
 
+  /*
+   * Advance the baseline after processing the newest encoder values.
+   * This ensures each received tick delta is integrated exactly once.
+   */
   last_arduino_counts_ = current_counts;
 
   return hardware_interface::return_type::OK;
@@ -705,232 +722,60 @@ hardware_interface::return_type RobotArmSystem::write(
 
 void RobotArmSystem::set_motor(size_t i, double pwm_command)
 {
-  if (i >= pwm_targets_.size() || i >= max_pwm_.size())
+  if (
+    i >= forward_lines_.size() ||
+    i >= backward_lines_.size() ||
+    i >= max_pwm_.size() ||
+    i >= last_motion_sign_.size())
   {
     return;
   }
 
-  double target = 0.0;
-
-  if (std::abs(pwm_command) > pwm_deadband_)
+  if (std::abs(pwm_command) <= pwm_deadband_)
   {
-    target = std::clamp(
-      pwm_command,
-      -max_pwm_[i],
-      max_pwm_[i]
-    );
-  }
+    gpiod_line_set_value(forward_lines_[i], 0);
+    gpiod_line_set_value(backward_lines_[i], 0);
 
-  std::lock_guard<std::mutex> lock(pwm_mutex_);
-  pwm_targets_[i] = target;
-}
-
-void RobotArmSystem::start_pwm_thread()
-{
-  if (pwm_thread_running_.exchange(true))
-  {
+    last_motion_sign_[i] = 0.0;
     return;
   }
 
-  pwm_thread_ = std::thread(&RobotArmSystem::pwm_loop, this);
+  const double clamped_command =
+    std::clamp(pwm_command, -max_pwm_[i], max_pwm_[i]);
 
-  RCLCPP_INFO(
-    rclcpp::get_logger("RobotArmSystem"),
-    "Started GPIO PWM thread at %.1f Hz",
-    software_pwm_frequency_hz_
-  );
-}
+  const double duty =
+    std::clamp(std::abs(clamped_command) / max_pwm_[i], 0.0, 1.0);
 
-void RobotArmSystem::stop_pwm_thread()
-{
-  if (!pwm_thread_running_.exchange(false))
+  const auto now = std::chrono::steady_clock::now();
+  const std::chrono::duration<double> elapsed = now - pwm_start_time_;
+
+  const double pwm_period = 1.0 / software_pwm_frequency_hz_;
+  const double phase = std::fmod(elapsed.count(), pwm_period);
+
+  const bool pwm_on = phase < duty * pwm_period;
+
+  if (!pwm_on)
   {
+    gpiod_line_set_value(forward_lines_[i], 0);
+    gpiod_line_set_value(backward_lines_[i], 0);
+
     return;
   }
 
-  pwm_condition_.notify_all();
-
-  if (pwm_thread_.joinable())
+  if (clamped_command > 0.0)
   {
-    pwm_thread_.join();
+    gpiod_line_set_value(forward_lines_[i], 1);
+    gpiod_line_set_value(backward_lines_[i], 0);
   }
-
-  RCLCPP_INFO(
-    rclcpp::get_logger("RobotArmSystem"),
-    "Stopped GPIO PWM thread"
-  );
-}
-
-void RobotArmSystem::pwm_loop()
-{
-  using Clock = std::chrono::steady_clock;
-  using Duration = std::chrono::duration<double>;
-
-  const Duration period(
-    1.0 / std::max(1.0, software_pwm_frequency_hz_)
-  );
-
-  auto next_period = Clock::now();
-
-  while (pwm_thread_running_.load())
+  else
   {
-    next_period +=
-      std::chrono::duration_cast<Clock::duration>(period);
-
-    std::vector<double> targets;
-
-    {
-      std::lock_guard<std::mutex> lock(pwm_mutex_);
-      targets = pwm_targets_;
-    }
-
-    /*
-     * Every tuple contains:
-     *   off deadline, joint index, direction
-     *
-     * All active outputs are switched on at the beginning of the period.
-     * They are then switched off at their individual duty-cycle deadline.
-     */
-    std::vector<std::tuple<Clock::time_point, size_t, int>> off_events;
-    off_events.reserve(targets.size());
-
-    const auto period_start = Clock::now();
-
-    for (size_t i = 0; i < targets.size(); ++i)
-    {
-      if (
-        i >= forward_lines_.size() ||
-        i >= backward_lines_.size() ||
-        i >= max_pwm_.size())
-      {
-        continue;
-      }
-
-      const double command = targets[i];
-
-      if (
-        std::abs(command) <= pwm_deadband_ ||
-        max_pwm_[i] <= 0.0)
-      {
-        gpiod_line_set_value(forward_lines_[i], 0);
-        gpiod_line_set_value(backward_lines_[i], 0);
-        continue;
-      }
-
-      const double duty = std::clamp(
-        std::abs(command) / max_pwm_[i],
-        0.0,
-        1.0
-      );
-
-      const int direction = command > 0.0 ? 1 : -1;
-
-      if (direction > 0)
-      {
-        gpiod_line_set_value(forward_lines_[i], 1);
-        gpiod_line_set_value(backward_lines_[i], 0);
-      }
-      else
-      {
-        gpiod_line_set_value(forward_lines_[i], 0);
-        gpiod_line_set_value(backward_lines_[i], 1);
-      }
-
-      if (duty < 1.0)
-      {
-        const auto on_time =
-          std::chrono::duration_cast<Clock::duration>(
-            period * duty
-          );
-
-        off_events.emplace_back(
-          period_start + on_time,
-          i,
-          direction
-        );
-      }
-    }
-
-    std::sort(
-      off_events.begin(),
-      off_events.end(),
-      [](const auto & a, const auto & b)
-      {
-        return std::get<0>(a) < std::get<0>(b);
-      }
-    );
-
-    for (const auto & event : off_events)
-    {
-      if (!pwm_thread_running_.load())
-      {
-        break;
-      }
-
-      const auto deadline = std::get<0>(event);
-      const size_t joint = std::get<1>(event);
-
-      std::unique_lock<std::mutex> wait_lock(pwm_wait_mutex_);
-
-      pwm_condition_.wait_until(
-        wait_lock,
-        deadline,
-        [this]()
-        {
-          return !pwm_thread_running_.load();
-        }
-      );
-
-      wait_lock.unlock();
-
-      if (!pwm_thread_running_.load())
-      {
-        break;
-      }
-
-      if (
-        joint < forward_lines_.size() &&
-        joint < backward_lines_.size())
-      {
-        gpiod_line_set_value(forward_lines_[joint], 0);
-        gpiod_line_set_value(backward_lines_[joint], 0);
-      }
-    }
-
-    if (!pwm_thread_running_.load())
-    {
-      break;
-    }
-
-    std::unique_lock<std::mutex> wait_lock(pwm_wait_mutex_);
-
-    pwm_condition_.wait_until(
-      wait_lock,
-      next_period,
-      [this]()
-      {
-        return !pwm_thread_running_.load();
-      }
-    );
-  }
-
-  for (size_t i = 0; i < forward_lines_.size(); ++i)
-  {
-    if (i < backward_lines_.size())
-    {
-      gpiod_line_set_value(forward_lines_[i], 0);
-      gpiod_line_set_value(backward_lines_[i], 0);
-    }
+    gpiod_line_set_value(forward_lines_[i], 0);
+    gpiod_line_set_value(backward_lines_[i], 1);
   }
 }
 
 void RobotArmSystem::stop_all()
 {
-  {
-    std::lock_guard<std::mutex> lock(pwm_mutex_);
-    std::fill(pwm_targets_.begin(), pwm_targets_.end(), 0.0);
-  }
-
   for (size_t i = 0; i < forward_lines_.size(); ++i)
   {
     if (i < backward_lines_.size())
