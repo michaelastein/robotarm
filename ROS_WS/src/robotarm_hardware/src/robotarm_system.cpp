@@ -26,7 +26,7 @@ RobotArmSystem::RobotArmSystem()
 : chip_(nullptr),
   software_pwm_frequency_hz_(100.0),
   pwm_deadband_(0.002),
-  velocity_deadband_rad_s_(0.030),
+  velocity_deadband_rad_s_(0.020),
   velocity_filter_alpha_(0.25),
   pwm_start_time_(std::chrono::steady_clock::now()),
   serial_fd_(-1),
@@ -653,7 +653,15 @@ hardware_interface::return_type RobotArmSystem::write(
       desired_velocity = 0.0;
     }
 
-    if (std::abs(desired_velocity) <= velocity_deadband_rad_s_)
+    double joint_velocity_deadband =
+      velocity_deadband_rad_s_;
+
+    if (info_.joints[i].name == "base_joint")
+    {
+      joint_velocity_deadband = 0.028;
+    }
+
+    if (std::abs(desired_velocity) <= joint_velocity_deadband)
     {
       last_motion_sign_[i] = 0.0;
       set_motor(i, 0.0);

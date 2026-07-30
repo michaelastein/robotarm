@@ -74,7 +74,7 @@ arm_trajectory_controller:
 
     gains:
       base_joint:
-        p: 0.8
+        p: 0.80
         i: 0.0
         d: 0.0
         i_clamp: 0.0
