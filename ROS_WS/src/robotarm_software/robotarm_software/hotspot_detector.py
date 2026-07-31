@@ -16,7 +16,9 @@ from std_msgs.msg import Float32MultiArray
 # Detection parameters
 # -----------------------------
 
-ROI_SIZE = 120
+# Complete ROI side length as a fraction of image width.
+# 0.20 means the ROI is one fifth of the full image width.
+ROI_WIDTH_FRACTION = 0.35
 LOST_FRAMES_RESET = 8
 MAX_TRAIL = 120
 
@@ -280,10 +282,14 @@ class HotspotDetector(Node):
         if self.last_valid is not None and self.lost_counter < LOST_FRAMES_RESET:
             x, y = self.last_valid
 
-            x1 = max(0, x - ROI_SIZE)
-            y1 = max(0, y - ROI_SIZE)
-            x2 = min(w, x + ROI_SIZE)
-            y2 = min(h, y + ROI_SIZE)
+            # Adaptive square ROI: complete side length is 1/5 of image width.
+            roi_side = max(2, int(round(w * ROI_WIDTH_FRACTION)))
+            roi_half = max(1, roi_side // 2)
+
+            x1 = max(0, x - roi_half)
+            y1 = max(0, y - roi_half)
+            x2 = min(w, x + roi_half)
+            y2 = min(h, y + roi_half)
 
             search_img = img[y1:y2, x1:x2]
             offset = np.array([x1, y1], dtype=np.float32)
