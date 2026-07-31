@@ -5,6 +5,7 @@
 #include <memory>
 #include <mutex>
 #include <string>
+#include <thread>
 
 #include <geometry_msgs/msg/pose_stamped.hpp>
 #include <moveit/move_group_interface/move_group_interface.hpp>
@@ -468,15 +469,24 @@ int main(int argc, char ** argv)
 
   auto node = std::make_shared<HotspotPathPlanner>();
 
-  /*
-   * MoveGroupInterface must be initialized after make_shared(),
-   * because initialize_move_group() uses shared_from_this().
-   */
-  node->initialize_move_group();
-
   rclcpp::executors::MultiThreadedExecutor executor;
   executor.add_node(node);
-  executor.spin();
+
+  std::thread executor_thread(
+    [&executor]()
+    {
+      executor.spin();
+    });
+
+  /*
+   * The executor must already be running so MoveGroupInterface
+   * can receive /joint_states while requesting the current pose.
+   */
+  std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+  node->initialize_move_group();
+
+  executor_thread.join();
 
   rclcpp::shutdown();
   return 0;
