@@ -50,7 +50,7 @@ public:
       rclcpp::CallbackGroupType::Reentrant);
 
     planning_timer_ = create_wall_timer(
-      500ms,
+      200ms,
       std::bind(
         &HotspotPathPlanner::planning_timer_callback,
         this),
@@ -86,8 +86,8 @@ public:
     /*
      * Start carefully on the physical robot.
      */
-    move_group_->setMaxVelocityScalingFactor(0.08);
-    move_group_->setMaxAccelerationScalingFactor(0.05);
+    move_group_->setMaxVelocityScalingFactor(0.38);
+    move_group_->setMaxAccelerationScalingFactor(0.18);
 
     const std::string detected_tool_link =
       move_group_->getEndEffectorLink();
@@ -293,31 +293,61 @@ private:
        *   hotspot lower
        *   move tool toward negative base X
        */
-      double correction_x =
-        -error_y * CARTESIAN_STEP_SCALE;
+      /*
+       * Adaptive image-to-Cartesian correction.
+       *
+       * Large image errors generate large movements. Near the image
+       * center, smaller movements provide accurate final alignment.
+       */
+      const double largest_image_error =
+        std::max(std::abs(error_x), std::abs(error_y));
 
-      double correction_y =
-        -error_x * CARTESIAN_STEP_SCALE;
+      double adaptive_scale = 0.020;
 
-      correction_x = std::clamp(
-        correction_x,
-        -MAX_CORRECTION_PER_PLAN,
-        MAX_CORRECTION_PER_PLAN);
-
-      correction_y = std::clamp(
-        correction_y,
-        -MAX_CORRECTION_PER_PLAN,
-        MAX_CORRECTION_PER_PLAN);
+      if (largest_image_error >= 0.70) {
+        adaptive_scale = 0.120;
+      } else if (largest_image_error >= 0.45) {
+        adaptive_scale = 0.090;
+      } else if (largest_image_error >= 0.25) {
+        adaptive_scale = 0.060;
+      } else if (largest_image_error >= 0.15) {
+        adaptive_scale = 0.028;
+      }
 
       /*
-       * Do not move an axis that is already centered.
+       * Camera X error moves the tool along robot Y.
+       * Camera Y error moves the tool along robot X.
        */
+      double correction_x =
+        -error_y * adaptive_scale;
+
+      double correction_y =
+        -error_x * adaptive_scale;
+
       if (std::abs(error_x) <= IMAGE_DEADBAND_X) {
         correction_y = 0.0;
       }
 
       if (std::abs(error_y) <= IMAGE_DEADBAND_Y) {
         correction_x = 0.0;
+      }
+
+      /*
+       * Limit the complete XY correction vector, including diagonal
+       * movement, to 60 mm per plan.
+       */
+      const double correction_length =
+        std::hypot(correction_x, correction_y);
+
+      if (
+        correction_length > MAX_CORRECTION_PER_PLAN &&
+        correction_length > 1e-9)
+      {
+        const double limit_factor =
+          MAX_CORRECTION_PER_PLAN / correction_length;
+
+        correction_x *= limit_factor;
+        correction_y *= limit_factor;
       }
 
       const double target_x =
@@ -453,18 +483,18 @@ private:
   static constexpr double MIN_CONFIDENCE = 2.0;
   static constexpr double TARGET_TIMEOUT_SECONDS = 0.5;
 
-  static constexpr double IMAGE_DEADBAND_X = 0.30;
-  static constexpr double IMAGE_DEADBAND_Y = 0.30;
+  static constexpr double IMAGE_DEADBAND_X = 0.15;
+  static constexpr double IMAGE_DEADBAND_Y = 0.15;
 
   /*
    * At full normalized error, request a 10 mm correction.
    */
-  static constexpr double CARTESIAN_STEP_SCALE = 0.010;
+  static constexpr double CARTESIAN_STEP_SCALE = 0.020;
 
   /*
    * Never request more than 10 mm per plan.
    */
-  static constexpr double MAX_CORRECTION_PER_PLAN = 0.010;
+  static constexpr double MAX_CORRECTION_PER_PLAN = 0.090;
 };
 
 
@@ -487,7 +517,7 @@ int main(int argc, char ** argv)
    * The executor must already be running so MoveGroupInterface
    * can receive /joint_states while requesting the current pose.
    */
-  std::this_thread::sleep_for(std::chrono::milliseconds(500));
+  std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
   node->initialize_move_group();
 
