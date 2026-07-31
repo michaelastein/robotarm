@@ -49,4 +49,12 @@ install(
     share/${PROJECT_NAME}
 )
 
+
+install(
+  PROGRAMS
+    scripts/joint_states_relay.py
+  DESTINATION
+    lib/${PROJECT_NAME}
+)
+
 ament_package()

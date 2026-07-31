@@ -30,6 +30,9 @@ def generate_launch_description():
                 "use_sim_time": False,
             },
         ],
+        remappings=[
+            ("joint_states", "/joint_states_moveit"),
+        ],
     )
 
     return LaunchDescription([
