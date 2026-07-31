@@ -46,11 +46,15 @@ public:
      * Do not plan at camera frequency.
      * Check for a new correction twice per second.
      */
+    planning_callback_group_ = create_callback_group(
+      rclcpp::CallbackGroupType::Reentrant);
+
     planning_timer_ = create_wall_timer(
       500ms,
       std::bind(
         &HotspotPathPlanner::planning_timer_callback,
-        this));
+        this),
+      planning_callback_group_);
 
     RCLCPP_INFO(
       get_logger(),
@@ -418,6 +422,7 @@ private:
     std_msgs::msg::Float32MultiArray>::SharedPtr
     hotspot_subscription_;
 
+  rclcpp::CallbackGroup::SharedPtr planning_callback_group_;
   rclcpp::TimerBase::SharedPtr planning_timer_;
 
   std::shared_ptr<
