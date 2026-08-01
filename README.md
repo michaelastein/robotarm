@@ -145,7 +145,8 @@ Install ROS 2 Jazzy and MoveIt 2 on Ubuntu 24.04. Source the ROS installation be
 ```
 mkdir -p ~/robotarm_ws/src
 cd ~/robotarm_ws/src
-git clone https://github.com/michaelastein/robotarm.git``` 
+git clone https://github.com/michaelastein/robotarm.git
+``` 
 
 Copy or link the packages from robotarm/ROS_WS/src into the workspace source directory:
 
@@ -153,18 +154,24 @@ Copy or link the packages from robotarm/ROS_WS/src into the workspace source dir
 
 3. Install dependencies
 
-```cd ~/robotarm_ws
-rosdep install --from-paths src --ignore-src -r -y```
+```
+cd ~/robotarm_ws
+rosdep install --from-paths src --ignore-src -r -y
+```
 
 4. Build
 
-```colcon build --symlink-install
-source install/setup.bash```
+```
+colcon build --symlink-install
+source install/setup.bash
+```
 
 All terminals used to run the project must source both ROS 2 and the workspace:
 
-```source /opt/ros/jazzy/setup.bash
-source ~/robotarm_ws/install/setup.bash```
+```
+source /opt/ros/jazzy/setup.bash
+source ~/robotarm_ws/install/setup.bash
+```
 
 ##Path Planning:
 
