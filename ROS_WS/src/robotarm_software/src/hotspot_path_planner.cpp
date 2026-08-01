@@ -16,17 +16,84 @@
 using namespace std::chrono_literals;
 
 
-/*
- * These names must match robotarm_moveit_config.
+/**
+ * @file hotspot_path_planner.cpp
+ *
+ * @brief MoveIt-based hotspot centering node.
+ *
+ * The node subscribes to normalized image errors from the hotspot detector and
+ * periodically requests small Cartesian corrections from MoveIt.
+ *
+ * Hotspot message format:
+ *   data[0]:
+ *     Visibility flag. Values greater than or equal to 0.5 indicate that the
+ *     hotspot is visible.
+ *
+ *   data[1]:
+ *     Normalized horizontal image error.
+ *     Negative means the hotspot is left of center.
+ *     Positive means the hotspot is right of center.
+ *
+ *   data[2]:
+ *     Normalized vertical image error.
+ *     Negative means the hotspot is above center.
+ *     Positive means the hotspot is below center.
+ *
+ *   data[3]:
+ *     Detector confidence.
+ *
+ * Image-to-robot mapping:
+ *   Positive image X error moves the tool toward negative base-frame Y.
+ *   Positive image Y error moves the tool toward negative base-frame X.
+ *
+ * Planning behavior:
+ *   - New hotspot data may arrive at camera frequency.
+ *   - Planning is checked only at PLANNING_PERIOD.
+ *   - Only fresh, visible, sufficiently confident targets are used.
+ *   - Independent image deadbands prevent unnecessary X or Y correction.
+ *   - The complete XY correction vector is limited per plan.
+ *   - The tool height measured during initialization is held constant.
+ *   - Position-only goals are used; no orientation target is specified.
  */
-static constexpr char PLANNING_GROUP[] = "arm";
-static constexpr char TOOL_LINK[] = "tool_tip_link";
-static constexpr char HOTSPOT_TOPIC[] = "/hotspot/target";
+
+
+namespace
+{
+
+constexpr char kPlanningGroup[] = "arm";
+constexpr char kToolLink[] = "tool_tip_link";
+constexpr char kHotspotTopic[] = "/hotspot/target";
+
+constexpr auto kPlanningPeriod = 200ms;
+constexpr auto kMoveGroupStartupDelay = 200ms;
+
+constexpr double kPlanningTimeSeconds = 3.0;
+constexpr int kPlanningAttempts = 5;
+constexpr double kGoalPositionToleranceMeters = 0.008;
+
+constexpr double kVelocityScalingFactor = 0.38;
+constexpr double kAccelerationScalingFactor = 0.18;
+
+constexpr double kMinimumConfidence = 2.0;
+constexpr double kTargetTimeoutSeconds = 0.5;
+
+constexpr double kImageDeadbandX = 0.15;
+constexpr double kImageDeadbandY = 0.15;
+
+constexpr double kMaximumCorrectionPerPlanMeters = 0.090;
+
+}  // namespace
 
 
 class HotspotPathPlanner : public rclcpp::Node
 {
 public:
+  /**
+   * @brief Construct the ROS node, hotspot subscription, and planning timer.
+   *
+   * The MoveGroupInterface is initialized separately after the executor has
+   * started so that current robot state messages can be processed.
+   */
   HotspotPathPlanner()
   : Node(
       "hotspot_path_planner",
@@ -35,22 +102,18 @@ public:
   {
     hotspot_subscription_ =
       create_subscription<std_msgs::msg::Float32MultiArray>(
-        HOTSPOT_TOPIC,
-        10,
-        std::bind(
-          &HotspotPathPlanner::hotspot_callback,
-          this,
-          std::placeholders::_1));
+      kHotspotTopic,
+      10,
+      std::bind(
+        &HotspotPathPlanner::hotspot_callback,
+        this,
+        std::placeholders::_1));
 
-    /*
-     * Do not plan at camera frequency.
-     * Check for a new correction twice per second.
-     */
     planning_callback_group_ = create_callback_group(
       rclcpp::CallbackGroupType::Reentrant);
 
     planning_timer_ = create_wall_timer(
-      200ms,
+      kPlanningPeriod,
       std::bind(
         &HotspotPathPlanner::planning_timer_callback,
         this),
@@ -58,67 +121,47 @@ public:
 
     RCLCPP_INFO(
       get_logger(),
-      "Hotspot path planner node created");
-
-    RCLCPP_INFO(
-      get_logger(),
-      "Listening to %s",
-      HOTSPOT_TOPIC);
+      "Hotspot path planner started");
   }
 
-
+  /**
+   * @brief Create and configure the MoveIt MoveGroupInterface.
+   *
+   * The method configures planning time, planning attempts, position tolerance,
+   * velocity scaling, and acceleration scaling. It then records the current
+   * tool height for later position-only corrections.
+   *
+   * @throws std::exception
+   *   MoveIt may throw while accessing the robot state or current pose.
+   */
   void initialize_move_group()
   {
     move_group_ =
       std::make_shared<
-        moveit::planning_interface::MoveGroupInterface>(
-        shared_from_this(),
-        PLANNING_GROUP);
+      moveit::planning_interface::MoveGroupInterface>(
+      shared_from_this(),
+      kPlanningGroup);
 
-    move_group_->setPlanningTime(3.0);
-    move_group_->setNumPlanningAttempts(5);
-
-    /*
-     * Position-only goal tolerance.
-     */
-    move_group_->setGoalPositionTolerance(0.008);
-
-    /*
-     * Start carefully on the physical robot.
-     */
-    move_group_->setMaxVelocityScalingFactor(0.38);
-    move_group_->setMaxAccelerationScalingFactor(0.18);
-
-    const std::string detected_tool_link =
-      move_group_->getEndEffectorLink();
-
-    RCLCPP_INFO(
-      get_logger(),
-      "MoveIt planning group: %s",
-      PLANNING_GROUP);
-
-    RCLCPP_INFO(
-      get_logger(),
-      "Configured tool link: %s",
-      TOOL_LINK);
-
-    RCLCPP_INFO(
-      get_logger(),
-      "MoveIt end-effector link: %s",
-      detected_tool_link.c_str());
+    move_group_->setPlanningTime(kPlanningTimeSeconds);
+    move_group_->setNumPlanningAttempts(kPlanningAttempts);
+    move_group_->setGoalPositionTolerance(
+      kGoalPositionToleranceMeters);
+    move_group_->setMaxVelocityScalingFactor(
+      kVelocityScalingFactor);
+    move_group_->setMaxAccelerationScalingFactor(
+      kAccelerationScalingFactor);
 
     initialize_height();
   }
 
 
 private:
-  /*
-   * Detector message:
+  /**
+   * @brief Store the latest hotspot detector message.
    *
-   * data[0] = visible
-   * data[1] = normalized image error X
-   * data[2] = normalized image error Y
-   * data[3] = confidence
+   * @param msg
+   *   Float32MultiArray containing visibility, normalized X error, normalized
+   *   Y error, and confidence.
    */
   void hotspot_callback(
     const std_msgs::msg::Float32MultiArray::SharedPtr msg)
@@ -144,27 +187,25 @@ private:
     have_target_message_ = true;
   }
 
-
+  /**
+   * @brief Save the current tool height as the fixed correction height.
+   *
+   * The current pose is requested for kToolLink. Its Z coordinate is stored and
+   * reused for every later position target.
+   */
   void initialize_height()
   {
     try {
       const geometry_msgs::msg::PoseStamped current_pose =
-        move_group_->getCurrentPose(TOOL_LINK);
+        move_group_->getCurrentPose(kToolLink);
 
       initial_height_ = current_pose.pose.position.z;
       height_initialized_ = true;
 
-      RCLCPP_WARN(
+      RCLCPP_INFO(
         get_logger(),
         "Initial tool height saved: z=%+.4f m",
         initial_height_);
-
-      RCLCPP_INFO(
-        get_logger(),
-        "Initial tool position: x=%+.4f y=%+.4f z=%+.4f",
-        current_pose.pose.position.x,
-        current_pose.pose.position.y,
-        current_pose.pose.position.z);
     } catch (const std::exception & exception) {
       height_initialized_ = false;
 
@@ -175,7 +216,28 @@ private:
     }
   }
 
-
+  /**
+   * @brief Copy the latest detector state under the target mutex.
+   *
+   * @param visible
+   *   Receives the current visibility flag.
+   *
+   * @param error_x
+   *   Receives the normalized horizontal image error.
+   *
+   * @param error_y
+   *   Receives the normalized vertical image error.
+   *
+   * @param confidence
+   *   Receives the latest detector confidence.
+   *
+   * @param target_time
+   *   Receives the ROS timestamp at which the latest detector message arrived.
+   *
+   * @return
+   *   True when at least one detector message has been received; otherwise
+   *   false.
+   */
   bool read_target(
     bool & visible,
     double & error_x,
@@ -198,14 +260,16 @@ private:
     return true;
   }
 
-
+  /**
+   * @brief Check the latest hotspot state and start one correction plan.
+   *
+   * Planning is skipped while MoveIt is uninitialized, another plan is active,
+   * the target is missing or stale, confidence is too low, or both image axes
+   * are inside their deadbands.
+   */
   void planning_timer_callback()
   {
-    if (!move_group_) {
-      return;
-    }
-
-    if (planning_or_executing_) {
+    if (!move_group_ || planning_or_executing_) {
       return;
     }
 
@@ -221,7 +285,10 @@ private:
     double error_x = 0.0;
     double error_y = 0.0;
     double confidence = 0.0;
-    rclcpp::Time target_time(0, 0, get_clock()->get_clock_type());
+    rclcpp::Time target_time(
+      0,
+      0,
+      get_clock()->get_clock_type());
 
     if (!read_target(
         visible,
@@ -238,40 +305,42 @@ private:
 
     if (
       !visible ||
-      target_age > TARGET_TIMEOUT_SECONDS ||
-      confidence < MIN_CONFIDENCE)
+      target_age > kTargetTimeoutSeconds ||
+      confidence < kMinimumConfidence)
     {
       return;
     }
 
     const bool x_centered =
-      std::abs(error_x) <= IMAGE_DEADBAND_X;
+      std::abs(error_x) <= kImageDeadbandX;
 
     const bool y_centered =
-      std::abs(error_y) <= IMAGE_DEADBAND_Y;
+      std::abs(error_y) <= kImageDeadbandY;
 
     if (x_centered && y_centered) {
-      RCLCPP_INFO_THROTTLE(
-        get_logger(),
-        *get_clock(),
-        2000,
-        "Hotspot centered: error=(%+.3f, %+.3f)",
-        error_x,
-        error_y);
-
       return;
     }
 
     planning_or_executing_ = true;
-
-    plan_and_execute_correction(
-      error_x,
-      error_y);
-
+    plan_and_execute_correction(error_x, error_y);
     planning_or_executing_ = false;
   }
 
-
+  /**
+   * @brief Plan and execute one adaptive Cartesian correction.
+   *
+   * @param error_x
+   *   Normalized horizontal image error. Positive values move the tool toward
+   *   negative base-frame Y.
+   *
+   * @param error_y
+   *   Normalized vertical image error. Positive values move the tool toward
+   *   negative base-frame X.
+   *
+   * The correction scale increases with image error. The final XY vector is
+   * limited to kMaximumCorrectionPerPlanMeters. The target Z coordinate is
+   * always set to the height saved during initialization.
+   */
   void plan_and_execute_correction(
     double error_x,
     double error_y)
@@ -280,27 +349,12 @@ private:
       move_group_->setStartStateToCurrentState();
 
       const geometry_msgs::msg::PoseStamped current_pose =
-        move_group_->getCurrentPose(TOOL_LINK);
+        move_group_->getCurrentPose(kToolLink);
 
-      /*
-       * Mapping matches the existing hotspot_servo.py:
-       *
-       * err_x positive:
-       *   hotspot right
-       *   move tool toward negative base Y
-       *
-       * err_y positive:
-       *   hotspot lower
-       *   move tool toward negative base X
-       */
-      /*
-       * Adaptive image-to-Cartesian correction.
-       *
-       * Large image errors generate large movements. Near the image
-       * center, smaller movements provide accurate final alignment.
-       */
       const double largest_image_error =
-        std::max(std::abs(error_x), std::abs(error_y));
+        std::max(
+        std::abs(error_x),
+        std::abs(error_y));
 
       double adaptive_scale = 0.020;
 
@@ -314,37 +368,30 @@ private:
         adaptive_scale = 0.028;
       }
 
-      /*
-       * Camera X error moves the tool along robot Y.
-       * Camera Y error moves the tool along robot X.
-       */
       double correction_x =
         -error_y * adaptive_scale;
 
       double correction_y =
         -error_x * adaptive_scale;
 
-      if (std::abs(error_x) <= IMAGE_DEADBAND_X) {
+      if (std::abs(error_x) <= kImageDeadbandX) {
         correction_y = 0.0;
       }
 
-      if (std::abs(error_y) <= IMAGE_DEADBAND_Y) {
+      if (std::abs(error_y) <= kImageDeadbandY) {
         correction_x = 0.0;
       }
 
-      /*
-       * Limit the complete XY correction vector, including diagonal
-       * movement, to 60 mm per plan.
-       */
       const double correction_length =
         std::hypot(correction_x, correction_y);
 
       if (
-        correction_length > MAX_CORRECTION_PER_PLAN &&
+        correction_length > kMaximumCorrectionPerPlanMeters &&
         correction_length > 1e-9)
       {
         const double limit_factor =
-          MAX_CORRECTION_PER_PLAN / correction_length;
+          kMaximumCorrectionPerPlanMeters /
+          correction_length;
 
         correction_x *= limit_factor;
         correction_y *= limit_factor;
@@ -356,37 +403,14 @@ private:
       const double target_y =
         current_pose.pose.position.y + correction_y;
 
-      /*
-       * Always restore the height measured when this node started.
-       */
       const double target_z = initial_height_;
 
-      RCLCPP_INFO(
-        get_logger(),
-        "Current xyz=(%+.4f, %+.4f, %+.4f), "
-        "error=(%+.3f, %+.3f), "
-        "target xyz=(%+.4f, %+.4f, %+.4f)",
-        current_pose.pose.position.x,
-        current_pose.pose.position.y,
-        current_pose.pose.position.z,
-        error_x,
-        error_y,
-        target_x,
-        target_y,
-        target_z);
-
-      /*
-       * Position-only goal:
-       *
-       * No orientation target is set. MoveIt may choose any reachable
-       * end-effector orientation.
-       */
       const bool target_accepted =
         move_group_->setPositionTarget(
-          target_x,
-          target_y,
-          target_z,
-          TOOL_LINK);
+        target_x,
+        target_y,
+        target_z,
+        kToolLink);
 
       if (!target_accepted) {
         RCLCPP_WARN(
@@ -414,10 +438,6 @@ private:
         return;
       }
 
-      RCLCPP_INFO(
-        get_logger(),
-        "Plan found; executing trajectory");
-
       const moveit::core::MoveItErrorCode execution_result =
         move_group_->execute(plan);
 
@@ -428,10 +448,6 @@ private:
         RCLCPP_ERROR(
           get_logger(),
           "Trajectory execution failed");
-      } else {
-        RCLCPP_INFO(
-          get_logger(),
-          "Trajectory execution completed");
       }
 
       move_group_->clearPoseTargets();
@@ -452,8 +468,11 @@ private:
     std_msgs::msg::Float32MultiArray>::SharedPtr
     hotspot_subscription_;
 
-  rclcpp::CallbackGroup::SharedPtr planning_callback_group_;
-  rclcpp::TimerBase::SharedPtr planning_timer_;
+  rclcpp::CallbackGroup::SharedPtr
+    planning_callback_group_;
+
+  rclcpp::TimerBase::SharedPtr
+    planning_timer_;
 
   std::shared_ptr<
     moveit::planning_interface::MoveGroupInterface>
@@ -476,33 +495,27 @@ private:
     0,
     RCL_ROS_TIME
   };
-
-  /*
-   * Tracking parameters.
-   */
-  static constexpr double MIN_CONFIDENCE = 2.0;
-  static constexpr double TARGET_TIMEOUT_SECONDS = 0.5;
-
-  static constexpr double IMAGE_DEADBAND_X = 0.15;
-  static constexpr double IMAGE_DEADBAND_Y = 0.15;
-
-  /*
-   * At full normalized error, request a 10 mm correction.
-   */
-  static constexpr double CARTESIAN_STEP_SCALE = 0.020;
-
-  /*
-   * Never request more than 10 mm per plan.
-   */
-  static constexpr double MAX_CORRECTION_PER_PLAN = 0.090;
 };
 
 
+/**
+ * @brief Initialize ROS, start the executor, initialize MoveIt, and shut down.
+ *
+ * @param argc
+ *   Number of process command-line arguments.
+ *
+ * @param argv
+ *   Process command-line argument array.
+ *
+ * @return
+ *   Zero after a normal shutdown.
+ */
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
 
-  auto node = std::make_shared<HotspotPathPlanner>();
+  auto node =
+    std::make_shared<HotspotPathPlanner>();
 
   rclcpp::executors::MultiThreadedExecutor executor;
   executor.add_node(node);
@@ -513,11 +526,8 @@ int main(int argc, char ** argv)
       executor.spin();
     });
 
-  /*
-   * The executor must already be running so MoveGroupInterface
-   * can receive /joint_states while requesting the current pose.
-   */
-  std::this_thread::sleep_for(std::chrono::milliseconds(200));
+  std::this_thread::sleep_for(
+    kMoveGroupStartupDelay);
 
   node->initialize_move_group();
 

@@ -1,3 +1,44 @@
+/**
+ * @file robotarm_system.cpp
+ *
+ * @brief ros2_control hardware interface for a three-joint GPIO-driven arm.
+ *
+ * This implementation:
+ *   - exports position and velocity state interfaces,
+ *   - exports velocity command interfaces,
+ *   - reads encoder counts from an Arduino over a nonblocking serial port,
+ *   - estimates signed joint motion from encoder magnitude and commanded motor
+ *     direction,
+ *   - converts requested joint velocities into bounded PWM targets,
+ *   - enforces software joint limits,
+ *   - produces software PWM on paired forward/backward GPIO lines,
+ *   - and releases all hardware resources during shutdown.
+ *
+ * Important configuration values are initialized in RobotArmSystem::on_init()
+ * according to each URDF joint name.
+ *
+ * Serial encoder format:
+ *   Each complete line must contain four comma-separated integer counts:
+ *
+ *     count0,count1,count2,count3
+ *
+ * Encoder counts are treated as cumulative magnitudes. Since the encoders do
+ * not provide direction, the sign is inferred from the active or most recently
+ * valid motor-command direction.
+ *
+ * Velocity-to-PWM control:
+ *   pwm = min_pwm
+ *       + velocity_to_pwm_gain * desired_speed
+ *       + velocity_kp * velocity_error
+ *
+ * The result is clamped to the configured per-joint maximum PWM value.
+ *
+ * Software PWM:
+ *   PWM targets are copied under a mutex by a dedicated thread. At the start of
+ *   each period, active motor outputs are enabled and then disabled at their
+ *   individual duty-cycle deadlines.
+ */
+
 #include "robotarm_hardware/robotarm_system.hpp"
 
 #include <hardware_interface/types/hardware_interface_type_values.hpp>
@@ -22,6 +63,12 @@
 namespace robotarm_hardware
 {
 
+/**
+ * @brief Initialize default hardware, serial, filter, and PWM state.
+ *
+ * Per-joint arrays are sized and configured later in on_init(), after the
+ * ros2_control hardware description is available.
+ */
 RobotArmSystem::RobotArmSystem()
 : chip_(nullptr),
   software_pwm_frequency_hz_(100.0),
@@ -38,6 +85,9 @@ RobotArmSystem::RobotArmSystem()
   last_arduino_counts_.fill(0);
 }
 
+/**
+ * @brief Stop motor output and release all hardware resources.
+ */
 RobotArmSystem::~RobotArmSystem()
 {
   stop_pwm_thread();
@@ -46,6 +96,16 @@ RobotArmSystem::~RobotArmSystem()
   close_arduino_serial();
 }
 
+/**
+ * @brief Initialize ros2_control interfaces and physical hardware.
+ *
+ * @param info
+ *   Parsed ros2_control hardware description from the robot configuration.
+ *
+ * @return
+ *   SUCCESS when all joints are recognized, serial communication opens, GPIO
+ *   lines are claimed, and the PWM thread starts. Otherwise ERROR.
+ */
 hardware_interface::CallbackReturn RobotArmSystem::on_init(
   const hardware_interface::HardwareInfo & info)
 {
@@ -163,35 +223,6 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
     }
   }
 
-  RCLCPP_INFO(
-    rclcpp::get_logger("RobotArmSystem"),
-    "URDF hardware joint count = %zu",
-    n
-  );
-
-  for (size_t i = 0; i < n; ++i)
-  {
-    RCLCPP_INFO(
-      rclcpp::get_logger("RobotArmSystem"),
-      "Joint %zu: name=%s fwd=%d bwd=%d arduino_channel=%d "
-      "ticks_per_rev=%.1f dir=%.1f min_pwm=%.3f max_pwm=%.3f "
-      "vel_to_pwm=%.3f vel_kp=%.3f min_cmd_vel=%.3f max_vel=%.3f",
-      i,
-      info_.joints[i].name.c_str(),
-      forward_gpio_[i],
-      backward_gpio_[i],
-      arduino_channel_[i],
-      ticks_per_joint_rev_[i],
-      direction_[i],
-      min_pwm_[i],
-      max_pwm_[i],
-      velocity_to_pwm_gain_[i],
-      velocity_kp_[i],
-      min_command_velocity_[i],
-      max_joint_velocity_[i]
-    );
-  }
-
   if (!open_arduino_serial())
   {
     RCLCPP_ERROR(
@@ -258,28 +289,21 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
 
     forward_lines_.push_back(fwd);
     backward_lines_.push_back(bwd);
-
-    RCLCPP_INFO(
-      rclcpp::get_logger("RobotArmSystem"),
-      "GPIO ready for %s: fwd=%d bwd=%d",
-      info_.joints[i].name.c_str(),
-      forward_gpio_[i],
-      backward_gpio_[i]
-    );
   }
 
   pwm_start_time_ = std::chrono::steady_clock::now();
   start_pwm_thread();
 
-  RCLCPP_INFO(
-    rclcpp::get_logger("RobotArmSystem"),
-    "RobotArmSystem initialized without debug logs"
-  );
-
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
 std::vector<hardware_interface::StateInterface>
+/**
+ * @brief Export position and velocity state interfaces for every joint.
+ *
+ * @return
+ *   Vector containing one position and one velocity interface per joint.
+ */
 RobotArmSystem::export_state_interfaces()
 {
   std::vector<hardware_interface::StateInterface> state_interfaces;
@@ -303,6 +327,12 @@ RobotArmSystem::export_state_interfaces()
 }
 
 std::vector<hardware_interface::CommandInterface>
+/**
+ * @brief Export one velocity command interface for every joint.
+ *
+ * @return
+ *   Vector containing the writable velocity command interfaces.
+ */
 RobotArmSystem::export_command_interfaces()
 {
   std::vector<hardware_interface::CommandInterface> command_interfaces;
@@ -319,6 +349,12 @@ RobotArmSystem::export_command_interfaces()
   return command_interfaces;
 }
 
+/**
+ * @brief Open and configure the Arduino encoder serial device.
+ *
+ * @return
+ *   True when the device opens and termios configuration succeeds.
+ */
 bool RobotArmSystem::open_arduino_serial()
 {
   serial_fd_ = open(
@@ -382,15 +418,12 @@ bool RobotArmSystem::open_arduino_serial()
 
   tcflush(serial_fd_, TCIFLUSH);
 
-  RCLCPP_INFO(
-    rclcpp::get_logger("RobotArmSystem"),
-    "Opened Arduino serial device %s at 115200 baud",
-    serial_device_.c_str()
-  );
-
   return true;
 }
 
+/**
+ * @brief Close the Arduino serial file descriptor when open.
+ */
 void RobotArmSystem::close_arduino_serial()
 {
   if (serial_fd_ >= 0)
@@ -400,6 +433,18 @@ void RobotArmSystem::close_arduino_serial()
   }
 }
 
+/**
+ * @brief Parse one comma-separated Arduino encoder line.
+ *
+ * @param line
+ *   Input line containing four integer encoder counts.
+ *
+ * @param counts
+ *   Output array updated only when all four values parse successfully.
+ *
+ * @return
+ *   True when exactly four integer fields are read successfully.
+ */
 bool RobotArmSystem::parse_arduino_line(
   const std::string & line,
   std::array<long, 4> & counts)
@@ -430,6 +475,16 @@ bool RobotArmSystem::parse_arduino_line(
   return true;
 }
 
+/**
+ * @brief Read all currently available serial data and keep the newest valid line.
+ *
+ * @param counts
+ *   Input/output encoder-count array. It is replaced by the newest complete
+ *   valid line when one is received.
+ *
+ * @return
+ *   True when at least one valid encoder line is parsed.
+ */
 bool RobotArmSystem::read_arduino_counts(std::array<long, 4> & counts)
 {
   if (serial_fd_ < 0)
@@ -506,6 +561,18 @@ bool RobotArmSystem::read_arduino_counts(std::array<long, 4> & counts)
   return got_valid_line;
 }
 
+/**
+ * @brief Update joint position and velocity state from Arduino encoder counts.
+ *
+ * @param time
+ *   Current ros2_control update time. Unused by this implementation.
+ *
+ * @param period
+ *   Time elapsed since the previous read cycle.
+ *
+ * @return
+ *   hardware_interface::return_type::OK.
+ */
 hardware_interface::return_type RobotArmSystem::read(
   const rclcpp::Time &,
   const rclcpp::Duration & period)
@@ -533,15 +600,6 @@ hardware_interface::return_type RobotArmSystem::read(
   {
     last_arduino_counts_ = current_counts;
     arduino_counts_initialized_ = true;
-
-    RCLCPP_WARN(
-      rclcpp::get_logger("RobotArmSystem"),
-      "Arduino counts initialized: [%ld, %ld, %ld, %ld]",
-      current_counts[0],
-      current_counts[1],
-      current_counts[2],
-      current_counts[3]
-    );
 
     return hardware_interface::return_type::OK;
   }
@@ -629,6 +687,18 @@ hardware_interface::return_type RobotArmSystem::read(
   return hardware_interface::return_type::OK;
 }
 
+/**
+ * @brief Convert velocity commands into protected per-joint PWM targets.
+ *
+ * @param time
+ *   Current ros2_control update time, stored for active command tracking.
+ *
+ * @param period
+ *   Time elapsed since the previous write cycle. Unused here.
+ *
+ * @return
+ *   hardware_interface::return_type::OK.
+ */
 hardware_interface::return_type RobotArmSystem::write(
   const rclcpp::Time & time,
   const rclcpp::Duration &)
@@ -711,6 +781,16 @@ hardware_interface::return_type RobotArmSystem::write(
   return hardware_interface::return_type::OK;
 }
 
+/**
+ * @brief Store one bounded signed PWM target for the software PWM thread.
+ *
+ * @param i
+ *   Joint index.
+ *
+ * @param pwm_command
+ *   Signed PWM request. Positive and negative values select opposite motor
+ *   directions. Values inside pwm_deadband_ become zero.
+ */
 void RobotArmSystem::set_motor(size_t i, double pwm_command)
 {
   if (i >= pwm_targets_.size() || i >= max_pwm_.size())
@@ -733,6 +813,9 @@ void RobotArmSystem::set_motor(size_t i, double pwm_command)
   pwm_targets_[i] = target;
 }
 
+/**
+ * @brief Start the dedicated software-PWM worker thread once.
+ */
 void RobotArmSystem::start_pwm_thread()
 {
   if (pwm_thread_running_.exchange(true))
@@ -741,14 +824,11 @@ void RobotArmSystem::start_pwm_thread()
   }
 
   pwm_thread_ = std::thread(&RobotArmSystem::pwm_loop, this);
-
-  RCLCPP_INFO(
-    rclcpp::get_logger("RobotArmSystem"),
-    "Started GPIO PWM thread at %.1f Hz",
-    software_pwm_frequency_hz_
-  );
 }
 
+/**
+ * @brief Stop and join the software-PWM worker thread.
+ */
 void RobotArmSystem::stop_pwm_thread()
 {
   if (!pwm_thread_running_.exchange(false))
@@ -762,13 +842,14 @@ void RobotArmSystem::stop_pwm_thread()
   {
     pwm_thread_.join();
   }
-
-  RCLCPP_INFO(
-    rclcpp::get_logger("RobotArmSystem"),
-    "Stopped GPIO PWM thread"
-  );
 }
 
+/**
+ * @brief Generate software PWM for every configured motor output.
+ *
+ * Each cycle enables the selected direction output, schedules per-joint
+ * turn-off events according to duty cycle, and waits until the next period.
+ */
 void RobotArmSystem::pwm_loop()
 {
   using Clock = std::chrono::steady_clock;
@@ -932,6 +1013,9 @@ void RobotArmSystem::pwm_loop()
   }
 }
 
+/**
+ * @brief Clear every PWM target and drive all motor GPIO outputs low.
+ */
 void RobotArmSystem::stop_all()
 {
   {
@@ -949,6 +1033,9 @@ void RobotArmSystem::stop_all()
   }
 }
 
+/**
+ * @brief Release all claimed GPIO lines and close the GPIO chip.
+ */
 void RobotArmSystem::release_gpio()
 {
   for (auto * line : forward_lines_)

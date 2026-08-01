@@ -1,4 +1,68 @@
 #!/usr/bin/env python3
+"""
+Direct joint-velocity controller for centering a detected image hotspot.
+
+The node receives normalized image-space hotspot errors, converts them into a
+small Cartesian tool-tip velocity, and maps that velocity to joint velocities
+with a numerically calculated Jacobian and damped least-squares inverse
+kinematics. A slow Z-height correction keeps the tool tip near the height at
+which tracking began.
+
+Configuration overview:
+    JOINT_NAMES:
+        Ordered joint names used for state lookup, limit enforcement, and
+        command publication. The published velocity vector always follows this
+        order: base, shoulder, elbow.
+
+    HOTSPOT_TOPIC:
+        Float32MultiArray input topic. Expected fields are visible flag,
+        horizontal image error, vertical image error, and detector confidence.
+
+    COMMAND_TOPIC:
+        Float64MultiArray output topic carrying direct joint velocities in
+        radians per second.
+
+    PUBLISH_PERIOD:
+        Timer period in seconds. A value of 0.01 runs the control loop at 100 Hz.
+
+    CONF_MIN / TARGET_TIMEOUT:
+        Minimum accepted detector confidence and maximum age of a hotspot
+        message before it is treated as stale.
+
+    CENTER_*_DEADBAND_*:
+        Enter/exit hysteresis thresholds for image X and Y errors. Separate
+        thresholds prevent rapid switching and circular motion near center.
+
+    MAX_CART_VEL_XY / MIN_EFFECTIVE_CART_VEL_XY:
+        Maximum and minimum effective commanded Cartesian speeds in the base
+        X/Y plane. The minimum helps overcome hardware deadband.
+
+    HOTSPOT_*_SIGN_TO_BASE_*:
+        Sign mappings from camera-image error directions to base-frame motion.
+
+    Z_HOLD_* / KZ_HOLD / MAX_Z_HOLD_VEL:
+        Parameters for slow tool-tip height correction. Z correction is
+        deliberately weaker than hotspot-centering motion.
+
+    Z_SOFT_ERROR / Z_HARD_ERROR:
+        Height-error thresholds that reduce or stop X/Y motion so Z can recover.
+
+    SMOOTHING_ALPHA / JOINT_SMOOTHING_ALPHA:
+        Low-pass filter weights for Cartesian and joint-velocity commands.
+        Larger values react faster; smaller values produce smoother motion.
+
+    DAMPING / JACOBIAN_EPS:
+        Damped least-squares regularization and finite-difference step used for
+        the numerical position Jacobian.
+
+    MAX_JOINT_VEL / MIN_EFFECTIVE_QDOT_VECTOR:
+        Maximum joint speed and optional whole-vector minimum. Scaling the full
+        vector preserves the inverse-kinematics joint ratio.
+
+    JOINT_LIMITS / JOINT_LIMIT_MARGIN:
+        Per-joint position bounds and the safety margin inside each bound where
+        commands farther into the limit are blocked.
+"""
 
 import math
 import threading
@@ -14,9 +78,7 @@ from std_msgs.msg import Float32MultiArray
 from std_msgs.msg import Float64MultiArray
 
 
-# ============================================================
 # Joints / topics
-# ============================================================
 
 JOINT_NAMES = [
     "base_joint",
@@ -30,9 +92,7 @@ COMMAND_TOPIC = "/servo_controller/commands"
 PUBLISH_PERIOD = 0.01  # 100 Hz
 
 
-# ============================================================
 # Hotspot input format
-# ============================================================
 #
 # /hotspot/target:
 #   data[0] = visible, >= 0.5 means visible
@@ -40,7 +100,7 @@ PUBLISH_PERIOD = 0.01  # 100 Hz
 #   data[2] = err_y
 #   data[3] = confidence
 #
-# Desired mapping:
+# Mapping:
 #
 #   hotspot left:
 #     err_x negative -> move arm left  -> +base_link y
@@ -55,9 +115,7 @@ PUBLISH_PERIOD = 0.01  # 100 Hz
 #     err_y negative -> move arm front -> +base_link x
 
 
-# ============================================================
 # Hotspot centering control
-# ============================================================
 
 CONF_MIN = 0.0
 TARGET_TIMEOUT = 0.25
@@ -69,8 +127,7 @@ CENTER_EXIT_DEADBAND_X = 0.50
 CENTER_ENTER_DEADBAND_Y = 0.30
 CENTER_EXIT_DEADBAND_Y = 0.50
 
-# Slower than the aggressive version.
-# Faster than the too-weak 0.0012 version.
+
 MAX_CART_VEL_XY = 0.0025
 MIN_EFFECTIVE_CART_VEL_XY = 0.0007
 
@@ -83,9 +140,7 @@ ENABLE_BASE_X = True
 ENABLE_BASE_Y = True
 
 
-# ============================================================
 # Z height hold
-# ============================================================
 #
 # Z is only a slow drift correction.
 # It should not constantly fight tiny height changes.
@@ -93,8 +148,8 @@ ENABLE_BASE_Y = True
 ENABLE_Z_HOLD = True
 
 # More relaxed Z hysteresis.
-Z_HOLD_DEADBAND = 0.035
-Z_HOLD_EXIT_DEADBAND = 0.065
+Z_HOLD_DEADBAND = 0.015
+Z_HOLD_EXIT_DEADBAND = 0.025
 
 KZ_HOLD = 0.006
 MAX_Z_HOLD_VEL = 0.00035
@@ -108,9 +163,7 @@ Z_HARD_ERROR = 0.080
 XY_SCALE_WHEN_Z_SOFT_ERROR = 0.25
 
 
-# ============================================================
 # Filtering / stopping
-# ============================================================
 
 SMOOTHING_ALPHA = 0.18
 LOST_ALPHA = 0.35
@@ -120,26 +173,20 @@ STOP_COMMANDS_AFTER_LOST = 10
 COMMAND_EPSILON = 0.00001
 
 
-# ============================================================
 # IK / Jacobian parameters
-# ============================================================
 
 DAMPING = 0.035
 JACOBIAN_EPS = 1e-4
 
 
-# ============================================================
 # Joint velocity output
-# ============================================================
 #
 # Hardware deadband is around 0.003 rad/s.
 # If Python sends tiny qdot values like 0.0003, nothing happens.
 #
-# Therefore we use a small VECTOR minimum.
+# Therefore use a small VECTOR minimum.
 # This preserves the IK ratio, unlike per-joint minimum lifting.
-#
-# 0.006 was too aggressive and caused XY circling.
-# 0.0035 is softer but still above the hardware deadband.
+
 
 MAX_JOINT_VEL = 0.08
 
@@ -150,9 +197,7 @@ JOINT_VEL_DEADBAND = 0.00005
 JOINT_SMOOTHING_ALPHA = 0.20
 
 
-# ============================================================
 # Joint limits
-# ============================================================
 
 JOINT_LIMITS = {
     "base_joint": (-3.0, 3.0),
@@ -163,21 +208,31 @@ JOINT_LIMITS = {
 JOINT_LIMIT_MARGIN = 0.05
 
 
-# ============================================================
-# Debug
-# ============================================================
-
-DEBUG_PRINT_PERIOD = 1.0
-DEBUG_PRINT_JOINT_STATE_ORDER = True
-DEBUG_PRINT_JACOBIAN = False
-DEBUG_PRINT_OBSERVED_JOINT_DELTA = True
-
-
 def clamp(value, low, high):
+    """
+    Restrict a numeric value to an inclusive range.
+
+    Parameters:
+        value: Number to constrain.
+        low: Smallest permitted result.
+        high: Largest permitted result.
+
+    Returns:
+        The input value clipped to the interval [low, high].
+    """
     return max(low, min(high, value))
 
 
 def rot_z(theta):
+    """
+    Build a homogeneous rotation matrix about the Z axis.
+
+    Parameters:
+        theta: Rotation angle in radians.
+
+    Returns:
+        A 4x4 NumPy homogeneous transformation matrix using float64 values.
+    """
     c = math.cos(theta)
     s = math.sin(theta)
 
@@ -193,6 +248,15 @@ def rot_z(theta):
 
 
 def rot_y(theta):
+    """
+    Build a homogeneous rotation matrix about the Y axis.
+
+    Parameters:
+        theta: Rotation angle in radians.
+
+    Returns:
+        A 4x4 NumPy homogeneous transformation matrix using float64 values.
+    """
     c = math.cos(theta)
     s = math.sin(theta)
 
@@ -208,6 +272,17 @@ def rot_y(theta):
 
 
 def trans(x, y, z):
+    """
+    Build a homogeneous translation matrix.
+
+    Parameters:
+        x: Translation along the X axis in meters.
+        y: Translation along the Y axis in meters.
+        z: Translation along the Z axis in meters.
+
+    Returns:
+        A 4x4 NumPy homogeneous transformation matrix using float64 values.
+    """
     return np.array(
         [
             [1.0, 0.0, 0.0, x],
@@ -221,12 +296,15 @@ def trans(x, y, z):
 
 def forward_kinematics(q):
     """
-    FK from base_link to tool_tip_link.
+    Compute the tool-tip pose relative to base_link.
 
-    q order:
-      q[0] = base_joint
-      q[1] = shoulder_joint
-      q[2] = elbow_joint
+    Parameters:
+        q: Three-element joint-position array in radians, ordered as
+            [base_joint, shoulder_joint, elbow_joint].
+
+    Returns:
+        A 4x4 homogeneous transformation matrix from base_link to
+        tool_tip_link.
     """
 
     base = q[0]
@@ -250,11 +328,31 @@ def forward_kinematics(q):
 
 
 def tip_position(q):
+    """
+    Compute only the Cartesian tool-tip position.
+
+    Parameters:
+        q: Three-element joint-position array in radians, ordered as
+            [base_joint, shoulder_joint, elbow_joint].
+
+    Returns:
+        A length-three float64 array containing [x, y, z] in meters.
+    """
     T = forward_kinematics(q)
     return T[0:3, 3].copy()
 
 
 def numeric_position_jacobian(q):
+    """
+    Estimate the translational Jacobian with forward finite differences.
+
+    Parameters:
+        q: Three-element joint-position array in radians.
+
+    Returns:
+        A 3x3 matrix mapping joint velocity to tool-tip linear velocity.
+        Rows correspond to base-frame X, Y, and Z; columns follow JOINT_NAMES.
+    """
     J = np.zeros((3, 3), dtype=np.float64)
     p0 = tip_position(q)
 
@@ -268,6 +366,18 @@ def numeric_position_jacobian(q):
 
 
 def damped_least_squares(J, v):
+    """
+    Convert a Cartesian velocity into joint velocities using damped IK.
+
+    Parameters:
+        J: 3x3 translational Jacobian.
+        v: Desired three-element Cartesian tool-tip velocity in meters per
+            second, expressed in base_link.
+
+    Returns:
+        A three-element joint-velocity vector in radians per second. A zero
+        vector is returned if the linear system cannot be solved.
+    """
     lambda2 = DAMPING * DAMPING
     A = J @ J.T + lambda2 * np.eye(3, dtype=np.float64)
 
@@ -282,6 +392,15 @@ def damped_least_squares(J, v):
 class HotspotDirectJointServo(Node):
 
     def __init__(self):
+        """
+        Initialize ROS interfaces, controller state, filters, and diagnostics.
+
+        Parameters:
+            None. ROS arguments are handled by rclpy before node construction.
+
+        Returns:
+            None.
+        """
         super().__init__("hotspot_direct_joint_servo")
 
         self.target_sub = self.create_subscription(
@@ -327,13 +446,6 @@ class HotspotDirectJointServo(Node):
 
         self.lost_stop_publish_count = STOP_COMMANDS_AFTER_LOST
 
-        self.printed_joint_state_order = False
-
-        self.last_debug_time = 0.0
-        self.last_tip_pos = None
-
-        self.last_q_for_observed_delta = None
-        self.last_q_time_for_observed_delta = None
 
         self.timer = self.create_timer(
             PUBLISH_PERIOD,
@@ -366,11 +478,20 @@ class HotspotDirectJointServo(Node):
         self.get_logger().info("Mapping: err_x negative -> +base_y left")
         self.get_logger().info("Mapping: err_y positive -> -base_x back")
 
-    # ========================================================
     # Callbacks
-    # ========================================================
 
     def target_callback(self, msg):
+        """
+        Store the latest hotspot detection message.
+
+        Parameters:
+            msg: Float32MultiArray with at least four entries:
+                data[0] visible flag, data[1] horizontal error,
+                data[2] vertical error, and data[3] confidence.
+
+        Returns:
+            None. Messages shorter than four values are ignored.
+        """
         if len(msg.data) < 4:
             return
 
@@ -382,16 +503,19 @@ class HotspotDirectJointServo(Node):
             self.last_target_time = time.monotonic()
 
     def joint_state_callback(self, msg):
+        """
+        Update known joint positions from a JointState message.
+
+        Parameters:
+            msg: JointState message. Positions are matched by joint name rather
+                than by array index, so unrelated joints and ordering changes
+                are tolerated.
+
+        Returns:
+            None. The internal ready flag becomes true after all required joint
+            positions have been received.
+        """
         with self.lock:
-            if DEBUG_PRINT_JOINT_STATE_ORDER and not self.printed_joint_state_order:
-                self.printed_joint_state_order = True
-                self.get_logger().warn(
-                    "Received /joint_states order: "
-                    + ", ".join(msg.name)
-                )
-                self.get_logger().warn(
-                    "This node reads joint states BY NAME, not by index."
-                )
 
             for name, pos in zip(msg.name, msg.position):
                 if name in JOINT_NAMES:
@@ -402,11 +526,19 @@ class HotspotDirectJointServo(Node):
                 for joint in JOINT_NAMES
             )
 
-    # ========================================================
     # State helpers
-    # ========================================================
 
     def get_q(self):
+        """
+        Return the current required joint positions in command order.
+
+        Parameters:
+            None.
+
+        Returns:
+            A float64 array ordered as JOINT_NAMES, or None until all required
+            joint positions have been received.
+        """
         with self.lock:
             if not self.have_all_joints:
                 return None
@@ -421,12 +553,32 @@ class HotspotDirectJointServo(Node):
             )
 
     def target_is_fresh(self):
+        """
+        Check whether the latest hotspot message is recent enough for control.
+
+        Parameters:
+            None.
+
+        Returns:
+            True when a target timestamp exists and its age does not exceed
+            TARGET_TIMEOUT; otherwise False.
+        """
         if self.last_target_time is None:
             return False
 
         return (time.monotonic() - self.last_target_time) <= TARGET_TIMEOUT
 
     def reset_hold_z_if_needed(self, tip):
+        """
+        Initialize the Z-height reference from the current tool-tip position.
+
+        Parameters:
+            tip: Three-element tool-tip position [x, y, z] in meters.
+
+        Returns:
+            None. Initialization occurs only once unless hold_z is reset
+            elsewhere.
+        """
         if self.hold_z is None:
             self.hold_z = float(tip[2])
             self.z_centered = True
@@ -434,22 +586,49 @@ class HotspotDirectJointServo(Node):
                 f"Z hold initialized: hold_z={self.hold_z:+.4f} m"
             )
 
-    # ========================================================
     # Command helpers
-    # ========================================================
 
     def publish_zero_once(self):
+        """
+        Publish one zero joint-velocity command.
+
+        Parameters:
+            None.
+
+        Returns:
+            None.
+        """
         msg = Float64MultiArray()
         msg.data = [0.0, 0.0, 0.0]
         self.cmd_pub.publish(msg)
 
     def hard_stop(self):
+        """
+        Clear all velocity filters and immediately publish a zero command.
+
+        Parameters:
+            None.
+
+        Returns:
+            None.
+        """
         self.filtered_base_v[:] = 0.0
         self.filtered_qdot[:] = 0.0
         self.cmd_qdot[:] = 0.0
         self.publish_zero_once()
 
     def apply_hysteresis_deadband(self, err_x, err_y):
+        """
+        Apply independent enter/exit deadbands to hotspot X and Y errors.
+
+        Parameters:
+            err_x: Normalized horizontal image error.
+            err_y: Normalized vertical image error.
+
+        Returns:
+            A tuple (err_x_used, err_y_used). An axis is returned as zero while
+            its centered state remains inside the hysteresis region.
+        """
         if self.centered_x:
             if abs(err_x) > CENTER_EXIT_DEADBAND_X:
                 self.centered_x = False
@@ -479,6 +658,19 @@ class HotspotDirectJointServo(Node):
         max_vel,
         min_effective_vel,
     ):
+        """
+        Map one signed normalized error to a shaped Cartesian speed.
+
+        Parameters:
+            error: Signed image-space error after deadband handling.
+            enter_deadband: Error magnitude at which useful motion begins.
+            max_vel: Maximum output speed magnitude.
+            min_effective_vel: Minimum nonzero output speed magnitude.
+
+        Returns:
+            A signed velocity. Magnitude grows quadratically from the minimum
+            effective speed to max_vel as the error approaches full scale.
+        """
         if error == 0.0:
             return 0.0
 
@@ -499,6 +691,19 @@ class HotspotDirectJointServo(Node):
         return math.copysign(vel_abs, error)
 
     def compute_xy_base_velocity(self, active, err_x, err_y, conf):
+        """
+        Convert hotspot errors into a base-frame X/Y velocity command.
+
+        Parameters:
+            active: Whether target tracking is currently permitted.
+            err_x: Normalized horizontal image error.
+            err_y: Normalized vertical image error.
+            conf: Detector confidence associated with the errors.
+
+        Returns:
+            A three-element float64 velocity vector [vx, vy, 0] in meters per
+            second, expressed in base_link.
+        """
         raw_v = np.zeros(3, dtype=np.float64)
 
         if not active:
@@ -544,6 +749,18 @@ class HotspotDirectJointServo(Node):
         return raw_v
 
     def compute_z_hold_velocity(self, tip, xy_is_moving):
+        """
+        Compute the slow Z velocity used to maintain the stored height.
+
+        Parameters:
+            tip: Current three-element tool-tip position in meters.
+            xy_is_moving: Whether an X/Y correction is currently requested.
+                Retained for controller tuning and future scaling logic.
+
+        Returns:
+            Signed base-frame Z velocity in meters per second, or zero when Z
+            hold is disabled, uninitialized, or inside its hysteresis band.
+        """
         if not ENABLE_Z_HOLD:
             return 0.0
 
@@ -573,6 +790,17 @@ class HotspotDirectJointServo(Node):
         return vz
 
     def apply_z_priority_to_xy(self, raw_base_v, tip):
+        """
+        Reduce X/Y motion when the tool-tip height error is excessive.
+
+        Parameters:
+            raw_base_v: Mutable three-element Cartesian velocity vector.
+            tip: Current three-element tool-tip position in meters.
+
+        Returns:
+            The adjusted velocity vector. X/Y are scaled at the soft threshold
+            and set to zero at the hard threshold.
+        """
         if self.hold_z is None:
             return raw_base_v
 
@@ -592,6 +820,17 @@ class HotspotDirectJointServo(Node):
         return raw_base_v
 
     def apply_joint_limits(self, q, qdot):
+        """
+        Block joint velocities that would move farther into a position limit.
+
+        Parameters:
+            q: Current three-element joint-position vector in radians.
+            qdot: Requested three-element joint-velocity vector in radians per
+                second.
+
+        Returns:
+            A copied and limit-safe joint-velocity vector.
+        """
         qdot_out = qdot.copy()
 
         for i, joint in enumerate(JOINT_NAMES):
@@ -615,11 +854,14 @@ class HotspotDirectJointServo(Node):
 
     def postprocess_qdot(self, qdot):
         """
-        Preserve IK ratio.
+        Apply joint deadband, whole-vector minimum scaling, and speed limiting.
 
-        Do not lift each joint individually.
-        If the whole vector is too small, scale the whole vector.
-        This keeps shoulder/elbow/base ratio intact.
+        Parameters:
+            qdot: Three-element joint-velocity vector in radians per second.
+
+        Returns:
+            A processed copy that preserves the relative inverse-kinematics
+            ratio between joints while respecting effective and maximum speeds.
         """
 
         out = qdot.copy()
@@ -644,137 +886,21 @@ class HotspotDirectJointServo(Node):
 
         return out
 
-    # ========================================================
-    # Debug
-    # ========================================================
 
-    def observed_joint_delta_text(self, q):
-        if not DEBUG_PRINT_OBSERVED_JOINT_DELTA:
-            return ""
-
-        now = time.monotonic()
-
-        if self.last_q_for_observed_delta is None:
-            self.last_q_for_observed_delta = q.copy()
-            self.last_q_time_for_observed_delta = now
-            return "observed_qdot=[init]"
-
-        dt = now - self.last_q_time_for_observed_delta
-
-        if dt <= 1e-6:
-            return "observed_qdot=[dt too small]"
-
-        dq = q - self.last_q_for_observed_delta
-        observed_qdot = dq / dt
-
-        self.last_q_for_observed_delta = q.copy()
-        self.last_q_time_for_observed_delta = now
-
-        return (
-            "observed_qdot=[{:+.3f}, {:+.3f}, {:+.3f}]".format(
-                observed_qdot[0],
-                observed_qdot[1],
-                observed_qdot[2],
-            )
-        )
-
-    def maybe_debug_print(
-        self,
-        active,
-        q,
-        tip,
-        raw_base_v,
-        filtered_base_v,
-        qdot_raw,
-        qdot_limited,
-        qdot_cmd,
-        J,
-        did_publish,
-        reason,
-    ):
-        now = time.monotonic()
-
-        if now - self.last_debug_time < DEBUG_PRINT_PERIOD:
-            return
-
-        self.last_debug_time = now
-
-        if self.last_tip_pos is None:
-            dx = 0.0
-            dy = 0.0
-            dz = 0.0
-        else:
-            dx = tip[0] - self.last_tip_pos[0]
-            dy = tip[1] - self.last_tip_pos[1]
-            dz = tip[2] - self.last_tip_pos[2]
-
-        self.last_tip_pos = tip.copy()
-
-        predicted_tip_v = J @ qdot_cmd
-        observed_text = self.observed_joint_delta_text(q)
-
-        hold_z_text = "None" if self.hold_z is None else f"{self.hold_z:+.4f}"
-
-        z_error = 0.0
-        if self.hold_z is not None:
-            z_error = self.hold_z - float(tip[2])
-
-        self.get_logger().info(
-            "tip=[{:+.4f}, {:+.4f}, {:+.4f}] "
-            "d_tip=[{:+.4f}, {:+.4f}, {:+.4f}] "
-            "hold_z={} z_err={:+.4f} "
-            "active={} visible={} centered=({}, {}) z_centered={} "
-            "err=({:+.3f},{:+.3f}) conf={:.2f} "
-            "raw_base_v=[{:+.5f}, {:+.5f}, {:+.5f}] "
-            "filtered_base_v=[{:+.5f}, {:+.5f}, {:+.5f}] "
-            "q=[{:+.3f}, {:+.3f}, {:+.3f}] "
-            "qdot_raw=[{:+.5f}, {:+.5f}, {:+.5f}] "
-            "qdot_limited=[{:+.5f}, {:+.5f}, {:+.5f}] "
-            "qdot_cmd=[{:+.5f}, {:+.5f}, {:+.5f}] "
-            "pred_tip_v=[{:+.5f}, {:+.5f}, {:+.5f}] "
-            "{} published={} reason={}".format(
-                tip[0], tip[1], tip[2],
-                dx, dy, dz,
-                hold_z_text,
-                z_error,
-                active,
-                self.target_visible,
-                self.centered_x,
-                self.centered_y,
-                self.z_centered,
-                self.err_x,
-                self.err_y,
-                self.conf,
-                raw_base_v[0], raw_base_v[1], raw_base_v[2],
-                filtered_base_v[0], filtered_base_v[1], filtered_base_v[2],
-                q[0], q[1], q[2],
-                qdot_raw[0], qdot_raw[1], qdot_raw[2],
-                qdot_limited[0], qdot_limited[1], qdot_limited[2],
-                qdot_cmd[0], qdot_cmd[1], qdot_cmd[2],
-                predicted_tip_v[0], predicted_tip_v[1], predicted_tip_v[2],
-                observed_text,
-                did_publish,
-                reason,
-            )
-        )
-
-        if DEBUG_PRINT_JACOBIAN:
-            self.get_logger().info(
-                "\nJacobian columns: tip_velocity = J * qdot\n"
-                "  base     dx dy dz = [{:+.5f}, {:+.5f}, {:+.5f}]\n"
-                "  shoulder dx dy dz = [{:+.5f}, {:+.5f}, {:+.5f}]\n"
-                "  elbow    dx dy dz = [{:+.5f}, {:+.5f}, {:+.5f}]".format(
-                    J[0, 0], J[1, 0], J[2, 0],
-                    J[0, 1], J[1, 1], J[2, 1],
-                    J[0, 2], J[1, 2], J[2, 2],
-                )
-            )
-
-    # ========================================================
     # Main control loop
-    # ========================================================
 
     def publish_command(self):
+        """
+        Run one complete control cycle and publish a joint-velocity command.
+
+        Parameters:
+            None. The method reads the latest joint and hotspot state stored by
+            the subscriber callbacks.
+
+        Returns:
+            None. Depending on state, it publishes a tracking command, a finite
+            sequence of zero stop commands, or no command.
+        """
         q = self.get_q()
 
         if q is None:
@@ -809,25 +935,7 @@ class HotspotDirectJointServo(Node):
             if self.lost_stop_publish_count < STOP_COMMANDS_AFTER_LOST:
                 self.publish_zero_once()
                 self.lost_stop_publish_count += 1
-                did_publish = True
-                reason = "lost_or_stale_zero_stop"
-            else:
-                did_publish = False
-                reason = "lost_or_stale_no_publish"
 
-            self.maybe_debug_print(
-                active,
-                q,
-                tip,
-                np.zeros(3, dtype=np.float64),
-                self.filtered_base_v,
-                np.zeros(3, dtype=np.float64),
-                np.zeros(3, dtype=np.float64),
-                np.zeros(3, dtype=np.float64),
-                J,
-                did_publish,
-                reason,
-            )
             return
 
         raw_base_v = self.compute_xy_base_velocity(
@@ -858,19 +966,6 @@ class HotspotDirectJointServo(Node):
         if self.centered_x and self.centered_y and self.z_centered:
             self.hard_stop()
 
-            self.maybe_debug_print(
-                active,
-                q,
-                tip,
-                raw_base_v,
-                self.filtered_base_v,
-                np.zeros(3, dtype=np.float64),
-                np.zeros(3, dtype=np.float64),
-                np.zeros(3, dtype=np.float64),
-                J,
-                True,
-                "all_centered_hard_stop",
-            )
             return
 
         alpha = SMOOTHING_ALPHA if active else LOST_ALPHA
@@ -899,19 +994,6 @@ class HotspotDirectJointServo(Node):
         )
 
         if float(np.linalg.norm(self.filtered_base_v)) <= COMMAND_EPSILON:
-            self.maybe_debug_print(
-                active,
-                q,
-                tip,
-                raw_base_v,
-                self.filtered_base_v,
-                np.zeros(3, dtype=np.float64),
-                np.zeros(3, dtype=np.float64),
-                np.zeros(3, dtype=np.float64),
-                J,
-                False,
-                "active_but_zero_base_velocity_no_publish",
-            )
             return
 
         qdot_raw = damped_least_squares(
@@ -935,19 +1017,6 @@ class HotspotDirectJointServo(Node):
             and abs(self.cmd_qdot[1]) < COMMAND_EPSILON
             and abs(self.cmd_qdot[2]) < COMMAND_EPSILON
         ):
-            self.maybe_debug_print(
-                active,
-                q,
-                tip,
-                raw_base_v,
-                self.filtered_base_v,
-                qdot_raw,
-                qdot_limited,
-                self.cmd_qdot,
-                J,
-                False,
-                "active_but_tiny_qdot_no_publish",
-            )
             return
 
         msg = Float64MultiArray()
@@ -960,22 +1029,18 @@ class HotspotDirectJointServo(Node):
         self.cmd_pub.publish(msg)
         self.lost_stop_publish_count = 0
 
-        self.maybe_debug_print(
-            active,
-            q,
-            tip,
-            raw_base_v,
-            self.filtered_base_v,
-            qdot_raw,
-            qdot_limited,
-            self.cmd_qdot,
-            J,
-            True,
-            "active_tracking_center_and_hold_z",
-        )
-
 
 def main(args=None):
+    """
+    Initialize ROS, run the servo node, and perform a safe shutdown.
+
+    Parameters:
+        args: Optional ROS argument sequence passed to rclpy.init().
+
+    Returns:
+        None. A final zero command is published during normal shutdown when the
+        ROS context is still active.
+    """
     rclpy.init(args=args)
 
     node = HotspotDirectJointServo()
