@@ -12,10 +12,6 @@ def generate_launch_description():
         "robotarm_moveit_config"
     ).find("robotarm_moveit_config")
 
-    planner_share = FindPackageShare(
-        "robotarm_path_planning"
-    ).find("robotarm_path_planning")
-
     move_group = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             str(
@@ -27,7 +23,7 @@ def generate_launch_description():
     )
 
     joint_states_relay = Node(
-        package="robotarm_path_planning",
+        package="robotarm_software",
         executable="joint_states_relay.py",
         name="joint_states_relay",
         output="screen",
@@ -40,14 +36,11 @@ def generate_launch_description():
         output="screen",
     )
 
-    hotspot_path_planner = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            str(
-                Path(planner_share)
-                / "launch"
-                / "hotspot_path_planning.launch.py"
-            )
-        )
+    hotspot_path_planner = Node(
+        package="robotarm_software",
+        executable="hotspot_path_planner",
+        name="hotspot_path_planner",
+        output="screen",
     )
 
     delayed_path_planner = TimerAction(
