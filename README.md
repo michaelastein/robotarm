@@ -170,7 +170,7 @@ All terminals used to run the project must source both ROS 2 and the workspace:
 
 ```
 source /opt/ros/jazzy/setup.bash
-source ~/robotarm_ws/install/setup.bash
+source ~/robotarm/ROS_WS/install/setup.bash
 ```
 
 ## Path Planning:
