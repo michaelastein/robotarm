@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""ROS 2 node for detecting and tracking a bright LED hotspot.
+"""ROS 2 node for detecting and tracking a bright hotspot.
 
 Configuration parameters:
     ROI_WIDTH_FRACTION:
@@ -61,6 +61,8 @@ Published target message layout:
         Raw score assigned to the strongest hotspot candidate.
 """
 
+import argparse
+
 import cv2
 import numpy as np
 
@@ -72,18 +74,35 @@ from sensor_msgs.msg import CompressedImage
 from std_msgs.msg import Float32MultiArray
 
 
-# Tracking and detection configuration.
-ROI_WIDTH_FRACTION = 0.35
-LOST_FRAMES_RESET = 8
-MAX_TRAIL = 120
+# LED configuration. These values are unchanged from the original detector.
+LED_ROI_WIDTH_FRACTION = 0.35
+LED_LOST_FRAMES_RESET = 8
+LED_MAX_TRAIL = 120
 
-CONF_THRESHOLD = 2.0
-MIN_BRIGHTNESS = 150
-MIN_SATURATION = 40
-MAX_HOTSPOT_AREA_FRACTION = 0.03
-MIN_HOTSPOT_PIXELS = 3
+LED_CONF_THRESHOLD = 2.0
+LED_MIN_BRIGHTNESS = 150
+LED_MIN_SATURATION = 40
+LED_MAX_HOTSPOT_AREA_FRACTION = 0.03
+LED_MIN_HOTSPOT_PIXELS = 3
 
-ANNOTATION_EVERY_N_FRAMES = 5
+LED_ANNOTATION_EVERY_N_FRAMES = 5
+LED_PROCESS_NOISE = 0.02
+LED_INITIAL_MEASUREMENT_NOISE = 1.0
+
+# Welding configuration.
+WELDING_ROI_WIDTH_FRACTION = 0.38
+WELDING_LOST_FRAMES_RESET = 5
+WELDING_MAX_TRAIL = 100
+
+WELDING_CONF_THRESHOLD = 5.0
+WELDING_MIN_BRIGHTNESS = 180
+WELDING_MAX_FULLFRAME_AREA_FRACTION = 0.01
+WELDING_MAX_ROI_AREA_FRACTION = 0.03
+WELDING_MIN_HOTSPOT_PIXELS = 3
+
+WELDING_ANNOTATION_EVERY_N_FRAMES = 1
+WELDING_PROCESS_NOISE = 0.08
+WELDING_INITIAL_MEASUREMENT_NOISE = 0.5
 
 
 def fit_text_scale(
@@ -121,7 +140,7 @@ def fit_text_scale(
     return max(scale, min_scale)
 
 
-def find_hotspot(img):
+def find_led_hotspot(img):
     """Detect the strongest LED-like hotspot in an image.
 
     The detector combines brightness and saturation thresholds, removes small
@@ -160,18 +179,18 @@ def find_hotspot(img):
     mean_gray = float(np.mean(gray))
     max_gray = float(np.max(gray))
 
-    if max_gray < MIN_BRIGHTNESS:
+    if max_gray < LED_MIN_BRIGHTNESS:
         return None, 0.0, None
 
     percentile_99 = float(np.percentile(gray, 99.0))
     brightness_threshold = max(
-        MIN_BRIGHTNESS,
+        LED_MIN_BRIGHTNESS,
         percentile_99,
         mean_gray + 35.0,
     )
 
     bright_mask = gray >= brightness_threshold
-    saturated_mask = saturation >= MIN_SATURATION
+    saturated_mask = saturation >= LED_MIN_SATURATION
     candidate_mask = bright_mask | (
         (gray >= mean_gray + 25.0) & saturated_mask
     )
@@ -194,10 +213,10 @@ def find_hotspot(img):
     for label in range(1, num_labels):
         area = stats[label, cv2.CC_STAT_AREA]
 
-        if area < MIN_HOTSPOT_PIXELS:
+        if area < LED_MIN_HOTSPOT_PIXELS:
             continue
 
-        if area > MAX_HOTSPOT_AREA_FRACTION * total_pixels:
+        if area > LED_MAX_HOTSPOT_AREA_FRACTION * total_pixels:
             continue
 
         component_width = stats[label, cv2.CC_STAT_WIDTH]
@@ -248,10 +267,68 @@ def find_hotspot(img):
     return measurement, float(best_score), mask_uint8
 
 
+def find_welding_hotspot(img, roi_mode=False):
+    """Detect the bright welding-arc region using the welding preset."""
+    if img is None or img.size == 0:
+        return None, 0.0, None
+
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY).astype(np.float32)
+    gray = cv2.GaussianBlur(gray, (5, 5), 0)
+
+    height, width = gray.shape
+    total_pixels = height * width
+
+    mean_gray = float(np.mean(gray))
+    max_gray = float(np.max(gray))
+
+    if max_gray < WELDING_MIN_BRIGHTNESS:
+        return None, 0.0, None
+
+    brightness_threshold = max(235.0, mean_gray + 40.0)
+    candidate_mask = gray >= brightness_threshold
+    mask_uint8 = candidate_mask.astype(np.uint8) * 255
+
+    bright_pixel_count = int(np.count_nonzero(candidate_mask))
+    max_area_fraction = (
+        WELDING_MAX_ROI_AREA_FRACTION
+        if roi_mode
+        else WELDING_MAX_FULLFRAME_AREA_FRACTION
+    )
+
+    if bright_pixel_count < WELDING_MIN_HOTSPOT_PIXELS:
+        return None, 0.0, mask_uint8
+
+    if bright_pixel_count > max_area_fraction * total_pixels:
+        return None, 0.0, mask_uint8
+
+    ys, xs = np.where(candidate_mask)
+
+    if len(xs) == 0:
+        return None, 0.0, mask_uint8
+
+    weights = gray[ys, xs]
+    weights = weights / (np.sum(weights) + 1e-6)
+
+    center_x = float(np.sum(xs * weights))
+    center_y = float(np.sum(ys * weights))
+    measurement = np.array([[center_x], [center_y]], dtype=np.float32)
+
+    hot_mean = float(np.mean(gray[ys, xs]))
+    contrast = hot_mean / (mean_gray + 1e-6)
+
+    confidence = float(
+        (hot_mean / 255.0)
+        * max(1.0, contrast)
+        * (bright_pixel_count / 10.0)
+    )
+
+    return measurement, confidence, mask_uint8
+
+
 class HotspotDetector(Node):
     """ROS 2 node that detects, tracks, and publishes a bright hotspot."""
 
-    def __init__(self):
+    def __init__(self, detector_mode="led"):
         """Initialize ROS interfaces, Kalman tracking, and detector state.
 
         Parameters:
@@ -262,6 +339,25 @@ class HotspotDetector(Node):
             None.
         """
         super().__init__("hotspot_detector")
+
+        self.detector_mode = detector_mode
+
+        if self.detector_mode == "welding":
+            self.roi_width_fraction = WELDING_ROI_WIDTH_FRACTION
+            self.lost_frames_reset = WELDING_LOST_FRAMES_RESET
+            self.max_trail = WELDING_MAX_TRAIL
+            self.conf_threshold = WELDING_CONF_THRESHOLD
+            self.annotation_every_n_frames = WELDING_ANNOTATION_EVERY_N_FRAMES
+            process_noise = WELDING_PROCESS_NOISE
+            initial_measurement_noise = WELDING_INITIAL_MEASUREMENT_NOISE
+        else:
+            self.roi_width_fraction = LED_ROI_WIDTH_FRACTION
+            self.lost_frames_reset = LED_LOST_FRAMES_RESET
+            self.max_trail = LED_MAX_TRAIL
+            self.conf_threshold = LED_CONF_THRESHOLD
+            self.annotation_every_n_frames = LED_ANNOTATION_EVERY_N_FRAMES
+            process_noise = LED_PROCESS_NOISE
+            initial_measurement_noise = LED_INITIAL_MEASUREMENT_NOISE
 
         self.sub = self.create_subscription(
             CompressedImage,
@@ -297,8 +393,10 @@ class HotspotDetector(Node):
             ],
             dtype=np.float32,
         )
-        self.kalman.processNoiseCov = np.eye(4, dtype=np.float32) * 0.02
-        self.kalman.measurementNoiseCov = np.eye(2, dtype=np.float32)
+        self.kalman.processNoiseCov = np.eye(4, dtype=np.float32) * process_noise
+        self.kalman.measurementNoiseCov = (
+            np.eye(2, dtype=np.float32) * initial_measurement_noise
+        )
         self.kalman.statePost = np.zeros((4, 1), dtype=np.float32)
 
         self.traj = []
@@ -313,13 +411,16 @@ class HotspotDetector(Node):
         self.mode = "FULL"
         self.frame_count = 0
 
-        self.get_logger().info("Hotspot detector started")
+        self.get_logger().info(
+            f"Hotspot detector started in {self.detector_mode.upper()} mode"
+        )
         self.get_logger().info("Target topic: /hotspot/target")
         self.get_logger().info(
             "Annotated image topic: /hotspot/annotated_image/compressed"
         )
         self.get_logger().info(
-            f"Annotated image published every {ANNOTATION_EVERY_N_FRAMES} frames"
+            f"Annotated image published every "
+            f"{self.annotation_every_n_frames} frames"
         )
 
     def image_callback(self, msg):
@@ -379,9 +480,9 @@ class HotspotDetector(Node):
         height, width = img.shape[:2]
         roi_rect = None
 
-        if self.last_valid is not None and self.lost_counter < LOST_FRAMES_RESET:
+        if self.last_valid is not None and self.lost_counter < self.lost_frames_reset:
             x, y = self.last_valid
-            roi_side = max(2, int(round(width * ROI_WIDTH_FRACTION)))
+            roi_side = max(2, int(round(width * self.roi_width_fraction)))
             roi_half = max(1, roi_side // 2)
 
             x1 = max(0, x - roi_half)
@@ -400,10 +501,16 @@ class HotspotDetector(Node):
 
         self.kalman.predict()
 
-        measurement, confidence, _ = find_hotspot(search_img)
+        if self.detector_mode == "welding":
+            measurement, confidence, _ = find_welding_hotspot(
+                search_img,
+                roi_mode=(self.mode == "ROI"),
+            )
+        else:
+            measurement, confidence, _ = find_led_hotspot(search_img)
         self.current_conf = float(confidence)
 
-        valid = measurement is not None and confidence >= CONF_THRESHOLD
+        valid = measurement is not None and confidence >= self.conf_threshold
         self.current_detection_valid = valid
 
         if valid:
@@ -425,7 +532,7 @@ class HotspotDetector(Node):
         else:
             self.lost_counter += 1
 
-            if self.lost_counter > LOST_FRAMES_RESET:
+            if self.lost_counter > self.lost_frames_reset:
                 self.target_visible = False
                 self.current_error_x = 0.0
                 self.current_error_y = 0.0
@@ -440,12 +547,12 @@ class HotspotDetector(Node):
             self.current_error_y = (estimated_y - height * 0.5) / (height * 0.5)
 
             self.traj.append((int(estimated_x), int(estimated_y)))
-            if len(self.traj) > MAX_TRAIL:
+            if len(self.traj) > self.max_trail:
                 self.traj.pop(0)
 
         self.publish_target()
 
-        if self.frame_count % ANNOTATION_EVERY_N_FRAMES == 0:
+        if self.frame_count % self.annotation_every_n_frames == 0:
             annotated = self.make_annotated_image(
                 img,
                 roi_rect=roi_rect,
@@ -484,15 +591,26 @@ class HotspotDetector(Node):
             else image_center
         )
 
-        if valid:
-            color = (0, 0, 255)
-            status = "LED HOTSPOT"
-        elif self.target_visible:
-            color = (0, 165, 255)
-            status = "TRACKING PREDICTED"
+        if self.detector_mode == "welding":
+            if valid:
+                color = (0, 0, 255)
+                status = "WELD HOTSPOT"
+            elif self.target_visible:
+                color = (0, 165, 255)
+                status = "TRACKING PREDICTED"
+            else:
+                color = (100, 100, 100)
+                status = "NO WELD HOTSPOT"
         else:
-            color = (100, 100, 100)
-            status = "NO LED"
+            if valid:
+                color = (0, 0, 255)
+                status = "LED HOTSPOT"
+            elif self.target_visible:
+                color = (0, 165, 255)
+                status = "TRACKING PREDICTED"
+            else:
+                color = (100, 100, 100)
+                status = "NO LED"
 
         cv2.circle(vis, target_point, 8, color, -1)
         cv2.circle(vis, image_center, 8, (0, 255, 0), 2)
@@ -606,18 +724,21 @@ class HotspotDetector(Node):
 
 
 def main(args=None):
-    """Start the ROS 2 node and process callbacks until shutdown.
+    """Start the detector in LED mode by default or welding mode on request."""
+    parser = argparse.ArgumentParser(
+        description="Detect and track an LED or welding hotspot.",
+    )
+    parser.add_argument(
+        "--mode",
+        choices=("led", "welding"),
+        default="led",
+        help="Detection preset. Default: led",
+    )
 
-    Parameters:
-        args: Optional ROS 2 command-line arguments passed to ``rclpy.init``.
-            Use ``None`` to let rclpy read the process command line normally.
+    parsed_args, ros_args = parser.parse_known_args(args=args)
 
-    Returns:
-        None. The function blocks in ``rclpy.spin`` until interrupted, then
-        destroys the node and shuts down rclpy cleanly.
-    """
-    rclpy.init(args=args)
-    node = HotspotDetector()
+    rclpy.init(args=ros_args)
+    node = HotspotDetector(detector_mode=parsed_args.mode)
 
     try:
         rclpy.spin(node)
