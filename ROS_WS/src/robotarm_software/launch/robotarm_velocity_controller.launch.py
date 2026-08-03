@@ -58,11 +58,11 @@ def generate_launch_description():
         output="screen",
     )
 
-    servo_controller_spawner = launch_ros.actions.Node(
+    velocity_controller_spawner = launch_ros.actions.Node(
         package="controller_manager",
         executable="spawner",
         arguments=[
-            "servo_controller",
+            "velocity_controller",
             "--controller-manager",
             "/controller_manager",
         ],
@@ -137,7 +137,7 @@ def generate_launch_description():
             "   tool_position_velocity_control\n"
             "\n"
             " Check with:\n"
-            "   ros2 topic info /servo_controller/commands -v\n"
+            "   ros2 topic info /velocity_controller/commands -v\n"
             "========================================\n"
         )
     )
@@ -147,7 +147,7 @@ def generate_launch_description():
             robot_state_publisher_node,
             ros2_control_node,
             joint_state_spawner,
-            servo_controller_spawner,
+            velocity_controller_spawner,
             static_tf2_broadcaster_node,
             safety_node,
             safety_supervisor_node,

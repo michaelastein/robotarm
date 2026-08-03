@@ -95,7 +95,7 @@ JOINT_NAMES = [
 ]
 
 JOINT_STATE_TOPIC = "/joint_states"
-COMMAND_TOPIC = "/servo_controller/commands"
+COMMAND_TOPIC = "/velocity_controller/commands"
 
 START_POSITION = {
     "base_joint": 0.3,
@@ -170,7 +170,7 @@ def clamp(value: float, low: float, high: float) -> float:
     return max(low, min(high, value))
 
 
-class StartPositionServo(Node):
+class StartPositionVelocity(Node):
     """Move predefined joint targets using direct velocity commands."""
 
     def __init__(self) -> None:
@@ -183,7 +183,7 @@ class StartPositionServo(Node):
         Returns:
             None.
         """
-        super().__init__("start_position_servo")
+        super().__init__("start_position_velocity")
 
         self.command_pub = self.create_publisher(
             Float64MultiArray,
@@ -486,7 +486,7 @@ def parse_arguments() -> argparse.Namespace:
     """
     parser = argparse.ArgumentParser(
         description=(
-            "Move the robot using the direct Servo "
+            "Move the robot using the direct velocity control "
             "velocity controller"
         ),
     )
@@ -527,14 +527,14 @@ def main(args=None) -> None:
     cli_args = parse_arguments()
 
     rclpy.init(args=args)
-    node = StartPositionServo()
+    node = StartPositionVelocity()
     success = False
 
     try:
         if cli_args.start:
             success = node.go_to_target(
                 START_POSITION,
-                "Servo start position",
+                "Velocity start position",
             )
         elif cli_args.zero:
             success = node.go_to_target(

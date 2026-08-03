@@ -10,8 +10,8 @@ When the safety stop clears, the supervisor reactivates only the controllers
 that were active before the stop.
 
 Protected controllers:
-    SERVO_CONTROLLER:
-        Direct joint-velocity controller used by the hotspot servo node.
+    VELOCITY_CONTROLLER:
+        Direct joint-velocity controller used by the hotspot velocity-control node.
 
     TRAJECTORY_CONTROLLER:
         Trajectory controller used for planned arm motion.
@@ -26,9 +26,9 @@ ROS topics:
         False:
             Reactivate controllers that were active before the safety stop.
 
-    SERVO_COMMAND_TOPIC:
+    VELOCITY_COMMAND_TOPIC:
         std_msgs/msg/Float64MultiArray containing joint velocity commands in
-        the order expected by the servo controller. The supervisor publishes
+        the order expected by the velocity controller. The supervisor publishes
         [0.0, 0.0, 0.0] during a stop and before controller transitions.
 
 Controller-manager services:
@@ -71,15 +71,15 @@ from rclpy.node import Node
 from std_msgs.msg import Bool, Float64MultiArray
 
 
-SERVO_CONTROLLER = "servo_controller"
+VELOCITY_CONTROLLER = "velocity_controller"
 TRAJECTORY_CONTROLLER = "arm_trajectory_controller"
 
 MOTION_CONTROLLERS = {
-    SERVO_CONTROLLER,
+    VELOCITY_CONTROLLER,
     TRAJECTORY_CONTROLLER,
 }
 
-SERVO_COMMAND_TOPIC = "/servo_controller/commands"
+VELOCITY_COMMAND_TOPIC = "/velocity_controller/commands"
 SAFETY_TOPIC = "/robotarm/safety_stop"
 
 LIST_CONTROLLERS_SERVICE = "/controller_manager/list_controllers"
@@ -123,7 +123,7 @@ class SafetySupervisor(Node):
 
         self.zero_pub = self.create_publisher(
             Float64MultiArray,
-            SERVO_COMMAND_TOPIC,
+            VELOCITY_COMMAND_TOPIC,
             10,
         )
 

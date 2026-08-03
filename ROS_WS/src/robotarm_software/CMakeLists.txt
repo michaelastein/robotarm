@@ -61,9 +61,9 @@ install(
     robotarm_software/tool_position_velocity_control.py
     robotarm_software/hotspot_detector.py
     robotarm_software/hotspot_web_stream.py
-    robotarm_software/start_position_servo.py
+    robotarm_software/start_position_velocity.py
     robotarm_software/start_position_path.py
-    robotarm_software/hotspot_servo.py
+    robotarm_software/hotspot_velocity.py
     robotarm_software/joint_states_relay.py
   DESTINATION
     lib/${PROJECT_NAME}

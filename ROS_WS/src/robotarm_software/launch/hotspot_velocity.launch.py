@@ -16,8 +16,8 @@ def generate_launch_description():
 
             Node(
                 package="robotarm_software",
-                executable="hotspot_servo.py",
-                name="hotspot_servo",
+                executable="hotspot_velocity.py",
+                name="hotspot_velocity",
                 output="screen",
             ),
 

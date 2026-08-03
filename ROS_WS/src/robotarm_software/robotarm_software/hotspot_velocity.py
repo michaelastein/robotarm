@@ -87,7 +87,7 @@ JOINT_NAMES = [
 ]
 
 HOTSPOT_TOPIC = "/hotspot/target"
-COMMAND_TOPIC = "/servo_controller/commands"
+COMMAND_TOPIC = "/velocity_controller/commands"
 
 PUBLISH_PERIOD = 0.01  # 100 Hz
 
@@ -389,7 +389,7 @@ def damped_least_squares(J, v):
     return qdot
 
 
-class HotspotDirectJointServo(Node):
+class HotspotDirectJointVelocity(Node):
 
     def __init__(self):
         """
@@ -401,7 +401,7 @@ class HotspotDirectJointServo(Node):
         Returns:
             None.
         """
-        super().__init__("hotspot_direct_joint_servo")
+        super().__init__("hotspot_direct_joint_velocity")
 
         self.target_sub = self.create_subscription(
             Float32MultiArray,
@@ -452,7 +452,7 @@ class HotspotDirectJointServo(Node):
             self.publish_command,
         )
 
-        self.get_logger().info("Hotspot direct joint servo started")
+        self.get_logger().info("Hotspot direct joint velocity control started")
         self.get_logger().info(f"Listening to {HOTSPOT_TOPIC}")
         self.get_logger().info(f"Publishing direct joint velocities to {COMMAND_TOPIC}")
         self.get_logger().warn("MoveIt Servo is bypassed/removed.")
@@ -1032,7 +1032,7 @@ class HotspotDirectJointServo(Node):
 
 def main(args=None):
     """
-    Initialize ROS, run the servo node, and perform a safe shutdown.
+    Initialize ROS, run the velocity-control node, and perform a safe shutdown.
 
     Parameters:
         args: Optional ROS argument sequence passed to rclpy.init().
@@ -1043,7 +1043,7 @@ def main(args=None):
     """
     rclpy.init(args=args)
 
-    node = HotspotDirectJointServo()
+    node = HotspotDirectJointVelocity()
 
     try:
         rclpy.spin(node)

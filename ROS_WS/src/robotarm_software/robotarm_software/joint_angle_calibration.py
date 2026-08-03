@@ -31,7 +31,7 @@ JOINT_ALIASES = {
     "elbow_joint": "elbow_joint",
 }
 
-COMMAND_TOPIC = "/servo_controller/commands"
+COMMAND_TOPIC = "/velocity_controller/commands"
 
 PUBLISH_RATE = 50.0
 
@@ -91,7 +91,7 @@ class JointAngleCalibration(Node):
         self.printed_order = False
 
         self.get_logger().info("Joint angle calibration ready")
-        self.get_logger().info("Publishes direct joint velocities to /servo_controller/commands")
+        self.get_logger().info("Publishes direct joint velocities to /velocity_controller/commands")
         self.get_logger().warn("Move only one joint at a time. Keep hand near emergency stop.")
 
     def joint_state_callback(self, msg):

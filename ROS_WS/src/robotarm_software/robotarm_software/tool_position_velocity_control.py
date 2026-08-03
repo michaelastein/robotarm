@@ -19,7 +19,7 @@ JOINT_NAMES = [
     "elbow_joint",
 ]
 
-COMMAND_TOPIC = "/servo_controller/commands"
+COMMAND_TOPIC = "/velocity_controller/commands"
 
 PUBLISH_PERIOD = 0.01  # 100 Hz
 
@@ -238,7 +238,7 @@ class ToolPositionVelocityControl(Node):
         )
 
         self.get_logger().info("Straight-axis base_link tool controller started")
-        self.get_logger().info("Publishes directly to /servo_controller/commands")
+        self.get_logger().info("Publishes directly to /velocity_controller/commands")
         self.get_logger().warn("MoveIt Servo is bypassed.")
         self.get_logger().warn("PURE IK TEST MODE: KP_POSITION=0.0, MAX_CORRECTION_VEL=0.0")
         self.get_logger().warn("VECTOR SCALE MODE: qdot direction preserved, vector scaled to useful motor speed")

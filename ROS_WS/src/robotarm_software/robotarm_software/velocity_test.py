@@ -41,7 +41,7 @@ JOINT_NAMES = [
     "elbow_joint",
 ]
 
-COMMAND_TOPIC = "/servo_controller/commands"
+COMMAND_TOPIC = "/velocity_controller/commands"
 JOINT_STATE_TOPIC = "/joint_states"
 
 PUBLISH_RATE_HZ = 50.0
