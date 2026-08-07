@@ -1122,7 +1122,7 @@ class ExperimentNode(Node):
 
             command.extend(
                 [
-                    "/joint_state_broadcaster/joint_states",
+                    "/joint_states",
                     "/hotspot/target",
                 ]
             )
