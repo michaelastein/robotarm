@@ -86,8 +86,6 @@ LED_MAX_HOTSPOT_AREA_FRACTION = 0.03
 LED_MIN_HOTSPOT_PIXELS = 3
 
 LED_ANNOTATION_EVERY_N_FRAMES = 5
-LED_PROCESS_NOISE = 0.02
-LED_INITIAL_MEASUREMENT_NOISE = 1.0
 
 # Welding configuration.
 WELDING_ROI_WIDTH_FRACTION = 0.38
@@ -101,8 +99,6 @@ WELDING_MAX_ROI_AREA_FRACTION = 0.03
 WELDING_MIN_HOTSPOT_PIXELS = 3
 
 WELDING_ANNOTATION_EVERY_N_FRAMES = 5
-WELDING_PROCESS_NOISE = 0.08
-WELDING_INITIAL_MEASUREMENT_NOISE = 0.5
 
 
 def fit_text_scale(
@@ -348,16 +344,12 @@ class HotspotDetector(Node):
             self.max_trail = WELDING_MAX_TRAIL
             self.conf_threshold = WELDING_CONF_THRESHOLD
             self.annotation_every_n_frames = WELDING_ANNOTATION_EVERY_N_FRAMES
-            process_noise = WELDING_PROCESS_NOISE
-            initial_measurement_noise = WELDING_INITIAL_MEASUREMENT_NOISE
         else:
             self.roi_width_fraction = LED_ROI_WIDTH_FRACTION
             self.lost_frames_reset = LED_LOST_FRAMES_RESET
             self.max_trail = LED_MAX_TRAIL
             self.conf_threshold = LED_CONF_THRESHOLD
             self.annotation_every_n_frames = LED_ANNOTATION_EVERY_N_FRAMES
-            process_noise = LED_PROCESS_NOISE
-            initial_measurement_noise = LED_INITIAL_MEASUREMENT_NOISE
 
         self.sub = self.create_subscription(
             CompressedImage,
@@ -376,28 +368,11 @@ class HotspotDetector(Node):
             qos_profile_sensor_data,
         )
 
-        self.kalman = cv2.KalmanFilter(4, 2)
-        self.kalman.measurementMatrix = np.array(
-            [
-                [1, 0, 0, 0],
-                [0, 1, 0, 0],
-            ],
-            dtype=np.float32,
-        )
-        self.kalman.transitionMatrix = np.array(
-            [
-                [1, 0, 1, 0],
-                [0, 1, 0, 1],
-                [0, 0, 1, 0],
-                [0, 0, 0, 1],
-            ],
-            dtype=np.float32,
-        )
-        self.kalman.processNoiseCov = np.eye(4, dtype=np.float32) * process_noise
-        self.kalman.measurementNoiseCov = (
-            np.eye(2, dtype=np.float32) * initial_measurement_noise
-        )
-        self.kalman.statePost = np.zeros((4, 1), dtype=np.float32)
+        # Simple exponential moving average (EMA) smoothing.
+        # Higher alpha reacts faster; lower alpha smooths more strongly.
+        self.smoothing_alpha = 0.3
+        self.smoothed_x = None
+        self.smoothed_y = None
 
         self.traj = []
         self.last_valid = None
@@ -499,8 +474,6 @@ class HotspotDetector(Node):
             offset = np.zeros(2, dtype=np.float32)
             self.mode = "FULL"
 
-        self.kalman.predict()
-
         if self.detector_mode == "welding":
             measurement, confidence, _ = find_welding_hotspot(
                 search_img,
@@ -517,15 +490,33 @@ class HotspotDetector(Node):
             measurement = np.array(measurement, dtype=np.float32, copy=True)
             measurement[:, 0] += offset
 
-            noise = np.float32(max(0.05, 2.0 / (confidence + 1e-3)))
-            self.kalman.measurementNoiseCov = (
-                np.eye(2, dtype=np.float32) * noise
+            measured_x = float(measurement[0, 0])
+            measured_y = float(measurement[1, 0])
+
+            # Smooth the measured position directly. No prediction/extrapolation.
+            if self.smoothed_x is None or self.smoothed_y is None:
+                self.smoothed_x = measured_x
+                self.smoothed_y = measured_y
+            else:
+                alpha = self.smoothing_alpha
+                self.smoothed_x = (
+                    alpha * measured_x + (1.0 - alpha) * self.smoothed_x
+                )
+                self.smoothed_y = (
+                    alpha * measured_y + (1.0 - alpha) * self.smoothed_y
+                )
+
+            # Keep the smoothed target position inside the valid image area.
+            self.smoothed_x = float(
+                np.clip(self.smoothed_x, 0.0, max(0.0, float(width - 1)))
             )
-            self.kalman.correct(measurement)
+            self.smoothed_y = float(
+                np.clip(self.smoothed_y, 0.0, max(0.0, float(height - 1)))
+            )
 
             self.last_valid = (
-                int(measurement[0, 0]),
-                int(measurement[1, 0]),
+                int(round(self.smoothed_x)),
+                int(round(self.smoothed_y)),
             )
             self.lost_counter = 0
             self.target_visible = True
@@ -536,17 +527,26 @@ class HotspotDetector(Node):
                 self.target_visible = False
                 self.current_error_x = 0.0
                 self.current_error_y = 0.0
+                self.smoothed_x = None
+                self.smoothed_y = None
 
-        estimate = self.kalman.statePost.ravel().astype(np.float32)
+        if self.target_visible and self.smoothed_x is not None:
+            self.current_error_x = (
+                self.smoothed_x - width * 0.5
+            ) / (width * 0.5)
+            self.current_error_y = (
+                self.smoothed_y - height * 0.5
+            ) / (height * 0.5)
 
-        if self.target_visible:
-            estimated_x = float(estimate[0])
-            estimated_y = float(estimate[1])
+            # Final safety clamp: published normalized errors are always [-1, 1].
+            self.current_error_x = float(
+                np.clip(self.current_error_x, -1.0, 1.0)
+            )
+            self.current_error_y = float(
+                np.clip(self.current_error_y, -1.0, 1.0)
+            )
 
-            self.current_error_x = (estimated_x - width * 0.5) / (width * 0.5)
-            self.current_error_y = (estimated_y - height * 0.5) / (height * 0.5)
-
-            self.traj.append((int(estimated_x), int(estimated_y)))
+            self.traj.append((int(round(self.smoothed_x)), int(round(self.smoothed_y))))
             if len(self.traj) > self.max_trail:
                 self.traj.pop(0)
 
