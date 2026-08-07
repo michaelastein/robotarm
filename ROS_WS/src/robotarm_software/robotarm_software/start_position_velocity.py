@@ -126,7 +126,7 @@ MAX_VEL = {
 }
 
 MIN_VEL = {
-    "base_joint": 0.02,
+    "base_joint": 0.015,
     "shoulder_joint": 0.08,
     "elbow_joint": 0.08,
 }

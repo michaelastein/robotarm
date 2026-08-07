@@ -9,59 +9,60 @@ kinematics. A slow Z-height correction keeps the tool tip near the height at
 which tracking began.
 
 Configuration overview:
-    JOINT_NAMES:
-        Ordered joint names used for state lookup, limit enforcement, and
-        command publication. The published velocity vector always follows this
-        order: base, shoulder, elbow.
+JOINT_NAMES:
+Ordered joint names used for state lookup, limit enforcement, and
+command publication. The published velocity vector always follows this
+order: base, shoulder, elbow.
 
-    HOTSPOT_TOPIC:
-        Float32MultiArray input topic. Expected fields are visible flag,
-        horizontal image error, vertical image error, and detector confidence.
+HOTSPOT_TOPIC:
+    Float32MultiArray input topic. Expected fields are visible flag,
+    horizontal image error, vertical image error, and detector confidence.
 
-    COMMAND_TOPIC:
-        Float64MultiArray output topic carrying direct joint velocities in
-        radians per second.
+COMMAND_TOPIC:
+    Float64MultiArray output topic carrying direct joint velocities in
+    radians per second.
 
-    PUBLISH_PERIOD:
-        Timer period in seconds. A value of 0.01 runs the control loop at 100 Hz.
+PUBLISH_PERIOD:
+    Timer period in seconds. A value of 0.01 runs the control loop at 100 Hz.
 
-    CONF_MIN / TARGET_TIMEOUT:
-        Minimum accepted detector confidence and maximum age of a hotspot
-        message before it is treated as stale.
+CONF_MIN / TARGET_TIMEOUT:
+    Minimum accepted detector confidence and maximum age of a hotspot
+    message before it is treated as stale.
 
-    CENTER_*_DEADBAND_*:
-        Enter/exit hysteresis thresholds for image X and Y errors. Separate
-        thresholds prevent rapid switching and circular motion near center.
+CENTER_*_DEADBAND_*:
+    Enter/exit hysteresis thresholds for image X and Y errors. Separate
+    thresholds prevent rapid switching and circular motion near center.
 
-    MAX_CART_VEL_XY / MIN_EFFECTIVE_CART_VEL_XY:
-        Maximum and minimum effective commanded Cartesian speeds in the base
-        X/Y plane. The minimum helps overcome hardware deadband.
+MAX_CART_VEL_XY / MIN_EFFECTIVE_CART_VEL_XY:
+    Maximum and minimum effective commanded Cartesian speeds in the base
+    X/Y plane. The minimum helps overcome hardware deadband.
 
-    HOTSPOT_*_SIGN_TO_BASE_*:
-        Sign mappings from camera-image error directions to base-frame motion.
+HOTSPOT_*_SIGN_TO_BASE_*:
+    Sign mappings from camera-image error directions to base-frame motion.
 
-    Z_HOLD_* / KZ_HOLD / MAX_Z_HOLD_VEL:
-        Parameters for slow tool-tip height correction. Z correction is
-        deliberately weaker than hotspot-centering motion.
+Z_HOLD_* / KZ_HOLD / MAX_Z_HOLD_VEL:
+    Parameters for slow tool-tip height correction. Z correction is
+    deliberately weaker than hotspot-centering motion.
 
-    Z_SOFT_ERROR / Z_HARD_ERROR:
-        Height-error thresholds that reduce or stop X/Y motion so Z can recover.
+Z_SOFT_ERROR / Z_HARD_ERROR:
+    Height-error thresholds that reduce or stop X/Y motion so Z can recover.
 
-    SMOOTHING_ALPHA / JOINT_SMOOTHING_ALPHA:
-        Low-pass filter weights for Cartesian and joint-velocity commands.
-        Larger values react faster; smaller values produce smoother motion.
+SMOOTHING_ALPHA / JOINT_SMOOTHING_ALPHA:
+    Low-pass filter weights for Cartesian and joint-velocity commands.
+    Larger values react faster; smaller values produce smoother motion.
 
-    DAMPING / JACOBIAN_EPS:
-        Damped least-squares regularization and finite-difference step used for
-        the numerical position Jacobian.
+DAMPING / JACOBIAN_EPS:
+    Damped least-squares regularization and finite-difference step used for
+    the numerical position Jacobian.
 
-    MAX_JOINT_VEL / MIN_EFFECTIVE_QDOT_VECTOR:
-        Maximum joint speed and optional whole-vector minimum. Scaling the full
-        vector preserves the inverse-kinematics joint ratio.
+MAX_JOINT_VEL / MIN_EFFECTIVE_QDOT_VECTOR:
+    Maximum joint speed and optional whole-vector minimum. Scaling the full
+    vector preserves the inverse-kinematics joint ratio.
 
-    JOINT_LIMITS / JOINT_LIMIT_MARGIN:
-        Per-joint position bounds and the safety margin inside each bound where
-        commands farther into the limit are blocked.
+JOINT_LIMITS / JOINT_LIMIT_MARGIN:
+    Per-joint position bounds and the safety margin inside each bound where
+    commands farther into the limit are blocked.
+
 """
 
 import math
@@ -77,13 +78,12 @@ from sensor_msgs.msg import JointState
 from std_msgs.msg import Float32MultiArray
 from std_msgs.msg import Float64MultiArray
 
-
 # Joints / topics
 
 JOINT_NAMES = [
-    "base_joint",
-    "shoulder_joint",
-    "elbow_joint",
+"base_joint",
+"shoulder_joint",
+"elbow_joint",
 ]
 
 HOTSPOT_TOPIC = "/hotspot/target"
@@ -91,29 +91,47 @@ COMMAND_TOPIC = "/velocity_controller/commands"
 
 PUBLISH_PERIOD = 0.01  # 100 Hz
 
-
 # Hotspot input format
-#
-# /hotspot/target:
-#   data[0] = visible, >= 0.5 means visible
-#   data[1] = err_x
-#   data[2] = err_y
-#   data[3] = confidence
-#
-# Mapping:
-#
-#   hotspot left:
-#     err_x negative -> move arm left  -> +base_link y
-#
-#   hotspot right:
-#     err_x positive -> move arm right -> -base_link y
-#
-#   hotspot lower:
-#     err_y positive -> move arm back  -> -base_link x
-#
-#   hotspot upper:
-#     err_y negative -> move arm front -> +base_link x
 
+#
+
+# /hotspot/target:
+
+# data[0] = visible, >= 0.5 means visible
+
+# data[1] = err_x
+
+# data[2] = err_y
+
+# data[3] = confidence
+
+#
+
+# Mapping:
+
+#
+
+# hotspot left:
+
+# err_x negative -> move arm left  -> +base_link y
+
+#
+
+# hotspot right:
+
+# err_x positive -> move arm right -> -base_link y
+
+#
+
+# hotspot lower:
+
+# err_y positive -> move arm back  -> -base_link x
+
+#
+
+# hotspot upper:
+
+# err_y negative -> move arm front -> +base_link x
 
 # Hotspot centering control
 
@@ -121,14 +139,14 @@ CONF_MIN = 0.0
 TARGET_TIMEOUT = 0.25
 
 # Larger hysteresis against circling around a stationary LED.
-CENTER_ENTER_DEADBAND_X = 0.30
-CENTER_EXIT_DEADBAND_X = 0.50
 
-CENTER_ENTER_DEADBAND_Y = 0.30
-CENTER_EXIT_DEADBAND_Y = 0.50
+CENTER_ENTER_DEADBAND_X = 0.15
+CENTER_EXIT_DEADBAND_X = 0.15
 
+CENTER_ENTER_DEADBAND_Y = 0.15
+CENTER_EXIT_DEADBAND_Y = 0.15
 
-MAX_CART_VEL_XY = 0.0025
+MAX_CART_VEL_XY = 0.004
 MIN_EFFECTIVE_CART_VEL_XY = 0.0007
 
 ERROR_FULL_SPEED = 1.00
@@ -139,17 +157,20 @@ HOTSPOT_Y_SIGN_TO_BASE_X = -1.0
 ENABLE_BASE_X = True
 ENABLE_BASE_Y = True
 
-
 # Z height hold
+
 #
+
 # Z is only a slow drift correction.
+
 # It should not constantly fight tiny height changes.
 
 ENABLE_Z_HOLD = True
 
 # More relaxed Z hysteresis.
-Z_HOLD_DEADBAND = 0.015
-Z_HOLD_EXIT_DEADBAND = 0.025
+
+Z_HOLD_DEADBAND = 0.03
+Z_HOLD_EXIT_DEADBAND = 0.04
 
 KZ_HOLD = 0.006
 MAX_Z_HOLD_VEL = 0.00035
@@ -158,10 +179,10 @@ MIN_EFFECTIVE_Z_VEL = 0.0000
 Z_HOLD_SCALE_WHILE_XY_MOVING = 1.00
 
 # If Z drifts far, slow/stop XY so height can recover.
+
 Z_SOFT_ERROR = 0.055
 Z_HARD_ERROR = 0.080
 XY_SCALE_WHEN_Z_SOFT_ERROR = 0.25
-
 
 # Filtering / stopping
 
@@ -172,41 +193,53 @@ STOP_COMMANDS_AFTER_LOST = 10
 
 COMMAND_EPSILON = 0.00001
 
-
 # IK / Jacobian parameters
 
 DAMPING = 0.035
 JACOBIAN_EPS = 1e-4
 
-
 # Joint velocity output
+
 #
+
 # Hardware deadband is around 0.003 rad/s.
+
 # If Python sends tiny qdot values like 0.0003, nothing happens.
+
 #
+
 # Therefore use a small VECTOR minimum.
+
 # This preserves the IK ratio, unlike per-joint minimum lifting.
 
-
-MAX_JOINT_VEL = 0.08
+MAX_JOINT_VEL = 0.1
 
 USE_MIN_EFFECTIVE_QDOT_VECTOR = True
-MIN_EFFECTIVE_QDOT_VECTOR = 0.0035
+MIN_EFFECTIVE_QDOT_VECTOR = 0.03
+
+# Controller-side startup floor.
+# The hardware interface ignores |qdot| <= 0.003 rad/s, so intended
+# non-zero joint commands are lifted only slightly above that threshold.
+USE_MIN_EFFECTIVE_QDOT_PER_JOINT = True
+MIN_EFFECTIVE_QDOT_PER_JOINT = 0.0035
 
 JOINT_VEL_DEADBAND = 0.00005
 JOINT_SMOOTHING_ALPHA = 0.20
 
+# Per-joint output tuning.
+# Slightly reduce base motion and increase shoulder response.
+BASE_JOINT_VEL_SCALE = 0.75
+SHOULDER_JOINT_VEL_SCALE = 1.35
 
 # Joint limits
 
 JOINT_LIMITS = {
-    "base_joint": (-3.0, 3.0),
-    "shoulder_joint": (-0.52359878, 1.39626340),
-    "elbow_joint": (-0.69813170, 2.44346095),
+"base_joint": (-3.0, 3.0),
+"shoulder_joint": (-0.52359878, 1.39626340),
+"elbow_joint": (-0.69813170, 2.44346095),
 }
 
 JOINT_LIMIT_MARGIN = 0.05
-
 
 def clamp(value, low, high):
     """
@@ -221,7 +254,6 @@ def clamp(value, low, high):
         The input value clipped to the interval [low, high].
     """
     return max(low, min(high, value))
-
 
 def rot_z(theta):
     """
@@ -246,7 +278,6 @@ def rot_z(theta):
         dtype=np.float64,
     )
 
-
 def rot_y(theta):
     """
     Build a homogeneous rotation matrix about the Y axis.
@@ -270,7 +301,6 @@ def rot_y(theta):
         dtype=np.float64,
     )
 
-
 def trans(x, y, z):
     """
     Build a homogeneous translation matrix.
@@ -292,7 +322,6 @@ def trans(x, y, z):
         ],
         dtype=np.float64,
     )
-
 
 def forward_kinematics(q):
     """
@@ -326,7 +355,6 @@ def forward_kinematics(q):
 
     return T
 
-
 def tip_position(q):
     """
     Compute only the Cartesian tool-tip position.
@@ -340,7 +368,6 @@ def tip_position(q):
     """
     T = forward_kinematics(q)
     return T[0:3, 3].copy()
-
 
 def numeric_position_jacobian(q):
     """
@@ -364,7 +391,6 @@ def numeric_position_jacobian(q):
 
     return J
 
-
 def damped_least_squares(J, v):
     """
     Convert a Cartesian velocity into joint velocities using damped IK.
@@ -387,7 +413,6 @@ def damped_least_squares(J, v):
         qdot = np.zeros(3, dtype=np.float64)
 
     return qdot
-
 
 class HotspotDirectJointVelocity(Node):
 
@@ -879,6 +904,14 @@ class HotspotDirectJointVelocity(Node):
             if max_abs < MIN_EFFECTIVE_QDOT_VECTOR:
                 out *= MIN_EFFECTIVE_QDOT_VECTOR / max_abs
 
+        # Ensure every intended non-zero joint command clears the hardware
+        # velocity deadband. This is deliberately only a small lift; it does
+        # not alter zero commands and preserves each joint's sign.
+        if USE_MIN_EFFECTIVE_QDOT_PER_JOINT:
+            for i in range(3):
+                if 0.0 < abs(out[i]) < MIN_EFFECTIVE_QDOT_PER_JOINT:
+                    out[i] = math.copysign(MIN_EFFECTIVE_QDOT_PER_JOINT, out[i])
+
         max_abs = float(np.max(np.abs(out)))
 
         if max_abs > MAX_JOINT_VEL:
@@ -904,11 +937,11 @@ class HotspotDirectJointVelocity(Node):
         q = self.get_q()
 
         if q is None:
-            self.hard_stop()
             self.get_logger().warn(
-                "Waiting for joint states...",
+                "ZERO CMD: missing joint states",
                 throttle_duration_sec=1.0,
             )
+            self.hard_stop()
             return
 
         tip = tip_position(q)
@@ -926,6 +959,21 @@ class HotspotDirectJointVelocity(Node):
         J = numeric_position_jacobian(q)
 
         if not active:
+            reasons = []
+            if not target_visible:
+                reasons.append("target not visible")
+            if not fresh:
+                reasons.append("target stale/timeout")
+            if conf < CONF_MIN:
+                reasons.append(
+                    f"confidence too low ({conf:.3f} < {CONF_MIN:.3f})"
+                )
+
+            self.get_logger().warn(
+                "ZERO CMD: " + ", ".join(reasons),
+                throttle_duration_sec=1.0,
+            )
+
             self.filtered_base_v[:] = 0.0
             self.filtered_qdot[:] = 0.0
             self.cmd_qdot[:] = 0.0
@@ -964,8 +1012,11 @@ class HotspotDirectJointVelocity(Node):
         # Only hard-stop when image X, image Y, and Z are all centered.
         # Do NOT hard-stop just because qdot is tiny while the target is still off-center.
         if self.centered_x and self.centered_y and self.z_centered:
+            self.get_logger().info(
+                "ZERO CMD: target centered in X/Y and Z hold centered",
+                throttle_duration_sec=1.0,
+            )
             self.hard_stop()
-
             return
 
         alpha = SMOOTHING_ALPHA if active else LOST_ALPHA
@@ -994,6 +1045,11 @@ class HotspotDirectJointVelocity(Node):
         )
 
         if float(np.linalg.norm(self.filtered_base_v)) <= COMMAND_EPSILON:
+            self.get_logger().warn(
+                "ZERO CMD: filtered Cartesian velocity below epsilon "
+                f"v={self.filtered_base_v}, eps={COMMAND_EPSILON}",
+                throttle_duration_sec=1.0,
+            )
             return
 
         qdot_raw = damped_least_squares(
@@ -1002,6 +1058,11 @@ class HotspotDirectJointVelocity(Node):
         )
 
         qdot_limited = self.apply_joint_limits(q, qdot_raw)
+
+        # Intentional per-joint tuning after IK.
+        qdot_limited[0] *= BASE_JOINT_VEL_SCALE
+        qdot_limited[1] *= SHOULDER_JOINT_VEL_SCALE
+
         qdot_limited = self.postprocess_qdot(qdot_limited)
 
         self.filtered_qdot = (
@@ -1017,6 +1078,11 @@ class HotspotDirectJointVelocity(Node):
             and abs(self.cmd_qdot[1]) < COMMAND_EPSILON
             and abs(self.cmd_qdot[2]) < COMMAND_EPSILON
         ):
+            self.get_logger().warn(
+                "ZERO CMD: final joint velocity below epsilon "
+                f"qdot={self.cmd_qdot}, eps={COMMAND_EPSILON}",
+                throttle_duration_sec=1.0,
+            )
             return
 
         msg = Float64MultiArray()
@@ -1028,7 +1094,6 @@ class HotspotDirectJointVelocity(Node):
 
         self.cmd_pub.publish(msg)
         self.lost_stop_publish_count = 0
-
 
 def main(args=None):
     """
@@ -1054,7 +1119,6 @@ def main(args=None):
             node.publish_zero_once()
             node.destroy_node()
             rclpy.shutdown()
-
 
 if __name__ == "__main__":
     main()
