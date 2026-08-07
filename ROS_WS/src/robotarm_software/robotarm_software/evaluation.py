@@ -178,6 +178,11 @@ HTML_PAGE = r"""<!doctype html>
         const MAXIMUM_POINT_STEP_PIXELS = 8 * CSS_PIXELS_PER_CM;
         const LINE_SPEED_PIXELS_PER_SECOND = 22;
 
+        // Bewegungsbereich: große Ellipse innerhalb des Fensters.
+        // Werte < 0.5 lassen mehr Abstand zu den Bildschirmrändern.
+        const ELLIPSE_RADIUS_X = 0.44;
+        const ELLIPSE_RADIUS_Y = 0.40;
+
         const MODE_SEEDS = {
             lines: 104729,
             expandingPoints: 224737,
@@ -236,6 +241,32 @@ HTML_PAGE = r"""<!doctype html>
         function easeInOut(amount) {
             const value = clamp(amount, 0, 1);
             return value * value * (3 - 2 * value);
+        }
+
+        function projectInsideEllipse(point) {
+            const dx = (point.x - 0.5) / ELLIPSE_RADIUS_X;
+            const dy = (point.y - 0.5) / ELLIPSE_RADIUS_Y;
+            const radius = Math.hypot(dx, dy);
+
+            if (radius <= 1) {
+                return point;
+            }
+
+            return {
+                x: 0.5 + (dx / radius) * ELLIPSE_RADIUS_X,
+                y: 0.5 + (dy / radius) * ELLIPSE_RADIUS_Y
+            };
+        }
+
+        function randomPointInEllipse(random) {
+            // sqrt sorgt für eine gleichmäßige Verteilung über die Fläche.
+            const radius = Math.sqrt(random());
+            const angle = random() * Math.PI * 2;
+
+            return {
+                x: 0.5 + Math.cos(angle) * radius * ELLIPSE_RADIUS_X,
+                y: 0.5 + Math.sin(angle) * radius * ELLIPSE_RADIUS_Y
+            };
         }
 
         function reflectInside(value, minimum, maximum) {
@@ -347,10 +378,7 @@ HTML_PAGE = r"""<!doctype html>
                 }];
 
                 for (let index = 0; index < 32; index += 1) {
-                    anchors.push({
-                        x: lerp(marginX, 1 - marginX, random()),
-                        y: lerp(marginY, 1 - marginY, random())
-                    });
+                    anchors.push(randomPointInEllipse(random));
                 }
 
                 const samples = [anchors[0]];
@@ -401,16 +429,13 @@ HTML_PAGE = r"""<!doctype html>
                     const distanceX = stepPixels / viewportWidth;
                     const distanceY = stepPixels / viewportHeight;
 
-                    x = reflectInside(
-                        x + Math.cos(angle) * distanceX,
-                        marginX,
-                        1 - marginX
-                    );
-                    y = reflectInside(
-                        y + Math.sin(angle) * distanceY,
-                        marginY,
-                        1 - marginY
-                    );
+                    const projectedPoint = projectInsideEllipse({
+                        x: x + Math.cos(angle) * distanceX,
+                        y: y + Math.sin(angle) * distanceY
+                    });
+
+                    x = projectedPoint.x;
+                    y = projectedPoint.y;
 
                     points.push({ x, y });
 
@@ -453,10 +478,7 @@ HTML_PAGE = r"""<!doctype html>
                 const anchors = [{ x: 0.5, y: 0.5 }];
 
                 for (let index = 0; index < 26; index += 1) {
-                    anchors.push({
-                        x: lerp(marginX, 1 - marginX, random()),
-                        y: lerp(marginY, 1 - marginY, random())
-                    });
+                    anchors.push(randomPointInEllipse(random));
                 }
 
                 const samples = [anchors[0]];
@@ -478,31 +500,15 @@ HTML_PAGE = r"""<!doctype html>
                     const along1 = lerp(0.20, 0.42, random());
                     const along2 = lerp(0.58, 0.82, random());
 
-                    const control1 = {
-                        x: clamp(
-                            start.x + dx * along1 + normalX * bend1,
-                            marginX,
-                            1 - marginX
-                        ),
-                        y: clamp(
-                            start.y + dy * along1 + normalY * bend1,
-                            marginY,
-                            1 - marginY
-                        )
-                    };
+                    const control1 = projectInsideEllipse({
+                        x: start.x + dx * along1 + normalX * bend1,
+                        y: start.y + dy * along1 + normalY * bend1
+                    });
 
-                    const control2 = {
-                        x: clamp(
-                            start.x + dx * along2 + normalX * bend2,
-                            marginX,
-                            1 - marginX
-                        ),
-                        y: clamp(
-                            start.y + dy * along2 + normalY * bend2,
-                            marginY,
-                            1 - marginY
-                        )
-                    };
+                    const control2 = projectInsideEllipse({
+                        x: start.x + dx * along2 + normalX * bend2,
+                        y: start.y + dy * along2 + normalY * bend2
+                    });
 
                     const sampleCount = 72;
 
