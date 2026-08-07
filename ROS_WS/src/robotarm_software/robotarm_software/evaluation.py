@@ -178,10 +178,12 @@ HTML_PAGE = r"""<!doctype html>
         const MAXIMUM_POINT_STEP_PIXELS = 8 * CSS_PIXELS_PER_CM;
         const LINE_SPEED_PIXELS_PER_SECOND = 22;
 
-        // Bewegungsbereich: große Ellipse innerhalb des Fensters.
-        // Werte < 0.5 lassen mehr Abstand zu den Bildschirmrändern.
-        const ELLIPSE_RADIUS_X = 0.44;
-        const ELLIPSE_RADIUS_Y = 0.40;
+        // Bewegungsbereich: abgerundetes Rechteck.
+        // Das Rechteck lässt auf jeder Bildschirmseite 10 % frei.
+        // Der Kreisradius wird zusätzlich berücksichtigt, damit der Kreis
+        // vollständig innerhalb des Bewegungsbereichs bleibt.
+        const MOVEMENT_MARGIN_FRACTION = 0.10;
+        const ROUNDED_RECT_CORNER_RADIUS_FRACTION = 0.08;
 
         const MODE_SEEDS = {
             lines: 104729,
@@ -243,30 +245,129 @@ HTML_PAGE = r"""<!doctype html>
             return value * value * (3 - 2 * value);
         }
 
-        function projectInsideEllipse(point) {
-            const dx = (point.x - 0.5) / ELLIPSE_RADIUS_X;
-            const dy = (point.y - 0.5) / ELLIPSE_RADIUS_Y;
-            const radius = Math.hypot(dx, dy);
+        function getRoundedRectBounds() {
+            const marginX = viewportWidth * MOVEMENT_MARGIN_FRACTION;
+            const marginY = viewportHeight * MOVEMENT_MARGIN_FRACTION;
 
-            if (radius <= 1) {
-                return point;
-            }
+            // Zusätzlich zum 10-%-Rand wird der Kreisradius eingerückt,
+            // damit auch die Kreisfläche komplett im Rechteck bleibt.
+            const requestedClearanceX = marginX + CIRCLE_RADIUS;
+            const requestedClearanceY = marginY + CIRCLE_RADIUS;
+
+            // Falls das Browserfenster extrem klein ist, bleibt wenigstens
+            // ein minimaler Bewegungsbereich um die Mitte erhalten.
+            const halfWidth = Math.max(
+                1,
+                viewportWidth / 2 - requestedClearanceX
+            );
+            const halfHeight = Math.max(
+                1,
+                viewportHeight / 2 - requestedClearanceY
+            );
+
+            const left = viewportWidth / 2 - halfWidth;
+            const right = viewportWidth / 2 + halfWidth;
+            const top = viewportHeight / 2 - halfHeight;
+            const bottom = viewportHeight / 2 + halfHeight;
+
+            const cornerRadius = Math.min(
+                Math.min(viewportWidth, viewportHeight) *
+                    ROUNDED_RECT_CORNER_RADIUS_FRACTION,
+                halfWidth,
+                halfHeight
+            );
 
             return {
-                x: 0.5 + (dx / radius) * ELLIPSE_RADIUS_X,
-                y: 0.5 + (dy / radius) * ELLIPSE_RADIUS_Y
+                left,
+                right,
+                top,
+                bottom,
+                cornerRadius
             };
         }
 
-        function randomPointInEllipse(random) {
-            // sqrt sorgt für eine gleichmäßige Verteilung über die Fläche.
-            const radius = Math.sqrt(random());
-            const angle = random() * Math.PI * 2;
+        function isInsideRoundedRectPixels(x, y, bounds) {
+            const { left, right, top, bottom, cornerRadius } = bounds;
+
+            if (x < left || x > right || y < top || y > bottom) {
+                return false;
+            }
+
+            if (cornerRadius <= 0) {
+                return true;
+            }
+
+            const innerLeft = left + cornerRadius;
+            const innerRight = right - cornerRadius;
+            const innerTop = top + cornerRadius;
+            const innerBottom = bottom - cornerRadius;
+
+            if (
+                (x >= innerLeft && x <= innerRight) ||
+                (y >= innerTop && y <= innerBottom)
+            ) {
+                return true;
+            }
+
+            const cornerX = x < innerLeft ? innerLeft : innerRight;
+            const cornerY = y < innerTop ? innerTop : innerBottom;
+
+            return Math.hypot(x - cornerX, y - cornerY) <= cornerRadius;
+        }
+
+        function projectInsideRoundedRect(point) {
+            const bounds = getRoundedRectBounds();
+            const { left, right, top, bottom, cornerRadius } = bounds;
+
+            let x = clamp(point.x * viewportWidth, left, right);
+            let y = clamp(point.y * viewportHeight, top, bottom);
+
+            if (cornerRadius > 0) {
+                const innerLeft = left + cornerRadius;
+                const innerRight = right - cornerRadius;
+                const innerTop = top + cornerRadius;
+                const innerBottom = bottom - cornerRadius;
+
+                const inCornerColumn = x < innerLeft || x > innerRight;
+                const inCornerRow = y < innerTop || y > innerBottom;
+
+                if (inCornerColumn && inCornerRow) {
+                    const cornerX = x < innerLeft ? innerLeft : innerRight;
+                    const cornerY = y < innerTop ? innerTop : innerBottom;
+                    const dx = x - cornerX;
+                    const dy = y - cornerY;
+                    const distance = Math.hypot(dx, dy);
+
+                    if (distance > cornerRadius) {
+                        const scale = cornerRadius / distance;
+                        x = cornerX + dx * scale;
+                        y = cornerY + dy * scale;
+                    }
+                }
+            }
 
             return {
-                x: 0.5 + Math.cos(angle) * radius * ELLIPSE_RADIUS_X,
-                y: 0.5 + Math.sin(angle) * radius * ELLIPSE_RADIUS_Y
+                x: x / viewportWidth,
+                y: y / viewportHeight
             };
+        }
+
+        function randomPointInRoundedRect(random) {
+            const bounds = getRoundedRectBounds();
+
+            for (let attempt = 0; attempt < 1000; attempt += 1) {
+                const x = lerp(bounds.left, bounds.right, random());
+                const y = lerp(bounds.top, bounds.bottom, random());
+
+                if (isInsideRoundedRectPixels(x, y, bounds)) {
+                    return {
+                        x: x / viewportWidth,
+                        y: y / viewportHeight
+                    };
+                }
+            }
+
+            return { x: 0.5, y: 0.5 };
         }
 
         function reflectInside(value, minimum, maximum) {
@@ -368,9 +469,6 @@ HTML_PAGE = r"""<!doctype html>
             const seed = MODE_SEEDS[modeName] ?? 123456;
             const random = createRandom(seed);
 
-            const marginX = (CIRCLE_RADIUS + 8) / viewportWidth;
-            const marginY = (CIRCLE_RADIUS + 8) / viewportHeight;
-
             if (modeName === "lines") {
                 const anchors = [{
                     x: 0.5,
@@ -378,7 +476,7 @@ HTML_PAGE = r"""<!doctype html>
                 }];
 
                 for (let index = 0; index < 32; index += 1) {
-                    anchors.push(randomPointInEllipse(random));
+                    anchors.push(randomPointInRoundedRect(random));
                 }
 
                 const samples = [anchors[0]];
@@ -429,7 +527,7 @@ HTML_PAGE = r"""<!doctype html>
                     const distanceX = stepPixels / viewportWidth;
                     const distanceY = stepPixels / viewportHeight;
 
-                    const projectedPoint = projectInsideEllipse({
+                    const projectedPoint = projectInsideRoundedRect({
                         x: x + Math.cos(angle) * distanceX,
                         y: y + Math.sin(angle) * distanceY
                     });
@@ -478,7 +576,7 @@ HTML_PAGE = r"""<!doctype html>
                 const anchors = [{ x: 0.5, y: 0.5 }];
 
                 for (let index = 0; index < 26; index += 1) {
-                    anchors.push(randomPointInEllipse(random));
+                    anchors.push(randomPointInRoundedRect(random));
                 }
 
                 const samples = [anchors[0]];
@@ -500,12 +598,12 @@ HTML_PAGE = r"""<!doctype html>
                     const along1 = lerp(0.20, 0.42, random());
                     const along2 = lerp(0.58, 0.82, random());
 
-                    const control1 = projectInsideEllipse({
+                    const control1 = projectInsideRoundedRect({
                         x: start.x + dx * along1 + normalX * bend1,
                         y: start.y + dy * along1 + normalY * bend1
                     });
 
-                    const control2 = projectInsideEllipse({
+                    const control2 = projectInsideRoundedRect({
                         x: start.x + dx * along2 + normalX * bend2,
                         y: start.y + dy * along2 + normalY * bend2
                     });
