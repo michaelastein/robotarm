@@ -1,13 +1,16 @@
 from pathlib import Path
 
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, TimerAction
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
+    mode = LaunchConfiguration("mode")
+
     moveit_share = FindPackageShare(
         "robotarm_moveit_config"
     ).find("robotarm_moveit_config")
@@ -55,6 +58,11 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+        DeclareLaunchArgument(
+            "mode",
+            default_value="led",
+            description="Hotspot detector mode",
+        ),
         move_group,
         joint_states_relay,
         hotspot_detector,
