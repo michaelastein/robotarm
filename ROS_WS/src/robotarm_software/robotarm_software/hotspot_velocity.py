@@ -222,6 +222,7 @@ MIN_EFFECTIVE_QDOT_VECTOR = 0.03
 # non-zero joint commands are lifted only slightly above that threshold.
 USE_MIN_EFFECTIVE_QDOT_PER_JOINT = True
 MIN_EFFECTIVE_QDOT_PER_JOINT = 0.0035
+BASE_MIN_EFFECTIVE_QDOT = 0.0045
 
 JOINT_VEL_DEADBAND = 0.00005
 JOINT_SMOOTHING_ALPHA = 0.20
@@ -909,8 +910,13 @@ class HotspotDirectJointVelocity(Node):
         # not alter zero commands and preserves each joint's sign.
         if USE_MIN_EFFECTIVE_QDOT_PER_JOINT:
             for i in range(3):
-                if 0.0 < abs(out[i]) < MIN_EFFECTIVE_QDOT_PER_JOINT:
-                    out[i] = math.copysign(MIN_EFFECTIVE_QDOT_PER_JOINT, out[i])
+                min_qdot = (
+                    BASE_MIN_EFFECTIVE_QDOT
+                    if i == 0
+                    else MIN_EFFECTIVE_QDOT_PER_JOINT
+                )
+                if 0.0 < abs(out[i]) < min_qdot:
+                    out[i] = math.copysign(min_qdot, out[i])
 
         max_abs = float(np.max(np.abs(out)))
 
