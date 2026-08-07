@@ -12,6 +12,10 @@ def generate_launch_description():
                 executable="hotspot_detector.py",
                 name="hotspot_detector",
                 output="screen",
+                arguments=[
+                    "--mode",
+                    mode,
+                ],
             ),
 
             Node(
