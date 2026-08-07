@@ -1,0 +1,461 @@
+[0.612s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build']
+[0.612s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=4, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0xffffa4017080>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0xffffa3f37350>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0xffffa3f37350>>)
+[0.805s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.805s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.805s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.805s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.805s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.805s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.806s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/admin/robotarm'
+[0.806s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.806s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.806s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.806s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.806s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.806s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.806s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.806s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.806s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.865s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[0.865s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[0.865s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[0.865s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[0.865s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[0.866s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES) by extensions ['ignore', 'ignore_ament_install']
+[0.866s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES) by extension 'ignore'
+[0.866s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES) by extension 'ignore_ament_install'
+[0.866s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES) by extensions ['colcon_pkg']
+[0.866s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES) by extension 'colcon_pkg'
+[0.866s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES) by extensions ['colcon_meta']
+[0.866s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES) by extension 'colcon_meta'
+[0.866s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES) by extensions ['ros']
+[0.866s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES) by extension 'ros'
+[0.866s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES) by extensions ['cmake', 'python']
+[0.866s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES) by extension 'cmake'
+[0.866s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES) by extension 'python'
+[0.866s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES) by extensions ['python_setup_py']
+[0.867s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES) by extension 'python_setup_py'
+[0.867s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES/preferred) by extensions ['ignore', 'ignore_ament_install']
+[0.867s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES/preferred) by extension 'ignore'
+[0.867s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES/preferred) by extension 'ignore_ament_install'
+[0.867s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES/preferred) by extensions ['colcon_pkg']
+[0.867s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES/preferred) by extension 'colcon_pkg'
+[0.867s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES/preferred) by extensions ['colcon_meta']
+[0.867s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES/preferred) by extension 'colcon_meta'
+[0.867s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES/preferred) by extensions ['ros']
+[0.867s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES/preferred) by extension 'ros'
+[0.868s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES/preferred) by extensions ['cmake', 'python']
+[0.868s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES/preferred) by extension 'cmake'
+[0.868s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES/preferred) by extension 'python'
+[0.868s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES/preferred) by extensions ['python_setup_py']
+[0.868s] Level 1:colcon.colcon_core.package_identification:_identify(LICENSES/preferred) by extension 'python_setup_py'
+[0.868s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS) by extensions ['ignore', 'ignore_ament_install']
+[0.868s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS) by extension 'ignore'
+[0.868s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS) by extension 'ignore_ament_install'
+[0.868s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS) by extensions ['colcon_pkg']
+[0.868s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS) by extension 'colcon_pkg'
+[0.868s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS) by extensions ['colcon_meta']
+[0.868s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS) by extension 'colcon_meta'
+[0.868s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS) by extensions ['ros']
+[0.868s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS) by extension 'ros'
+[0.868s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS) by extensions ['cmake', 'python']
+[0.868s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS) by extension 'cmake'
+[0.868s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS) by extension 'python'
+[0.868s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS) by extensions ['python_setup_py']
+[0.868s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS) by extension 'python_setup_py'
+[0.869s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/build) by extensions ['ignore', 'ignore_ament_install']
+[0.869s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/build) by extension 'ignore'
+[0.869s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/build) ignored
+[0.869s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/install) by extensions ['ignore', 'ignore_ament_install']
+[0.869s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/install) by extension 'ignore'
+[0.869s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/install) ignored
+[0.879s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/log) by extensions ['ignore', 'ignore_ament_install']
+[0.879s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/log) by extension 'ignore'
+[0.879s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/log) ignored
+[0.879s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src) by extensions ['ignore', 'ignore_ament_install']
+[0.879s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src) by extension 'ignore'
+[0.879s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src) by extension 'ignore_ament_install'
+[0.879s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src) by extensions ['colcon_pkg']
+[0.879s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src) by extension 'colcon_pkg'
+[0.879s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src) by extensions ['colcon_meta']
+[0.879s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src) by extension 'colcon_meta'
+[0.879s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src) by extensions ['ros']
+[0.880s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src) by extension 'ros'
+[0.880s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src) by extensions ['cmake', 'python']
+[0.880s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src) by extension 'cmake'
+[0.880s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src) by extension 'python'
+[0.880s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src) by extensions ['python_setup_py']
+[0.880s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src) by extension 'python_setup_py'
+[0.881s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_fake_hardware) by extensions ['ignore', 'ignore_ament_install']
+[0.881s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_fake_hardware) by extension 'ignore'
+[0.881s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_fake_hardware) by extension 'ignore_ament_install'
+[0.881s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_fake_hardware) by extensions ['colcon_pkg']
+[0.881s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_fake_hardware) by extension 'colcon_pkg'
+[0.881s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_fake_hardware) by extensions ['colcon_meta']
+[0.881s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_fake_hardware) by extension 'colcon_meta'
+[0.881s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_fake_hardware) by extensions ['ros']
+[0.881s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_fake_hardware) by extension 'ros'
+[0.888s] DEBUG:colcon.colcon_core.package_identification:Package 'ROS_WS/src/robotarm_fake_hardware' with type 'ros.ament_cmake' and name 'robotarm_fake_hardware'
+[0.889s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_hardware) by extensions ['ignore', 'ignore_ament_install']
+[0.889s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_hardware) by extension 'ignore'
+[0.889s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_hardware) by extension 'ignore_ament_install'
+[0.889s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_hardware) by extensions ['colcon_pkg']
+[0.889s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_hardware) by extension 'colcon_pkg'
+[0.890s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_hardware) by extensions ['colcon_meta']
+[0.890s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_hardware) by extension 'colcon_meta'
+[0.890s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_hardware) by extensions ['ros']
+[0.890s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_hardware) by extension 'ros'
+[0.891s] DEBUG:colcon.colcon_core.package_identification:Package 'ROS_WS/src/robotarm_hardware' with type 'ros.ament_cmake' and name 'robotarm_hardware'
+[0.892s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_moveit_config) by extensions ['ignore', 'ignore_ament_install']
+[0.892s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_moveit_config) by extension 'ignore'
+[0.892s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_moveit_config) by extension 'ignore_ament_install'
+[0.892s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_moveit_config) by extensions ['colcon_pkg']
+[0.892s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_moveit_config) by extension 'colcon_pkg'
+[0.892s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_moveit_config) by extensions ['colcon_meta']
+[0.892s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_moveit_config) by extension 'colcon_meta'
+[0.892s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_moveit_config) by extensions ['ros']
+[0.892s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_moveit_config) by extension 'ros'
+[0.896s] DEBUG:colcon.colcon_core.package_identification:Package 'ROS_WS/src/robotarm_moveit_config' with type 'ros.ament_cmake' and name 'robotarm_moveit_config'
+[0.897s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning) by extensions ['ignore', 'ignore_ament_install']
+[0.898s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning) by extension 'ignore'
+[0.898s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning) by extension 'ignore_ament_install'
+[0.898s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning) by extensions ['colcon_pkg']
+[0.898s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning) by extension 'colcon_pkg'
+[0.898s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning) by extensions ['colcon_meta']
+[0.898s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning) by extension 'colcon_meta'
+[0.898s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning) by extensions ['ros']
+[0.898s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning) by extension 'ros'
+[0.898s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning) by extensions ['cmake', 'python']
+[0.898s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning) by extension 'cmake'
+[0.898s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning) by extension 'python'
+[0.898s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning) by extensions ['python_setup_py']
+[0.898s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning) by extension 'python_setup_py'
+[0.899s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include) by extensions ['ignore', 'ignore_ament_install']
+[0.899s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include) by extension 'ignore'
+[0.899s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include) by extension 'ignore_ament_install'
+[0.899s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include) by extensions ['colcon_pkg']
+[0.899s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include) by extension 'colcon_pkg'
+[0.899s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include) by extensions ['colcon_meta']
+[0.900s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include) by extension 'colcon_meta'
+[0.900s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include) by extensions ['ros']
+[0.900s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include) by extension 'ros'
+[0.900s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include) by extensions ['cmake', 'python']
+[0.900s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include) by extension 'cmake'
+[0.900s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include) by extension 'python'
+[0.900s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include) by extensions ['python_setup_py']
+[0.900s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include) by extension 'python_setup_py'
+[0.901s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include/robotarm_path_planning) by extensions ['ignore', 'ignore_ament_install']
+[0.901s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include/robotarm_path_planning) by extension 'ignore'
+[0.901s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include/robotarm_path_planning) by extension 'ignore_ament_install'
+[0.901s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include/robotarm_path_planning) by extensions ['colcon_pkg']
+[0.901s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include/robotarm_path_planning) by extension 'colcon_pkg'
+[0.901s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include/robotarm_path_planning) by extensions ['colcon_meta']
+[0.901s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include/robotarm_path_planning) by extension 'colcon_meta'
+[0.901s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include/robotarm_path_planning) by extensions ['ros']
+[0.901s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include/robotarm_path_planning) by extension 'ros'
+[0.901s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include/robotarm_path_planning) by extensions ['cmake', 'python']
+[0.901s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include/robotarm_path_planning) by extension 'cmake'
+[0.901s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include/robotarm_path_planning) by extension 'python'
+[0.901s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include/robotarm_path_planning) by extensions ['python_setup_py']
+[0.902s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/include/robotarm_path_planning) by extension 'python_setup_py'
+[0.902s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch) by extensions ['ignore', 'ignore_ament_install']
+[0.902s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch) by extension 'ignore'
+[0.902s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch) by extension 'ignore_ament_install'
+[0.903s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch) by extensions ['colcon_pkg']
+[0.903s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch) by extension 'colcon_pkg'
+[0.903s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch) by extensions ['colcon_meta']
+[0.903s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch) by extension 'colcon_meta'
+[0.903s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch) by extensions ['ros']
+[0.903s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch) by extension 'ros'
+[0.903s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch) by extensions ['cmake', 'python']
+[0.903s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch) by extension 'cmake'
+[0.903s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch) by extension 'python'
+[0.903s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch) by extensions ['python_setup_py']
+[0.903s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch) by extension 'python_setup_py'
+[0.904s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch/__pycache__) by extensions ['ignore', 'ignore_ament_install']
+[0.904s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch/__pycache__) by extension 'ignore'
+[0.904s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch/__pycache__) by extension 'ignore_ament_install'
+[0.904s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch/__pycache__) by extensions ['colcon_pkg']
+[0.904s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch/__pycache__) by extension 'colcon_pkg'
+[0.904s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch/__pycache__) by extensions ['colcon_meta']
+[0.904s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch/__pycache__) by extension 'colcon_meta'
+[0.904s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch/__pycache__) by extensions ['ros']
+[0.904s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch/__pycache__) by extension 'ros'
+[0.904s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch/__pycache__) by extensions ['cmake', 'python']
+[0.904s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch/__pycache__) by extension 'cmake'
+[0.904s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch/__pycache__) by extension 'python'
+[0.905s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch/__pycache__) by extensions ['python_setup_py']
+[0.905s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_path_planning/launch/__pycache__) by extension 'python_setup_py'
+[0.905s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_software) by extensions ['ignore', 'ignore_ament_install']
+[0.905s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_software) by extension 'ignore'
+[0.905s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_software) by extension 'ignore_ament_install'
+[0.905s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_software) by extensions ['colcon_pkg']
+[0.905s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_software) by extension 'colcon_pkg'
+[0.905s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_software) by extensions ['colcon_meta']
+[0.905s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_software) by extension 'colcon_meta'
+[0.905s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_software) by extensions ['ros']
+[0.905s] Level 1:colcon.colcon_core.package_identification:_identify(ROS_WS/src/robotarm_software) by extension 'ros'
+[0.907s] DEBUG:colcon.colcon_core.package_identification:Package 'ROS_WS/src/robotarm_software' with type 'ros.ament_cmake' and name 'robotarm_software'
+[0.907s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.908s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[0.908s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[0.908s] Level 1:colcon.colcon_core.package_identification:_identify(evaluation) by extensions ['ignore', 'ignore_ament_install']
+[0.908s] Level 1:colcon.colcon_core.package_identification:_identify(evaluation) by extension 'ignore'
+[0.908s] Level 1:colcon.colcon_core.package_identification:_identify(evaluation) by extension 'ignore_ament_install'
+[0.908s] Level 1:colcon.colcon_core.package_identification:_identify(evaluation) by extensions ['colcon_pkg']
+[0.908s] Level 1:colcon.colcon_core.package_identification:_identify(evaluation) by extension 'colcon_pkg'
+[0.908s] Level 1:colcon.colcon_core.package_identification:_identify(evaluation) by extensions ['colcon_meta']
+[0.908s] Level 1:colcon.colcon_core.package_identification:_identify(evaluation) by extension 'colcon_meta'
+[0.908s] Level 1:colcon.colcon_core.package_identification:_identify(evaluation) by extensions ['ros']
+[0.908s] Level 1:colcon.colcon_core.package_identification:_identify(evaluation) by extension 'ros'
+[0.908s] Level 1:colcon.colcon_core.package_identification:_identify(evaluation) by extensions ['cmake', 'python']
+[0.908s] Level 1:colcon.colcon_core.package_identification:_identify(evaluation) by extension 'cmake'
+[0.908s] Level 1:colcon.colcon_core.package_identification:_identify(evaluation) by extension 'python'
+[0.908s] Level 1:colcon.colcon_core.package_identification:_identify(evaluation) by extensions ['python_setup_py']
+[0.908s] Level 1:colcon.colcon_core.package_identification:_identify(evaluation) by extension 'python_setup_py'
+[0.909s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.909s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[0.909s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[0.909s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.909s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[0.909s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[0.909s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.909s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.909s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.909s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.909s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.958s] Level 5:colcon.colcon_core.verb:set package 'robotarm_fake_hardware' build argument 'cmake_args' from command line to 'None'
+[0.958s] Level 5:colcon.colcon_core.verb:set package 'robotarm_fake_hardware' build argument 'cmake_target' from command line to 'None'
+[0.958s] Level 5:colcon.colcon_core.verb:set package 'robotarm_fake_hardware' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.958s] Level 5:colcon.colcon_core.verb:set package 'robotarm_fake_hardware' build argument 'cmake_clean_cache' from command line to 'False'
+[0.958s] Level 5:colcon.colcon_core.verb:set package 'robotarm_fake_hardware' build argument 'cmake_clean_first' from command line to 'False'
+[0.958s] Level 5:colcon.colcon_core.verb:set package 'robotarm_fake_hardware' build argument 'cmake_force_configure' from command line to 'False'
+[0.958s] Level 5:colcon.colcon_core.verb:set package 'robotarm_fake_hardware' build argument 'ament_cmake_args' from command line to 'None'
+[0.958s] Level 5:colcon.colcon_core.verb:set package 'robotarm_fake_hardware' build argument 'catkin_cmake_args' from command line to 'None'
+[0.958s] Level 5:colcon.colcon_core.verb:set package 'robotarm_fake_hardware' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.958s] DEBUG:colcon.colcon_core.verb:Building package 'robotarm_fake_hardware' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/admin/robotarm/build/robotarm_fake_hardware', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/admin/robotarm/install/robotarm_fake_hardware', 'merge_install': False, 'path': '/home/admin/robotarm/ROS_WS/src/robotarm_fake_hardware', 'symlink_install': False, 'test_result_base': None}
+[0.958s] Level 5:colcon.colcon_core.verb:set package 'robotarm_hardware' build argument 'cmake_args' from command line to 'None'
+[0.958s] Level 5:colcon.colcon_core.verb:set package 'robotarm_hardware' build argument 'cmake_target' from command line to 'None'
+[0.958s] Level 5:colcon.colcon_core.verb:set package 'robotarm_hardware' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.959s] Level 5:colcon.colcon_core.verb:set package 'robotarm_hardware' build argument 'cmake_clean_cache' from command line to 'False'
+[0.959s] Level 5:colcon.colcon_core.verb:set package 'robotarm_hardware' build argument 'cmake_clean_first' from command line to 'False'
+[0.959s] Level 5:colcon.colcon_core.verb:set package 'robotarm_hardware' build argument 'cmake_force_configure' from command line to 'False'
+[0.959s] Level 5:colcon.colcon_core.verb:set package 'robotarm_hardware' build argument 'ament_cmake_args' from command line to 'None'
+[0.959s] Level 5:colcon.colcon_core.verb:set package 'robotarm_hardware' build argument 'catkin_cmake_args' from command line to 'None'
+[0.959s] Level 5:colcon.colcon_core.verb:set package 'robotarm_hardware' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.959s] DEBUG:colcon.colcon_core.verb:Building package 'robotarm_hardware' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/admin/robotarm/build/robotarm_hardware', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/admin/robotarm/install/robotarm_hardware', 'merge_install': False, 'path': '/home/admin/robotarm/ROS_WS/src/robotarm_hardware', 'symlink_install': False, 'test_result_base': None}
+[0.959s] Level 5:colcon.colcon_core.verb:set package 'robotarm_software' build argument 'cmake_args' from command line to 'None'
+[0.959s] Level 5:colcon.colcon_core.verb:set package 'robotarm_software' build argument 'cmake_target' from command line to 'None'
+[0.959s] Level 5:colcon.colcon_core.verb:set package 'robotarm_software' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.959s] Level 5:colcon.colcon_core.verb:set package 'robotarm_software' build argument 'cmake_clean_cache' from command line to 'False'
+[0.959s] Level 5:colcon.colcon_core.verb:set package 'robotarm_software' build argument 'cmake_clean_first' from command line to 'False'
+[0.959s] Level 5:colcon.colcon_core.verb:set package 'robotarm_software' build argument 'cmake_force_configure' from command line to 'False'
+[0.959s] Level 5:colcon.colcon_core.verb:set package 'robotarm_software' build argument 'ament_cmake_args' from command line to 'None'
+[0.959s] Level 5:colcon.colcon_core.verb:set package 'robotarm_software' build argument 'catkin_cmake_args' from command line to 'None'
+[0.959s] Level 5:colcon.colcon_core.verb:set package 'robotarm_software' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.959s] DEBUG:colcon.colcon_core.verb:Building package 'robotarm_software' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/admin/robotarm/build/robotarm_software', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/admin/robotarm/install/robotarm_software', 'merge_install': False, 'path': '/home/admin/robotarm/ROS_WS/src/robotarm_software', 'symlink_install': False, 'test_result_base': None}
+[0.960s] Level 5:colcon.colcon_core.verb:set package 'robotarm_moveit_config' build argument 'cmake_args' from command line to 'None'
+[0.960s] Level 5:colcon.colcon_core.verb:set package 'robotarm_moveit_config' build argument 'cmake_target' from command line to 'None'
+[0.960s] Level 5:colcon.colcon_core.verb:set package 'robotarm_moveit_config' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.960s] Level 5:colcon.colcon_core.verb:set package 'robotarm_moveit_config' build argument 'cmake_clean_cache' from command line to 'False'
+[0.960s] Level 5:colcon.colcon_core.verb:set package 'robotarm_moveit_config' build argument 'cmake_clean_first' from command line to 'False'
+[0.960s] Level 5:colcon.colcon_core.verb:set package 'robotarm_moveit_config' build argument 'cmake_force_configure' from command line to 'False'
+[0.960s] Level 5:colcon.colcon_core.verb:set package 'robotarm_moveit_config' build argument 'ament_cmake_args' from command line to 'None'
+[0.960s] Level 5:colcon.colcon_core.verb:set package 'robotarm_moveit_config' build argument 'catkin_cmake_args' from command line to 'None'
+[0.960s] Level 5:colcon.colcon_core.verb:set package 'robotarm_moveit_config' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.960s] DEBUG:colcon.colcon_core.verb:Building package 'robotarm_moveit_config' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/admin/robotarm/build/robotarm_moveit_config', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/admin/robotarm/install/robotarm_moveit_config', 'merge_install': False, 'path': '/home/admin/robotarm/ROS_WS/src/robotarm_moveit_config', 'symlink_install': False, 'test_result_base': None}
+[0.960s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.961s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.962s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/admin/robotarm/ROS_WS/src/robotarm_hardware' with build type 'ament_cmake'
+[0.962s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/admin/robotarm/ROS_WS/src/robotarm_hardware'
+[0.974s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.974s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.989s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/admin/robotarm/ROS_WS/src/robotarm_fake_hardware' with build type 'ament_cmake'
+[0.990s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/admin/robotarm/ROS_WS/src/robotarm_fake_hardware'
+[0.990s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.001s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/admin/robotarm/build/robotarm_hardware': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake /home/admin/robotarm/ROS_WS/src/robotarm_hardware -DCMAKE_INSTALL_PREFIX=/home/admin/robotarm/install/robotarm_hardware
+[1.009s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/admin/robotarm/build/robotarm_fake_hardware': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake /home/admin/robotarm/ROS_WS/src/robotarm_fake_hardware -DCMAKE_INSTALL_PREFIX=/home/admin/robotarm/install/robotarm_fake_hardware
+[6.255s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/admin/robotarm/build/robotarm_hardware' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake /home/admin/robotarm/ROS_WS/src/robotarm_hardware -DCMAKE_INSTALL_PREFIX=/home/admin/robotarm/install/robotarm_hardware
+[6.257s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/admin/robotarm/build/robotarm_hardware': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/admin/robotarm/build/robotarm_hardware -- -j4 -l4
+[6.258s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/admin/robotarm/build/robotarm_fake_hardware' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake /home/admin/robotarm/ROS_WS/src/robotarm_fake_hardware -DCMAKE_INSTALL_PREFIX=/home/admin/robotarm/install/robotarm_fake_hardware
+[6.260s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/admin/robotarm/build/robotarm_fake_hardware': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/admin/robotarm/build/robotarm_fake_hardware -- -j4 -l4
+[15.053s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/admin/robotarm/build/robotarm_fake_hardware' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/admin/robotarm/build/robotarm_fake_hardware -- -j4 -l4
+[15.074s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/admin/robotarm/build/robotarm_fake_hardware': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/admin/robotarm/build/robotarm_fake_hardware
+[15.098s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(robotarm_fake_hardware)
+[15.099s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/admin/robotarm/build/robotarm_fake_hardware' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/admin/robotarm/build/robotarm_fake_hardware
+[15.111s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_fake_hardware' for CMake module files
+[15.112s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_fake_hardware' for CMake config files
+[15.112s] Level 1:colcon.colcon_core.shell:create_environment_hook('robotarm_fake_hardware', 'cmake_prefix_path')
+[15.113s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/hook/cmake_prefix_path.dsv'
+[15.114s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/hook/cmake_prefix_path.sh'
+[15.116s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_fake_hardware/lib'
+[15.116s] Level 1:colcon.colcon_core.shell:create_environment_hook('robotarm_fake_hardware', 'ld_library_path_lib')
+[15.117s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/hook/ld_library_path_lib.dsv'
+[15.117s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/hook/ld_library_path_lib.sh'
+[15.118s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_fake_hardware/bin'
+[15.118s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_fake_hardware/lib/pkgconfig/robotarm_fake_hardware.pc'
+[15.122s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_fake_hardware/lib/python3.12/site-packages'
+[15.122s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_fake_hardware/bin'
+[15.123s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/package.dsv'
+[15.124s] INFO:colcon.colcon_core.shell:Creating package script '/home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/package.sh'
+[15.127s] INFO:colcon.colcon_core.shell:Creating package script '/home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/package.bash'
+[15.129s] INFO:colcon.colcon_core.shell:Creating package script '/home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/package.zsh'
+[15.130s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/admin/robotarm/install/robotarm_fake_hardware/share/colcon-core/packages/robotarm_fake_hardware)
+[15.131s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(robotarm_fake_hardware)
+[15.131s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_fake_hardware' for CMake module files
+[15.132s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_fake_hardware' for CMake config files
+[15.132s] Level 1:colcon.colcon_core.shell:create_environment_hook('robotarm_fake_hardware', 'cmake_prefix_path')
+[15.132s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/hook/cmake_prefix_path.dsv'
+[15.133s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/hook/cmake_prefix_path.sh'
+[15.134s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_fake_hardware/lib'
+[15.134s] Level 1:colcon.colcon_core.shell:create_environment_hook('robotarm_fake_hardware', 'ld_library_path_lib')
+[15.135s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/hook/ld_library_path_lib.dsv'
+[15.135s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/hook/ld_library_path_lib.sh'
+[15.137s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_fake_hardware/bin'
+[15.137s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_fake_hardware/lib/pkgconfig/robotarm_fake_hardware.pc'
+[15.137s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_fake_hardware/lib/python3.12/site-packages'
+[15.138s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_fake_hardware/bin'
+[15.138s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/package.dsv'
+[15.139s] INFO:colcon.colcon_core.shell:Creating package script '/home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/package.sh'
+[15.140s] INFO:colcon.colcon_core.shell:Creating package script '/home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/package.bash'
+[15.141s] INFO:colcon.colcon_core.shell:Creating package script '/home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/package.zsh'
+[15.143s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/admin/robotarm/install/robotarm_fake_hardware/share/colcon-core/packages/robotarm_fake_hardware)
+[15.732s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/admin/robotarm/build/robotarm_hardware' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/admin/robotarm/build/robotarm_hardware -- -j4 -l4
+[15.734s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/admin/robotarm/build/robotarm_hardware': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/admin/robotarm/build/robotarm_hardware
+[15.758s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(robotarm_hardware)
+[15.758s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_hardware' for CMake module files
+[15.758s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/admin/robotarm/build/robotarm_hardware' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/admin/robotarm/build/robotarm_hardware
+[15.759s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_hardware' for CMake config files
+[15.759s] Level 1:colcon.colcon_core.shell:create_environment_hook('robotarm_hardware', 'cmake_prefix_path')
+[15.759s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/hook/cmake_prefix_path.dsv'
+[15.760s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/hook/cmake_prefix_path.sh'
+[15.761s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_hardware/lib'
+[15.761s] Level 1:colcon.colcon_core.shell:create_environment_hook('robotarm_hardware', 'ld_library_path_lib')
+[15.761s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/hook/ld_library_path_lib.dsv'
+[15.761s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/hook/ld_library_path_lib.sh'
+[15.762s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_hardware/bin'
+[15.762s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_hardware/lib/pkgconfig/robotarm_hardware.pc'
+[15.762s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_hardware/lib/python3.12/site-packages'
+[15.763s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_hardware/bin'
+[15.763s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/package.dsv'
+[15.763s] INFO:colcon.colcon_core.shell:Creating package script '/home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/package.sh'
+[15.764s] INFO:colcon.colcon_core.shell:Creating package script '/home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/package.bash'
+[15.764s] INFO:colcon.colcon_core.shell:Creating package script '/home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/package.zsh'
+[15.765s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/admin/robotarm/install/robotarm_hardware/share/colcon-core/packages/robotarm_hardware)
+[15.765s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(robotarm_hardware)
+[15.766s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_hardware' for CMake module files
+[15.766s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_hardware' for CMake config files
+[15.767s] Level 1:colcon.colcon_core.shell:create_environment_hook('robotarm_hardware', 'cmake_prefix_path')
+[15.767s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/hook/cmake_prefix_path.dsv'
+[15.767s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/hook/cmake_prefix_path.sh'
+[15.768s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_hardware/lib'
+[15.768s] Level 1:colcon.colcon_core.shell:create_environment_hook('robotarm_hardware', 'ld_library_path_lib')
+[15.768s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/hook/ld_library_path_lib.dsv'
+[15.769s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/hook/ld_library_path_lib.sh'
+[15.770s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_hardware/bin'
+[15.770s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_hardware/lib/pkgconfig/robotarm_hardware.pc'
+[15.770s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_hardware/lib/python3.12/site-packages'
+[15.771s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_hardware/bin'
+[15.771s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/package.dsv'
+[15.771s] INFO:colcon.colcon_core.shell:Creating package script '/home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/package.sh'
+[15.772s] INFO:colcon.colcon_core.shell:Creating package script '/home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/package.bash'
+[15.773s] INFO:colcon.colcon_core.shell:Creating package script '/home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/package.zsh'
+[15.774s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/admin/robotarm/install/robotarm_hardware/share/colcon-core/packages/robotarm_hardware)
+[15.775s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/admin/robotarm/ROS_WS/src/robotarm_software' with build type 'ament_cmake'
+[15.776s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/admin/robotarm/ROS_WS/src/robotarm_software'
+[15.776s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[15.798s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/admin/robotarm/build/robotarm_software': AMENT_PREFIX_PATH=/home/admin/robotarm/install/robotarm_hardware:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/admin/robotarm/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_path_planning:/home/admin/robotarm/ROS_WS/install/robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/robotarm_software:/home/admin/robotarm/ROS_WS/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_fake_hardware:/home/admin/robotarm/ROS_WS/install/robot_moveit_config:/home/admin/robotarm/ROS_WS/install/point_motion:/home/admin/robotarm/ROS_WS/install/moveit_3dof:/home/admin/robotarm/ROS_WS/install/adi_tmcm_bb4:/home/admin/robotarm/ROS_WS/install/adi_robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/adi_robotarm:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/admin/robotarm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy LD_LIBRARY_PATH=/home/admin/robotarm/install/robotarm_hardware/lib:${LD_LIBRARY_PATH} /usr/bin/cmake /home/admin/robotarm/ROS_WS/src/robotarm_software -DCMAKE_INSTALL_PREFIX=/home/admin/robotarm/install/robotarm_software
+[19.727s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/admin/robotarm/build/robotarm_software' returned '0': AMENT_PREFIX_PATH=/home/admin/robotarm/install/robotarm_hardware:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/admin/robotarm/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_path_planning:/home/admin/robotarm/ROS_WS/install/robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/robotarm_software:/home/admin/robotarm/ROS_WS/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_fake_hardware:/home/admin/robotarm/ROS_WS/install/robot_moveit_config:/home/admin/robotarm/ROS_WS/install/point_motion:/home/admin/robotarm/ROS_WS/install/moveit_3dof:/home/admin/robotarm/ROS_WS/install/adi_tmcm_bb4:/home/admin/robotarm/ROS_WS/install/adi_robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/adi_robotarm:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/admin/robotarm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy LD_LIBRARY_PATH=/home/admin/robotarm/install/robotarm_hardware/lib:${LD_LIBRARY_PATH} /usr/bin/cmake /home/admin/robotarm/ROS_WS/src/robotarm_software -DCMAKE_INSTALL_PREFIX=/home/admin/robotarm/install/robotarm_software
+[19.729s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/admin/robotarm/build/robotarm_software': AMENT_PREFIX_PATH=/home/admin/robotarm/install/robotarm_hardware:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/admin/robotarm/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_path_planning:/home/admin/robotarm/ROS_WS/install/robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/robotarm_software:/home/admin/robotarm/ROS_WS/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_fake_hardware:/home/admin/robotarm/ROS_WS/install/robot_moveit_config:/home/admin/robotarm/ROS_WS/install/point_motion:/home/admin/robotarm/ROS_WS/install/moveit_3dof:/home/admin/robotarm/ROS_WS/install/adi_tmcm_bb4:/home/admin/robotarm/ROS_WS/install/adi_robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/adi_robotarm:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/admin/robotarm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy LD_LIBRARY_PATH=/home/admin/robotarm/install/robotarm_hardware/lib:${LD_LIBRARY_PATH} /usr/bin/cmake --build /home/admin/robotarm/build/robotarm_software -- -j4 -l4
+[40.406s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/admin/robotarm/build/robotarm_software' returned '0': AMENT_PREFIX_PATH=/home/admin/robotarm/install/robotarm_hardware:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/admin/robotarm/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_path_planning:/home/admin/robotarm/ROS_WS/install/robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/robotarm_software:/home/admin/robotarm/ROS_WS/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_fake_hardware:/home/admin/robotarm/ROS_WS/install/robot_moveit_config:/home/admin/robotarm/ROS_WS/install/point_motion:/home/admin/robotarm/ROS_WS/install/moveit_3dof:/home/admin/robotarm/ROS_WS/install/adi_tmcm_bb4:/home/admin/robotarm/ROS_WS/install/adi_robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/adi_robotarm:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/admin/robotarm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy LD_LIBRARY_PATH=/home/admin/robotarm/install/robotarm_hardware/lib:${LD_LIBRARY_PATH} /usr/bin/cmake --build /home/admin/robotarm/build/robotarm_software -- -j4 -l4
+[40.408s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/admin/robotarm/build/robotarm_software': AMENT_PREFIX_PATH=/home/admin/robotarm/install/robotarm_hardware:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/admin/robotarm/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_path_planning:/home/admin/robotarm/ROS_WS/install/robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/robotarm_software:/home/admin/robotarm/ROS_WS/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_fake_hardware:/home/admin/robotarm/ROS_WS/install/robot_moveit_config:/home/admin/robotarm/ROS_WS/install/point_motion:/home/admin/robotarm/ROS_WS/install/moveit_3dof:/home/admin/robotarm/ROS_WS/install/adi_tmcm_bb4:/home/admin/robotarm/ROS_WS/install/adi_robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/adi_robotarm:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/admin/robotarm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy LD_LIBRARY_PATH=/home/admin/robotarm/install/robotarm_hardware/lib:${LD_LIBRARY_PATH} /usr/bin/cmake --install /home/admin/robotarm/build/robotarm_software
+[40.553s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(robotarm_software)
+[40.554s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_software' for CMake module files
+[40.554s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/admin/robotarm/build/robotarm_software' returned '0': AMENT_PREFIX_PATH=/home/admin/robotarm/install/robotarm_hardware:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/admin/robotarm/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_path_planning:/home/admin/robotarm/ROS_WS/install/robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/robotarm_software:/home/admin/robotarm/ROS_WS/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_fake_hardware:/home/admin/robotarm/ROS_WS/install/robot_moveit_config:/home/admin/robotarm/ROS_WS/install/point_motion:/home/admin/robotarm/ROS_WS/install/moveit_3dof:/home/admin/robotarm/ROS_WS/install/adi_tmcm_bb4:/home/admin/robotarm/ROS_WS/install/adi_robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/adi_robotarm:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/admin/robotarm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy LD_LIBRARY_PATH=/home/admin/robotarm/install/robotarm_hardware/lib:${LD_LIBRARY_PATH} /usr/bin/cmake --install /home/admin/robotarm/build/robotarm_software
+[40.555s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_software' for CMake config files
+[40.555s] Level 1:colcon.colcon_core.shell:create_environment_hook('robotarm_software', 'cmake_prefix_path')
+[40.556s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/admin/robotarm/install/robotarm_software/share/robotarm_software/hook/cmake_prefix_path.dsv'
+[40.556s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/admin/robotarm/install/robotarm_software/share/robotarm_software/hook/cmake_prefix_path.sh'
+[40.557s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_software/lib'
+[40.557s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_software/bin'
+[40.557s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_software/lib/pkgconfig/robotarm_software.pc'
+[40.558s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages'
+[40.558s] Level 1:colcon.colcon_core.shell:create_environment_hook('robotarm_software', 'pythonpath')
+[40.558s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/admin/robotarm/install/robotarm_software/share/robotarm_software/hook/pythonpath.dsv'
+[40.558s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/admin/robotarm/install/robotarm_software/share/robotarm_software/hook/pythonpath.sh'
+[40.559s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_software/bin'
+[40.560s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/admin/robotarm/install/robotarm_software/share/robotarm_software/package.dsv'
+[40.560s] INFO:colcon.colcon_core.shell:Creating package script '/home/admin/robotarm/install/robotarm_software/share/robotarm_software/package.sh'
+[40.561s] INFO:colcon.colcon_core.shell:Creating package script '/home/admin/robotarm/install/robotarm_software/share/robotarm_software/package.bash'
+[40.561s] INFO:colcon.colcon_core.shell:Creating package script '/home/admin/robotarm/install/robotarm_software/share/robotarm_software/package.zsh'
+[40.561s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/admin/robotarm/install/robotarm_software/share/colcon-core/packages/robotarm_software)
+[40.562s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(robotarm_software)
+[40.562s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_software' for CMake module files
+[40.564s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_software' for CMake config files
+[40.564s] Level 1:colcon.colcon_core.shell:create_environment_hook('robotarm_software', 'cmake_prefix_path')
+[40.564s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/admin/robotarm/install/robotarm_software/share/robotarm_software/hook/cmake_prefix_path.dsv'
+[40.565s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/admin/robotarm/install/robotarm_software/share/robotarm_software/hook/cmake_prefix_path.sh'
+[40.566s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_software/lib'
+[40.566s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_software/bin'
+[40.566s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_software/lib/pkgconfig/robotarm_software.pc'
+[40.567s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages'
+[40.567s] Level 1:colcon.colcon_core.shell:create_environment_hook('robotarm_software', 'pythonpath')
+[40.567s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/admin/robotarm/install/robotarm_software/share/robotarm_software/hook/pythonpath.dsv'
+[40.567s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/admin/robotarm/install/robotarm_software/share/robotarm_software/hook/pythonpath.sh'
+[40.569s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_software/bin'
+[40.569s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/admin/robotarm/install/robotarm_software/share/robotarm_software/package.dsv'
+[40.570s] INFO:colcon.colcon_core.shell:Creating package script '/home/admin/robotarm/install/robotarm_software/share/robotarm_software/package.sh'
+[40.570s] INFO:colcon.colcon_core.shell:Creating package script '/home/admin/robotarm/install/robotarm_software/share/robotarm_software/package.bash'
+[40.571s] INFO:colcon.colcon_core.shell:Creating package script '/home/admin/robotarm/install/robotarm_software/share/robotarm_software/package.zsh'
+[40.572s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/admin/robotarm/install/robotarm_software/share/colcon-core/packages/robotarm_software)
+[40.575s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/admin/robotarm/ROS_WS/src/robotarm_moveit_config' with build type 'ament_cmake'
+[40.575s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/admin/robotarm/ROS_WS/src/robotarm_moveit_config'
+[40.575s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[40.590s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/admin/robotarm/build/robotarm_moveit_config': AMENT_PREFIX_PATH=/home/admin/robotarm/install/robotarm_software:/home/admin/robotarm/install/robotarm_hardware:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/admin/robotarm/install/robotarm_software:/home/admin/robotarm/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_path_planning:/home/admin/robotarm/ROS_WS/install/robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/robotarm_software:/home/admin/robotarm/ROS_WS/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_fake_hardware:/home/admin/robotarm/ROS_WS/install/robot_moveit_config:/home/admin/robotarm/ROS_WS/install/point_motion:/home/admin/robotarm/ROS_WS/install/moveit_3dof:/home/admin/robotarm/ROS_WS/install/adi_tmcm_bb4:/home/admin/robotarm/ROS_WS/install/adi_robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/adi_robotarm:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/admin/robotarm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy LD_LIBRARY_PATH=/home/admin/robotarm/install/robotarm_hardware/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/cmake /home/admin/robotarm/ROS_WS/src/robotarm_moveit_config -DCMAKE_INSTALL_PREFIX=/home/admin/robotarm/install/robotarm_moveit_config
+[41.803s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/admin/robotarm/build/robotarm_moveit_config' returned '0': AMENT_PREFIX_PATH=/home/admin/robotarm/install/robotarm_software:/home/admin/robotarm/install/robotarm_hardware:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/admin/robotarm/install/robotarm_software:/home/admin/robotarm/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_path_planning:/home/admin/robotarm/ROS_WS/install/robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/robotarm_software:/home/admin/robotarm/ROS_WS/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_fake_hardware:/home/admin/robotarm/ROS_WS/install/robot_moveit_config:/home/admin/robotarm/ROS_WS/install/point_motion:/home/admin/robotarm/ROS_WS/install/moveit_3dof:/home/admin/robotarm/ROS_WS/install/adi_tmcm_bb4:/home/admin/robotarm/ROS_WS/install/adi_robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/adi_robotarm:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/admin/robotarm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy LD_LIBRARY_PATH=/home/admin/robotarm/install/robotarm_hardware/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/cmake /home/admin/robotarm/ROS_WS/src/robotarm_moveit_config -DCMAKE_INSTALL_PREFIX=/home/admin/robotarm/install/robotarm_moveit_config
+[41.804s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/admin/robotarm/build/robotarm_moveit_config': AMENT_PREFIX_PATH=/home/admin/robotarm/install/robotarm_software:/home/admin/robotarm/install/robotarm_hardware:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/admin/robotarm/install/robotarm_software:/home/admin/robotarm/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_path_planning:/home/admin/robotarm/ROS_WS/install/robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/robotarm_software:/home/admin/robotarm/ROS_WS/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_fake_hardware:/home/admin/robotarm/ROS_WS/install/robot_moveit_config:/home/admin/robotarm/ROS_WS/install/point_motion:/home/admin/robotarm/ROS_WS/install/moveit_3dof:/home/admin/robotarm/ROS_WS/install/adi_tmcm_bb4:/home/admin/robotarm/ROS_WS/install/adi_robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/adi_robotarm:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/admin/robotarm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy LD_LIBRARY_PATH=/home/admin/robotarm/install/robotarm_hardware/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/cmake --build /home/admin/robotarm/build/robotarm_moveit_config -- -j4 -l4
+[41.874s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/admin/robotarm/build/robotarm_moveit_config' returned '0': AMENT_PREFIX_PATH=/home/admin/robotarm/install/robotarm_software:/home/admin/robotarm/install/robotarm_hardware:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/admin/robotarm/install/robotarm_software:/home/admin/robotarm/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_path_planning:/home/admin/robotarm/ROS_WS/install/robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/robotarm_software:/home/admin/robotarm/ROS_WS/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_fake_hardware:/home/admin/robotarm/ROS_WS/install/robot_moveit_config:/home/admin/robotarm/ROS_WS/install/point_motion:/home/admin/robotarm/ROS_WS/install/moveit_3dof:/home/admin/robotarm/ROS_WS/install/adi_tmcm_bb4:/home/admin/robotarm/ROS_WS/install/adi_robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/adi_robotarm:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/admin/robotarm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy LD_LIBRARY_PATH=/home/admin/robotarm/install/robotarm_hardware/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/cmake --build /home/admin/robotarm/build/robotarm_moveit_config -- -j4 -l4
+[41.876s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/admin/robotarm/build/robotarm_moveit_config': AMENT_PREFIX_PATH=/home/admin/robotarm/install/robotarm_software:/home/admin/robotarm/install/robotarm_hardware:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/admin/robotarm/install/robotarm_software:/home/admin/robotarm/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_path_planning:/home/admin/robotarm/ROS_WS/install/robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/robotarm_software:/home/admin/robotarm/ROS_WS/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_fake_hardware:/home/admin/robotarm/ROS_WS/install/robot_moveit_config:/home/admin/robotarm/ROS_WS/install/point_motion:/home/admin/robotarm/ROS_WS/install/moveit_3dof:/home/admin/robotarm/ROS_WS/install/adi_tmcm_bb4:/home/admin/robotarm/ROS_WS/install/adi_robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/adi_robotarm:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/admin/robotarm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy LD_LIBRARY_PATH=/home/admin/robotarm/install/robotarm_hardware/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/cmake --install /home/admin/robotarm/build/robotarm_moveit_config
+[41.909s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(robotarm_moveit_config)
+[41.909s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_moveit_config' for CMake module files
+[41.910s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/admin/robotarm/build/robotarm_moveit_config' returned '0': AMENT_PREFIX_PATH=/home/admin/robotarm/install/robotarm_software:/home/admin/robotarm/install/robotarm_hardware:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/admin/robotarm/install/robotarm_software:/home/admin/robotarm/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_path_planning:/home/admin/robotarm/ROS_WS/install/robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/robotarm_software:/home/admin/robotarm/ROS_WS/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_fake_hardware:/home/admin/robotarm/ROS_WS/install/robot_moveit_config:/home/admin/robotarm/ROS_WS/install/point_motion:/home/admin/robotarm/ROS_WS/install/moveit_3dof:/home/admin/robotarm/ROS_WS/install/adi_tmcm_bb4:/home/admin/robotarm/ROS_WS/install/adi_robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/adi_robotarm:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/admin/robotarm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy LD_LIBRARY_PATH=/home/admin/robotarm/install/robotarm_hardware/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/cmake --install /home/admin/robotarm/build/robotarm_moveit_config
+[41.910s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_moveit_config' for CMake config files
+[41.911s] Level 1:colcon.colcon_core.shell:create_environment_hook('robotarm_moveit_config', 'cmake_prefix_path')
+[41.911s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/admin/robotarm/install/robotarm_moveit_config/share/robotarm_moveit_config/hook/cmake_prefix_path.dsv'
+[41.911s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/admin/robotarm/install/robotarm_moveit_config/share/robotarm_moveit_config/hook/cmake_prefix_path.sh'
+[41.912s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_moveit_config/bin'
+[41.912s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_moveit_config/lib/pkgconfig/robotarm_moveit_config.pc'
+[41.913s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_moveit_config/lib/python3.12/site-packages'
+[41.913s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_moveit_config/bin'
+[41.914s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/admin/robotarm/install/robotarm_moveit_config/share/robotarm_moveit_config/package.dsv'
+[41.914s] INFO:colcon.colcon_core.shell:Creating package script '/home/admin/robotarm/install/robotarm_moveit_config/share/robotarm_moveit_config/package.sh'
+[41.915s] INFO:colcon.colcon_core.shell:Creating package script '/home/admin/robotarm/install/robotarm_moveit_config/share/robotarm_moveit_config/package.bash'
+[41.915s] INFO:colcon.colcon_core.shell:Creating package script '/home/admin/robotarm/install/robotarm_moveit_config/share/robotarm_moveit_config/package.zsh'
+[41.915s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/admin/robotarm/install/robotarm_moveit_config/share/colcon-core/packages/robotarm_moveit_config)
+[41.916s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(robotarm_moveit_config)
+[41.916s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_moveit_config' for CMake module files
+[41.917s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_moveit_config' for CMake config files
+[41.918s] Level 1:colcon.colcon_core.shell:create_environment_hook('robotarm_moveit_config', 'cmake_prefix_path')
+[41.918s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/admin/robotarm/install/robotarm_moveit_config/share/robotarm_moveit_config/hook/cmake_prefix_path.dsv'
+[41.918s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/admin/robotarm/install/robotarm_moveit_config/share/robotarm_moveit_config/hook/cmake_prefix_path.sh'
+[41.920s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_moveit_config/bin'
+[41.920s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_moveit_config/lib/pkgconfig/robotarm_moveit_config.pc'
+[41.920s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_moveit_config/lib/python3.12/site-packages'
+[41.921s] Level 1:colcon.colcon_core.environment:checking '/home/admin/robotarm/install/robotarm_moveit_config/bin'
+[41.921s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/admin/robotarm/install/robotarm_moveit_config/share/robotarm_moveit_config/package.dsv'
+[41.922s] INFO:colcon.colcon_core.shell:Creating package script '/home/admin/robotarm/install/robotarm_moveit_config/share/robotarm_moveit_config/package.sh'
+[41.924s] INFO:colcon.colcon_core.shell:Creating package script '/home/admin/robotarm/install/robotarm_moveit_config/share/robotarm_moveit_config/package.bash'
+[41.926s] INFO:colcon.colcon_core.shell:Creating package script '/home/admin/robotarm/install/robotarm_moveit_config/share/robotarm_moveit_config/package.zsh'
+[41.927s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/admin/robotarm/install/robotarm_moveit_config/share/colcon-core/packages/robotarm_moveit_config)
+[41.929s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[41.929s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[41.929s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[41.929s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[41.930s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[41.930s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/admin/robotarm/install/local_setup.sh'
+[41.932s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/admin/robotarm/install/_local_setup_util_sh.py'
+[41.934s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/admin/robotarm/install/setup.sh'
+[41.937s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/admin/robotarm/install/local_setup.bash'
+[41.938s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/admin/robotarm/install/setup.bash'
+[41.940s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/admin/robotarm/install/local_setup.zsh'
+[41.941s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/admin/robotarm/install/setup.zsh'

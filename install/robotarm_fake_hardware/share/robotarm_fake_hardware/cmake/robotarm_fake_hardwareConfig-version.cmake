@@ -1,0 +1,1 @@
+/home/admin/robotarm/build/robotarm_fake_hardware/ament_cmake_core/robotarm_fake_hardwareConfig-version.cmake

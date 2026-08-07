@@ -1,0 +1,8 @@
+source;share/robotarm_hardware/hook/cmake_prefix_path.dsv
+source;share/robotarm_hardware/hook/cmake_prefix_path.sh
+source;share/robotarm_hardware/hook/ld_library_path_lib.dsv
+source;share/robotarm_hardware/hook/ld_library_path_lib.sh
+source;share/robotarm_hardware/local_setup.bash
+source;share/robotarm_hardware/local_setup.dsv
+source;share/robotarm_hardware/local_setup.sh
+source;share/robotarm_hardware/local_setup.zsh

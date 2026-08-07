@@ -91,7 +91,7 @@ HTML_PAGE = r"""<!doctype html>
 
         #status {
             min-width: 220px;
-            color: #222;
+            color: #bbb;
             font-size: 13px;
         }
 

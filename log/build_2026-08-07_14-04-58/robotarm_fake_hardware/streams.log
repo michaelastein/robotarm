@@ -1,0 +1,75 @@
+[0.019s] Invoking command in '/home/admin/robotarm/build/robotarm_fake_hardware': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake /home/admin/robotarm/ROS_WS/src/robotarm_fake_hardware -DCMAKE_INSTALL_PREFIX=/home/admin/robotarm/install/robotarm_fake_hardware
+[0.959s] -- The C compiler identification is GNU 13.3.0
+[1.475s] -- The CXX compiler identification is GNU 13.3.0
+[1.524s] -- Detecting C compiler ABI info
+[1.775s] -- Detecting C compiler ABI info - done
+[1.789s] -- Check for working C compiler: /usr/bin/cc - skipped
+[1.791s] -- Detecting C compile features
+[1.792s] -- Detecting C compile features - done
+[1.811s] -- Detecting CXX compiler ABI info
+[2.030s] -- Detecting CXX compiler ABI info - done
+[2.045s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[2.046s] -- Detecting CXX compile features
+[2.047s] -- Detecting CXX compile features - done
+[2.073s] -- Found ament_cmake: 2.5.6 (/opt/ros/jazzy/share/ament_cmake/cmake)
+[2.400s] -- Found Python3: /usr/bin/python3 (found version "3.12.3") found components: Interpreter 
+[2.720s] -- Found hardware_interface: 4.44.0 (/opt/ros/jazzy/share/hardware_interface/cmake)
+[2.889s] -- Found rosidl_generator_c: 4.6.7 (/opt/ros/jazzy/share/rosidl_generator_c/cmake)
+[2.932s] -- Found rosidl_generator_cpp: 4.6.7 (/opt/ros/jazzy/share/rosidl_generator_cpp/cmake)
+[3.008s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[3.071s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[3.661s] -- Found TinyXML2 via Config file: /usr/lib/aarch64-linux-gnu/cmake/tinyxml2
+[3.798s] -- Found rmw_implementation_cmake: 7.3.3 (/opt/ros/jazzy/share/rmw_implementation_cmake/cmake)
+[3.812s] -- Found rmw_fastrtps_cpp: 8.4.3 (/opt/ros/jazzy/share/rmw_fastrtps_cpp/cmake)
+[3.896s] -- Found TinyXML2 via Config file: /usr/lib/aarch64-linux-gnu/cmake/tinyxml2
+[4.056s] -- Found OpenSSL: /usr/lib/aarch64-linux-gnu/libcrypto.so (found version "3.0.13")  
+[4.065s] -- Found TinyXML2 via Config file: /usr/lib/aarch64-linux-gnu/cmake/tinyxml2
+[4.091s] -- Found FastRTPS: /opt/ros/jazzy/include (Required is at least version "2.13") 
+[4.096s] -- Found TinyXML2 via Config file: /usr/lib/aarch64-linux-gnu/cmake/tinyxml2
+[4.111s] -- Found TinyXML2 via Config file: /usr/lib/aarch64-linux-gnu/cmake/tinyxml2
+[4.131s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[5.129s] -- Configuring done (4.8s)
+[5.214s] -- Generating done (0.1s)
+[5.222s] -- Build files have been written to: /home/admin/robotarm/build/robotarm_fake_hardware
+[5.268s] Invoked command in '/home/admin/robotarm/build/robotarm_fake_hardware' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake /home/admin/robotarm/ROS_WS/src/robotarm_fake_hardware -DCMAKE_INSTALL_PREFIX=/home/admin/robotarm/install/robotarm_fake_hardware
+[5.270s] Invoking command in '/home/admin/robotarm/build/robotarm_fake_hardware': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/admin/robotarm/build/robotarm_fake_hardware -- -j4 -l4
+[5.366s] [ 50%] [32mBuilding CXX object CMakeFiles/robotarm_fake_hardware.dir/src/velocity_fake_system.cpp.o[0m
+[10.434s] [01m[K/home/admin/robotarm/ROS_WS/src/robotarm_fake_hardware/src/velocity_fake_system.cpp:[m[K In member function ‘[01m[Kvirtual hardware_interface::CallbackReturn robotarm_fake_hardware::VelocityFakeSystem::[01;32m[Kon_init[m[K(const hardware_interface::HardwareInfo&)[m[K’:
+[10.434s] [01m[K/home/admin/robotarm/ROS_WS/src/robotarm_fake_hardware/src/velocity_fake_system.cpp:12:51:[m[K [01;35m[Kwarning: [m[K‘[01m[Kvirtual rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn hardware_interface::HardwareComponentInterface::[01;32m[Kon_init[m[K(const hardware_interface::HardwareInfo&)[m[K’ is deprecated: Use on_init(const HardwareComponentInterfaceParams & params) instead. [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+[10.434s]    12 |   if ([01;35m[Khardware_interface::SystemInterface::on_init(info)[m[K !=
+[10.435s]       |       [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~[m[K
+[10.435s] In file included from [01m[K/opt/ros/jazzy/include/hardware_interface/hardware_interface/system_interface.hpp:18[m[K,
+[10.435s]                  from [01m[K/home/admin/robotarm/ROS_WS/src/robotarm_fake_hardware/include/robotarm_fake_hardware/velocity_fake_system.hpp:3[m[K,
+[10.435s]                  from [01m[K/home/admin/robotarm/ROS_WS/src/robotarm_fake_hardware/src/velocity_fake_system.cpp:1[m[K:
+[10.435s] [01m[K/opt/ros/jazzy/include/hardware_interface/hardware_interface/hardware_component_interface.hpp:140:26:[m[K [01;36m[Knote: [m[Kdeclared here
+[10.435s]   140 |   virtual CallbackReturn [01;36m[Kon_init[m[K(const HardwareInfo & hardware_info);
+[10.435s]       |                          [01;36m[K^~~~~~~[m[K
+[13.240s] [100%] [32m[1mLinking CXX shared library librobotarm_fake_hardware.so[0m
+[14.040s] [100%] Built target robotarm_fake_hardware
+[14.063s] Invoked command in '/home/admin/robotarm/build/robotarm_fake_hardware' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/admin/robotarm/build/robotarm_fake_hardware -- -j4 -l4
+[14.084s] Invoking command in '/home/admin/robotarm/build/robotarm_fake_hardware': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/admin/robotarm/build/robotarm_fake_hardware
+[14.100s] -- Install configuration: ""
+[14.100s] -- Installing: /home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/robotarm_fake_hardware.xml
+[14.101s] -- Installing: /home/admin/robotarm/install/robotarm_fake_hardware/lib/librobotarm_fake_hardware.so
+[14.102s] -- Set non-toolchain portion of runtime path of "/home/admin/robotarm/install/robotarm_fake_hardware/lib/librobotarm_fake_hardware.so" to ""
+[14.102s] -- Installing: /home/admin/robotarm/install/robotarm_fake_hardware/include
+[14.102s] -- Installing: /home/admin/robotarm/install/robotarm_fake_hardware/include/robotarm_fake_hardware
+[14.102s] -- Installing: /home/admin/robotarm/install/robotarm_fake_hardware/include/robotarm_fake_hardware/velocity_fake_system.hpp
+[14.103s] -- Up-to-date: /home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/robotarm_fake_hardware.xml
+[14.103s] -- Installing: /home/admin/robotarm/install/robotarm_fake_hardware/share/ament_index/resource_index/package_run_dependencies/robotarm_fake_hardware
+[14.103s] -- Installing: /home/admin/robotarm/install/robotarm_fake_hardware/share/ament_index/resource_index/parent_prefix_path/robotarm_fake_hardware
+[14.103s] -- Installing: /home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/environment/ament_prefix_path.sh
+[14.103s] -- Installing: /home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/environment/ament_prefix_path.dsv
+[14.104s] -- Installing: /home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/environment/path.sh
+[14.104s] -- Installing: /home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/environment/path.dsv
+[14.104s] -- Installing: /home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/local_setup.bash
+[14.104s] -- Installing: /home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/local_setup.sh
+[14.104s] -- Installing: /home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/local_setup.zsh
+[14.105s] -- Installing: /home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/local_setup.dsv
+[14.105s] -- Installing: /home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/package.dsv
+[14.105s] -- Installing: /home/admin/robotarm/install/robotarm_fake_hardware/share/ament_index/resource_index/packages/robotarm_fake_hardware
+[14.105s] -- Installing: /home/admin/robotarm/install/robotarm_fake_hardware/share/ament_index/resource_index/hardware_interface__pluginlib__plugin/robotarm_fake_hardware
+[14.105s] -- Installing: /home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/cmake/robotarm_fake_hardwareConfig.cmake
+[14.106s] -- Installing: /home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/cmake/robotarm_fake_hardwareConfig-version.cmake
+[14.106s] -- Installing: /home/admin/robotarm/install/robotarm_fake_hardware/share/robotarm_fake_hardware/package.xml
+[14.109s] Invoked command in '/home/admin/robotarm/build/robotarm_fake_hardware' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/admin/robotarm/build/robotarm_fake_hardware

@@ -1,0 +1,1 @@
+/home/admin/robotarm/build/robotarm_fake_hardware/ament_cmake_environment_hooks/local_setup.sh

@@ -1,0 +1,148 @@
+[0.018s] Invoking command in '/home/admin/robotarm/build/robotarm_software': CMAKE_PREFIX_PATH=/home/admin/robotarm/install/robotarm_hardware:/home/admin/robotarm/install/robotarm_moveit_config:/home/admin/robotarm/install/robotarm_software:/home/admin/robotarm/install/robotarm_fake_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_path_planning:/home/admin/robotarm/ROS_WS/install/robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/robotarm_software:/home/admin/robotarm/ROS_WS/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_fake_hardware:/home/admin/robotarm/ROS_WS/install/robot_moveit_config:/home/admin/robotarm/ROS_WS/install/point_motion:/home/admin/robotarm/ROS_WS/install/moveit_3dof:/home/admin/robotarm/ROS_WS/install/adi_tmcm_bb4:/home/admin/robotarm/ROS_WS/install/adi_robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/adi_robotarm:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/admin/robotarm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake /home/admin/robotarm/ROS_WS/src/robotarm_software -DCMAKE_INSTALL_PREFIX=/home/admin/robotarm/install/robotarm_software
+[0.117s] -- The C compiler identification is GNU 13.3.0
+[0.217s] -- The CXX compiler identification is GNU 13.3.0
+[0.244s] -- Detecting C compiler ABI info
+[0.402s] -- Detecting C compiler ABI info - done
+[0.417s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.417s] -- Detecting C compile features
+[0.418s] -- Detecting C compile features - done
+[0.432s] -- Detecting CXX compiler ABI info
+[0.604s] -- Detecting CXX compiler ABI info - done
+[0.619s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.619s] -- Detecting CXX compile features
+[0.620s] -- Detecting CXX compile features - done
+[0.626s] -- Found ament_cmake: 2.5.6 (/opt/ros/jazzy/share/ament_cmake/cmake)
+[0.864s] -- Found Python3: /usr/bin/python3 (found version "3.12.3") found components: Interpreter 
+[1.058s] -- Found rclcpp: 28.1.18 (/opt/ros/jazzy/share/rclcpp/cmake)
+[1.133s] -- Found rosidl_generator_c: 4.6.7 (/opt/ros/jazzy/share/rosidl_generator_c/cmake)
+[1.160s] -- Found rosidl_generator_cpp: 4.6.7 (/opt/ros/jazzy/share/rosidl_generator_cpp/cmake)
+[1.191s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[1.224s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[1.353s] -- Found rmw_implementation_cmake: 7.3.3 (/opt/ros/jazzy/share/rmw_implementation_cmake/cmake)
+[1.361s] -- Found rmw_fastrtps_cpp: 8.4.3 (/opt/ros/jazzy/share/rmw_fastrtps_cpp/cmake)
+[1.510s] -- Found OpenSSL: /usr/lib/aarch64-linux-gnu/libcrypto.so (found version "3.0.13")  
+[1.537s] -- Found FastRTPS: /opt/ros/jazzy/include (Required is at least version "2.13") 
+[1.573s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[1.689s] -- Found rclpy: 7.1.11 (/opt/ros/jazzy/share/rclpy/cmake)
+[1.694s] -- Found std_msgs: 5.3.7 (/opt/ros/jazzy/share/std_msgs/cmake)
+[1.717s] -- Found sensor_msgs: 5.3.7 (/opt/ros/jazzy/share/sensor_msgs/cmake)
+[1.775s] -- Found control_msgs: 5.9.0 (/opt/ros/jazzy/share/control_msgs/cmake)
+[1.906s] -- Found moveit_ros_planning_interface: 2.12.4 (/opt/ros/jazzy/share/moveit_ros_planning_interface/cmake)
+[2.113s] -- Found Boost: /usr/lib/aarch64-linux-gnu/cmake/Boost-1.83.0/BoostConfig.cmake (found version "1.83.0") found components: date_time filesystem program_options system thread 
+[2.364s] -- Found Boost: /usr/lib/aarch64-linux-gnu/cmake/Boost-1.83.0/BoostConfig.cmake (found version "1.83.0") found components: chrono date_time filesystem iostreams program_options regex serialization system thread 
+[2.462s] -- Found parameter_traits: 0.7.1 (/opt/ros/jazzy/share/parameter_traits/cmake)
+[2.494s] -- Found rclcpp_lifecycle: 28.1.18 (/opt/ros/jazzy/share/rclcpp_lifecycle/cmake)
+[2.552s] -- Found Boost: /usr/lib/aarch64-linux-gnu/cmake/Boost-1.83.0/BoostConfig.cmake (found version "1.83.0") found components: filesystem 
+[2.649s] -- Found Eigen3: TRUE (found version "3.4.0") 
+[2.649s] -- Ensuring Eigen3 include directory is part of orocos-kdl CMake target
+[2.914s] -- Found Boost: /usr/lib/aarch64-linux-gnu/cmake/Boost-1.83.0/BoostConfig.cmake (found version "1.83.0") found components: system filesystem date_time program_options thread chrono 
+[2.983s] -- Found Boost: /usr/lib/aarch64-linux-gnu/cmake/Boost-1.83.0/BoostConfig.cmake (found version "1.83.0") found components: thread system filesystem regex date_time program_options 
+[3.024s] -- Found Boost: /usr/lib/aarch64-linux-gnu/cmake/Boost-1.83.0/BoostConfig.cmake (found version "1.83.0") found components: system filesystem date_time program_options thread 
+[3.263s] -- Found ament_lint_auto: 0.17.5 (/opt/ros/jazzy/share/ament_lint_auto/cmake)
+[3.471s] -- Added test 'copyright' to check source files copyright and LICENSE
+[3.474s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[3.475s] -- Configured cppcheck include dirs: 
+[3.475s] -- Configured cppcheck exclude dirs and/or files: 
+[3.478s] -- Added test 'cpplint' to check C / C++ code against the Google style
+[3.478s] -- Configured cpplint exclude dirs and/or files: 
+[3.480s] -- Added test 'flake8' to check Python code syntax and style conventions
+[3.480s] -- Configured 'flake8' exclude dirs and/or files: 
+[3.481s] -- Added test 'lint_cmake' to check CMake code style
+[3.482s] -- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257
+[3.485s] -- Added test 'uncrustify' to check C / C++ code style
+[3.485s] -- Configured uncrustify additional arguments: 
+[3.487s] -- Added test 'xmllint' to check XML markup files
+[3.490s] -- Configuring done (3.5s)
+[3.538s] -- Generating done (0.0s)
+[3.549s] -- Build files have been written to: /home/admin/robotarm/build/robotarm_software
+[3.578s] Invoked command in '/home/admin/robotarm/build/robotarm_software' returned '0': CMAKE_PREFIX_PATH=/home/admin/robotarm/install/robotarm_hardware:/home/admin/robotarm/install/robotarm_moveit_config:/home/admin/robotarm/install/robotarm_software:/home/admin/robotarm/install/robotarm_fake_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_path_planning:/home/admin/robotarm/ROS_WS/install/robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/robotarm_software:/home/admin/robotarm/ROS_WS/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_fake_hardware:/home/admin/robotarm/ROS_WS/install/robot_moveit_config:/home/admin/robotarm/ROS_WS/install/point_motion:/home/admin/robotarm/ROS_WS/install/moveit_3dof:/home/admin/robotarm/ROS_WS/install/adi_tmcm_bb4:/home/admin/robotarm/ROS_WS/install/adi_robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/adi_robotarm:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/admin/robotarm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake /home/admin/robotarm/ROS_WS/src/robotarm_software -DCMAKE_INSTALL_PREFIX=/home/admin/robotarm/install/robotarm_software
+[3.581s] Invoking command in '/home/admin/robotarm/build/robotarm_software': CMAKE_PREFIX_PATH=/home/admin/robotarm/install/robotarm_hardware:/home/admin/robotarm/install/robotarm_moveit_config:/home/admin/robotarm/install/robotarm_software:/home/admin/robotarm/install/robotarm_fake_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_path_planning:/home/admin/robotarm/ROS_WS/install/robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/robotarm_software:/home/admin/robotarm/ROS_WS/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_fake_hardware:/home/admin/robotarm/ROS_WS/install/robot_moveit_config:/home/admin/robotarm/ROS_WS/install/point_motion:/home/admin/robotarm/ROS_WS/install/moveit_3dof:/home/admin/robotarm/ROS_WS/install/adi_tmcm_bb4:/home/admin/robotarm/ROS_WS/install/adi_robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/adi_robotarm:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/admin/robotarm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/admin/robotarm/build/robotarm_software -- -j4 -l4
+[3.676s] [ 50%] [32mBuilding CXX object CMakeFiles/hotspot_path_planner.dir/src/hotspot_path_planner.cpp.o[0m
+[3.696s] [ 50%] Built target ament_cmake_python_copy_robotarm_software
+[3.979s] running egg_info
+[3.980s] creating robotarm_software.egg-info
+[4.003s] writing robotarm_software.egg-info/PKG-INFO
+[4.003s] writing dependency_links to robotarm_software.egg-info/dependency_links.txt
+[4.003s] writing top-level names to robotarm_software.egg-info/top_level.txt
+[4.003s] writing manifest file 'robotarm_software.egg-info/SOURCES.txt'
+[4.070s] reading manifest file 'robotarm_software.egg-info/SOURCES.txt'
+[4.071s] writing manifest file 'robotarm_software.egg-info/SOURCES.txt'
+[4.141s] [ 50%] Built target ament_cmake_python_build_robotarm_software_egg
+[21.906s] [100%] [32m[1mLinking CXX executable hotspot_path_planner[0m
+[23.296s] [100%] Built target hotspot_path_planner
+[23.318s] Invoked command in '/home/admin/robotarm/build/robotarm_software' returned '0': CMAKE_PREFIX_PATH=/home/admin/robotarm/install/robotarm_hardware:/home/admin/robotarm/install/robotarm_moveit_config:/home/admin/robotarm/install/robotarm_software:/home/admin/robotarm/install/robotarm_fake_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_path_planning:/home/admin/robotarm/ROS_WS/install/robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/robotarm_software:/home/admin/robotarm/ROS_WS/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_fake_hardware:/home/admin/robotarm/ROS_WS/install/robot_moveit_config:/home/admin/robotarm/ROS_WS/install/point_motion:/home/admin/robotarm/ROS_WS/install/moveit_3dof:/home/admin/robotarm/ROS_WS/install/adi_tmcm_bb4:/home/admin/robotarm/ROS_WS/install/adi_robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/adi_robotarm:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/admin/robotarm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/admin/robotarm/build/robotarm_software -- -j4 -l4
+[23.337s] Invoking command in '/home/admin/robotarm/build/robotarm_software': CMAKE_PREFIX_PATH=/home/admin/robotarm/install/robotarm_hardware:/home/admin/robotarm/install/robotarm_moveit_config:/home/admin/robotarm/install/robotarm_software:/home/admin/robotarm/install/robotarm_fake_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_path_planning:/home/admin/robotarm/ROS_WS/install/robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/robotarm_software:/home/admin/robotarm/ROS_WS/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_fake_hardware:/home/admin/robotarm/ROS_WS/install/robot_moveit_config:/home/admin/robotarm/ROS_WS/install/point_motion:/home/admin/robotarm/ROS_WS/install/moveit_3dof:/home/admin/robotarm/ROS_WS/install/adi_tmcm_bb4:/home/admin/robotarm/ROS_WS/install/adi_robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/adi_robotarm:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/admin/robotarm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/admin/robotarm/build/robotarm_software
+[23.351s] -- Install configuration: ""
+[23.351s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/robotarm_software/environment/pythonpath.sh
+[23.351s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/robotarm_software/environment/pythonpath.dsv
+[23.351s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software-0.0.0-py3.12.egg-info
+[23.351s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software-0.0.0-py3.12.egg-info/dependency_links.txt
+[23.352s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software-0.0.0-py3.12.egg-info/SOURCES.txt
+[23.352s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software-0.0.0-py3.12.egg-info/top_level.txt
+[23.352s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software-0.0.0-py3.12.egg-info/PKG-INFO
+[23.352s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software
+[23.352s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software/safety_node.py
+[23.352s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software/velocity_test.py
+[23.353s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software/start_position_path.py
+[23.353s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software/joint_states_relay.py
+[23.353s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software/__init__.py
+[23.353s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software/hotspot_web_stream.py
+[23.353s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software/start_position_velocity.py
+[23.353s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software/hotspot_velocity.py
+[23.353s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software/safety_supervisor.py
+[23.354s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software/tool_position_velocity_control.py
+[23.354s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software/hotspot_detector.py
+[23.354s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software/evaluation.py
+[23.354s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software/joint_angle_calibration.py
+[23.443s] Listing '/home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software'...
+[23.443s] Compiling '/home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software/__init__.py'...
+[23.443s] Compiling '/home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software/evaluation.py'...
+[23.443s] Compiling '/home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software/hotspot_detector.py'...
+[23.443s] Compiling '/home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software/hotspot_velocity.py'...
+[23.444s] Compiling '/home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software/hotspot_web_stream.py'...
+[23.444s] Compiling '/home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software/joint_angle_calibration.py'...
+[23.444s] Compiling '/home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software/joint_states_relay.py'...
+[23.444s] Compiling '/home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software/safety_node.py'...
+[23.444s] Compiling '/home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software/safety_supervisor.py'...
+[23.444s] Compiling '/home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software/start_position_path.py'...
+[23.444s] Compiling '/home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software/start_position_velocity.py'...
+[23.444s] Compiling '/home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software/tool_position_velocity_control.py'...
+[23.444s] Compiling '/home/admin/robotarm/install/robotarm_software/lib/python3.12/site-packages/robotarm_software/velocity_test.py'...
+[23.456s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/robotarm_software/hotspot_path_planner
+[23.464s] -- Set non-toolchain portion of runtime path of "/home/admin/robotarm/install/robotarm_software/lib/robotarm_software/hotspot_path_planner" to ""
+[23.464s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/robotarm_software/safety_node.py
+[23.464s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/robotarm_software/safety_supervisor.py
+[23.465s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/robotarm_software/tool_position_velocity_control.py
+[23.465s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/robotarm_software/hotspot_detector.py
+[23.465s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/robotarm_software/hotspot_web_stream.py
+[23.465s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/robotarm_software/start_position_velocity.py
+[23.465s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/robotarm_software/start_position_path.py
+[23.465s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/robotarm_software/hotspot_velocity.py
+[23.466s] -- Installing: /home/admin/robotarm/install/robotarm_software/lib/robotarm_software/joint_states_relay.py
+[23.466s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/robotarm_software/launch
+[23.466s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/robotarm_software/launch/hotspot_path_planning.launch.py
+[23.466s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/robotarm_software/launch/robotarm_path_controller.launch.py
+[23.466s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/robotarm_software/launch/hotspot_velocity.launch.py
+[23.466s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/robotarm_software/launch/robotarm_velocity_controller.launch.py
+[23.466s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/robotarm_software/launch/__pycache__
+[23.467s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/robotarm_software/launch/__pycache__/robotarm_path_controller.launch.cpython-312.pyc
+[23.467s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/robotarm_software/config
+[23.467s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/robotarm_software/config/ros2_controllers.yaml
+[23.467s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/robotarm_software/urdf
+[23.467s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/robotarm_software/urdf/robotarm.urdf
+[23.467s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/ament_index/resource_index/package_run_dependencies/robotarm_software
+[23.468s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/ament_index/resource_index/parent_prefix_path/robotarm_software
+[23.468s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/robotarm_software/environment/ament_prefix_path.sh
+[23.468s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/robotarm_software/environment/ament_prefix_path.dsv
+[23.468s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/robotarm_software/environment/path.sh
+[23.468s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/robotarm_software/environment/path.dsv
+[23.468s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/robotarm_software/local_setup.bash
+[23.469s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/robotarm_software/local_setup.sh
+[23.469s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/robotarm_software/local_setup.zsh
+[23.469s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/robotarm_software/local_setup.dsv
+[23.469s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/robotarm_software/package.dsv
+[23.469s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/ament_index/resource_index/packages/robotarm_software
+[23.470s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/robotarm_software/cmake/robotarm_softwareConfig.cmake
+[23.470s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/robotarm_software/cmake/robotarm_softwareConfig-version.cmake
+[23.470s] -- Installing: /home/admin/robotarm/install/robotarm_software/share/robotarm_software/package.xml
+[23.473s] Invoked command in '/home/admin/robotarm/build/robotarm_software' returned '0': CMAKE_PREFIX_PATH=/home/admin/robotarm/install/robotarm_hardware:/home/admin/robotarm/install/robotarm_moveit_config:/home/admin/robotarm/install/robotarm_software:/home/admin/robotarm/install/robotarm_fake_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_path_planning:/home/admin/robotarm/ROS_WS/install/robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/robotarm_software:/home/admin/robotarm/ROS_WS/install/robotarm_hardware:/home/admin/robotarm/ROS_WS/install/robotarm_fake_hardware:/home/admin/robotarm/ROS_WS/install/robot_moveit_config:/home/admin/robotarm/ROS_WS/install/point_motion:/home/admin/robotarm/ROS_WS/install/moveit_3dof:/home/admin/robotarm/ROS_WS/install/adi_tmcm_bb4:/home/admin/robotarm/ROS_WS/install/adi_robotarm_moveit_config:/home/admin/robotarm/ROS_WS/install/adi_robotarm:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik:/home/admin/robotarm/ROS_WS/install/adi_4dof_ik_kinematics_plugin:/home/admin/robotarm/ROS_WS/install/adi_4dof_endeffector_xyz:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/admin/robotarm/build/robotarm_software

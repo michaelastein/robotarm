@@ -1,0 +1,4 @@
+source;share/robotarm_fake_hardware/local_setup.bash
+source;share/robotarm_fake_hardware/local_setup.dsv
+source;share/robotarm_fake_hardware/local_setup.sh
+source;share/robotarm_fake_hardware/local_setup.zsh

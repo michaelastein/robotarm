@@ -1,0 +1,48 @@
+[0.022s] Invoking command in '/home/admin/robotarm/build/robotarm_hardware': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake /home/admin/robotarm/ROS_WS/src/robotarm_hardware -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/admin/robotarm/install/robotarm_hardware
+[0.044s] -- Found ament_cmake: 2.5.6 (/opt/ros/jazzy/share/ament_cmake/cmake)
+[0.407s] -- Override CMake install command with custom implementation using symlinks instead of copying resources
+[0.422s] -- Found hardware_interface: 4.44.0 (/opt/ros/jazzy/share/hardware_interface/cmake)
+[0.458s] -- Found rosidl_generator_c: 4.6.7 (/opt/ros/jazzy/share/rosidl_generator_c/cmake)
+[0.472s] -- Found rosidl_generator_cpp: 4.6.7 (/opt/ros/jazzy/share/rosidl_generator_cpp/cmake)
+[0.489s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.509s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.753s] -- Found TinyXML2 via Config file: /usr/lib/aarch64-linux-gnu/cmake/tinyxml2
+[0.799s] -- Found rmw_implementation_cmake: 7.3.3 (/opt/ros/jazzy/share/rmw_implementation_cmake/cmake)
+[0.802s] -- Found rmw_fastrtps_cpp: 8.4.3 (/opt/ros/jazzy/share/rmw_fastrtps_cpp/cmake)
+[0.827s] -- Found TinyXML2 via Config file: /usr/lib/aarch64-linux-gnu/cmake/tinyxml2
+[0.841s] -- Found TinyXML2 via Config file: /usr/lib/aarch64-linux-gnu/cmake/tinyxml2
+[0.864s] -- Found TinyXML2 via Config file: /usr/lib/aarch64-linux-gnu/cmake/tinyxml2
+[0.878s] -- Found TinyXML2 via Config file: /usr/lib/aarch64-linux-gnu/cmake/tinyxml2
+[0.895s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[1.280s] -- Configuring done (1.2s)
+[1.332s] -- Generating done (0.0s)
+[1.346s] -- Build files have been written to: /home/admin/robotarm/build/robotarm_hardware
+[1.366s] Invoked command in '/home/admin/robotarm/build/robotarm_hardware' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake /home/admin/robotarm/ROS_WS/src/robotarm_hardware -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/admin/robotarm/install/robotarm_hardware
+[1.368s] Invoking command in '/home/admin/robotarm/build/robotarm_hardware': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/admin/robotarm/build/robotarm_hardware -- -j4 -l4
+[1.476s] [ 50%] [32m[1mLinking CXX shared library librobotarm_hardware.so[0m
+[2.210s] [100%] Built target robotarm_hardware
+[2.231s] Invoked command in '/home/admin/robotarm/build/robotarm_hardware' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --build /home/admin/robotarm/build/robotarm_hardware -- -j4 -l4
+[2.233s] Invoking command in '/home/admin/robotarm/build/robotarm_hardware': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/admin/robotarm/build/robotarm_hardware
+[2.247s] -- Install configuration: ""
+[2.248s] -- Execute custom install script
+[2.248s] -- Symlinking: /home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware//robotarm_hardware.xml
+[2.266s] -- Symlinking: /home/admin/robotarm/install/robotarm_hardware/lib/librobotarm_hardware.so
+[2.282s] -- Symlinking: /home/admin/robotarm/install/robotarm_hardware/include/robotarm_hardware/robotarm_system.hpp
+[2.299s] -- Up-to-date symlink: /home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/robotarm_hardware.xml
+[2.299s] -- Symlinking: /home/admin/robotarm/install/robotarm_hardware/share/ament_index/resource_index/package_run_dependencies/robotarm_hardware
+[2.316s] -- Symlinking: /home/admin/robotarm/install/robotarm_hardware/share/ament_index/resource_index/parent_prefix_path/robotarm_hardware
+[2.333s] -- Symlinking: /home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/environment/ament_prefix_path.sh
+[2.350s] -- Symlinking: /home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/environment/ament_prefix_path.dsv
+[2.367s] -- Symlinking: /home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/environment/path.sh
+[2.384s] -- Symlinking: /home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/environment/path.dsv
+[2.401s] -- Symlinking: /home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/local_setup.bash
+[2.418s] -- Symlinking: /home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/local_setup.sh
+[2.435s] -- Symlinking: /home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/local_setup.zsh
+[2.453s] -- Symlinking: /home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/local_setup.dsv
+[2.469s] -- Symlinking: /home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/package.dsv
+[2.486s] -- Symlinking: /home/admin/robotarm/install/robotarm_hardware/share/ament_index/resource_index/packages/robotarm_hardware
+[2.504s] -- Symlinking: /home/admin/robotarm/install/robotarm_hardware/share/ament_index/resource_index/hardware_interface__pluginlib__plugin/robotarm_hardware
+[2.521s] -- Symlinking: /home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/cmake/robotarm_hardwareConfig.cmake
+[2.538s] -- Symlinking: /home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/cmake/robotarm_hardwareConfig-version.cmake
+[2.555s] -- Symlinking: /home/admin/robotarm/install/robotarm_hardware/share/robotarm_hardware/package.xml
+[2.574s] Invoked command in '/home/admin/robotarm/build/robotarm_hardware' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/admin/robotarm/ROS_WS/install/vision_tracker:/opt/ros/jazzy /usr/bin/cmake --install /home/admin/robotarm/build/robotarm_hardware
