@@ -80,9 +80,7 @@ RobotArmSystem::RobotArmSystem()
   serial_device_("/dev/ttyACM0"),
   arduino_counts_initialized_(false),
   coast_time_after_command_s_(0.20),
-  pwm_thread_running_(false),
-  base_last_encoder_tick_time_(0, 0, RCL_ROS_TIME),
-  base_startup_boost_(0.0)
+  pwm_thread_running_(false)
 {
   last_arduino_counts_.fill(0);
 }
@@ -576,7 +574,7 @@ bool RobotArmSystem::read_arduino_counts(std::array<long, 4> & counts)
  *   hardware_interface::return_type::OK.
  */
 hardware_interface::return_type RobotArmSystem::read(
-  const rclcpp::Time & time,
+  const rclcpp::Time &,
   const rclcpp::Duration & period)
 {
   const double dt = period.seconds();
@@ -635,15 +633,6 @@ hardware_interface::return_type RobotArmSystem::read(
         current_count
       );
       raw_delta_ticks = 0;
-    }
-
-    // Base-only startup/stall detection:
-    // remember when the base encoder last reported real movement.
-    if (
-      info_.joints[i].name == "base_joint" &&
-      raw_delta_ticks > 0)
-    {
-      base_last_encoder_tick_time_ = time;
     }
 
     /*
@@ -712,10 +701,8 @@ hardware_interface::return_type RobotArmSystem::read(
  */
 hardware_interface::return_type RobotArmSystem::write(
   const rclcpp::Time & time,
-  const rclcpp::Duration & period)
+  const rclcpp::Duration &)
 {
-  const double dt = std::max(0.0, period.seconds());
-
   for (size_t i = 0; i < info_.joints.size(); ++i)
   {
     double desired_velocity = command_[i];
@@ -736,58 +723,22 @@ hardware_interface::return_type RobotArmSystem::write(
       desired_velocity = 0.0;
     }
 
-    const bool is_base =
-      info_.joints[i].name == "base_joint";
-
     double joint_velocity_deadband =
       velocity_deadband_rad_s_;
 
-    if (is_base)
+    if (info_.joints[i].name == "base_joint")
     {
       joint_velocity_deadband = 0.028;
     }
 
-    /*
-     * No active command:
-     * stop the motor and completely reset the base startup boost.
-     */
     if (std::abs(desired_velocity) <= joint_velocity_deadband)
     {
-      if (is_base)
-      {
-        base_startup_boost_ = 0.0;
-        base_last_encoder_tick_time_ = time;
-      }
-
       last_motion_sign_[i] = 0.0;
       set_motor(i, 0.0);
       continue;
     }
 
-    const double sign =
-      desired_velocity > 0.0 ? 1.0 : -1.0;
-
-    /*
-     * Base only:
-     * A fresh command or direction reversal starts a new startup phase.
-     * Resetting the boost here is important so an accumulated boost is
-     * never applied immediately in the opposite direction after overshoot.
-     */
-    if (is_base)
-    {
-      const bool command_was_inactive =
-        last_motion_sign_[i] == 0.0;
-
-      const bool direction_changed =
-        last_motion_sign_[i] != 0.0 &&
-        last_motion_sign_[i] != sign;
-
-      if (command_was_inactive || direction_changed)
-      {
-        base_startup_boost_ = 0.0;
-        base_last_encoder_tick_time_ = time;
-      }
-    }
+    const double sign = desired_velocity > 0.0 ? 1.0 : -1.0;
 
     double desired_speed = std::abs(desired_velocity);
 
@@ -796,83 +747,42 @@ hardware_interface::return_type RobotArmSystem::write(
       desired_speed = min_command_velocity_[i];
     }
 
-    const double measured_speed_along_direction =
-      velocity_[i] * sign;
+    const double measured_speed_along_direction = velocity_[i] * sign;
 
     const double velocity_error =
       desired_speed - measured_speed_along_direction;
 
-    /*
-     * Existing feed-forward + proportional velocity control.
-     * Shoulder and elbow use exactly this path with no startup boost.
-     */
     double pwm_abs =
       min_pwm_[i] +
       velocity_to_pwm_gain_[i] * desired_speed +
       velocity_kp_[i] * velocity_error;
 
     /*
-     * Base-only startup/stall boost.
+     * Base-only startup assistance.
      *
-     * The base encoder has 575.1 ticks/revolution. At a command of
-     * 0.04 rad/s, one tick is expected only about every 0.27 seconds.
-     * Therefore the boost waits 0.40 seconds before treating the
-     * missing encoder ticks as a likely stall.
+     * The base needs more torque to break static friction than it needs once
+     * it is already moving. Therefore a new command from standstill receives
+     * a fixed minimum start PWM. As soon as the measured base velocity is no
+     * longer near zero, the normal velocity-to-PWM controller takes over
+     * again.
+     *
+     * Shoulder and elbow are completely unaffected by this block.
      */
-    if (is_base)
+    if (info_.joints[i].name == "base_joint")
     {
-      constexpr double stall_delay_s = 0.40;
-      constexpr double max_startup_boost = 0.07;
-      constexpr double boost_ramp_up_per_s = 0.10;
-      constexpr double boost_ramp_down_per_s = 0.35;
+      constexpr double base_start_pwm = 0.23;
+      constexpr double base_stopped_velocity_rad_s = 0.015;
 
-      double seconds_without_tick = 0.0;
+      const bool command_was_stopped =
+        last_motion_sign_[i] == 0.0;
 
-      if (base_last_encoder_tick_time_.nanoseconds() != 0)
+      const bool base_is_nearly_stopped =
+        std::abs(velocity_[i]) < base_stopped_velocity_rad_s;
+
+      if (command_was_stopped || base_is_nearly_stopped)
       {
-        seconds_without_tick =
-          (time - base_last_encoder_tick_time_).seconds();
-
-        // Protect against a clock jump/reset.
-        if (seconds_without_tick < 0.0)
-        {
-          seconds_without_tick = 0.0;
-          base_last_encoder_tick_time_ = time;
-          base_startup_boost_ = 0.0;
-        }
+        pwm_abs = std::max(pwm_abs, base_start_pwm);
       }
-      else
-      {
-        // First active base command after startup.
-        base_last_encoder_tick_time_ = time;
-      }
-
-      if (seconds_without_tick > stall_delay_s)
-      {
-        // No base encoder movement for long enough:
-        // increase PWM smoothly instead of jumping to a large minimum PWM.
-        base_startup_boost_ +=
-          boost_ramp_up_per_s * dt;
-
-        base_startup_boost_ = std::min(
-          base_startup_boost_,
-          max_startup_boost
-        );
-      }
-      else
-      {
-        // Encoder movement was seen recently:
-        // remove the startup boost quickly but smoothly.
-        base_startup_boost_ -=
-          boost_ramp_down_per_s * dt;
-
-        base_startup_boost_ = std::max(
-          base_startup_boost_,
-          0.0
-        );
-      }
-
-      pwm_abs += base_startup_boost_;
     }
 
     if (pwm_abs < 0.0)
@@ -886,11 +796,8 @@ hardware_interface::return_type RobotArmSystem::write(
       max_pwm_[i]
     );
 
-    const double pwm_command =
-      sign * pwm_abs;
-
-    const double physical_pwm_command =
-      pwm_command * direction_[i];
+    const double pwm_command = sign * pwm_abs;
+    const double physical_pwm_command = pwm_command * direction_[i];
 
     last_motion_sign_[i] = sign;
     last_valid_motion_sign_[i] = sign;
