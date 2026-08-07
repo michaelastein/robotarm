@@ -1122,7 +1122,7 @@ class ExperimentNode(Node):
 
             command.extend(
                 [
-                    "/joint_state_broadcaster/joint_states",
+                    "/joint_states",
                     "/hotspot/target",
                 ]
             )
@@ -1537,7 +1537,7 @@ def main() -> None:
 
     node.get_logger().info(
         "Aufgezeichnete Topics: "
-        "/joint_state_broadcaster/joint_states, "
+        "/joint_states, "
         "/hotspot/target"
     )
 
