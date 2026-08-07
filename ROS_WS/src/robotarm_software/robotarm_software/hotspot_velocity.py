@@ -215,7 +215,7 @@ JACOBIAN_EPS = 1e-4
 MAX_JOINT_VEL = 0.3
 
 USE_MIN_EFFECTIVE_QDOT_VECTOR = True
-MIN_EFFECTIVE_QDOT_VECTOR = 0.03
+MIN_EFFECTIVE_QDOT_VECTOR = 0.025
 
 # Controller-side startup floor.
 # The hardware interface ignores |qdot| <= 0.003 rad/s, so intended
@@ -230,6 +230,7 @@ JOINT_SMOOTHING_ALPHA = 0.20
 # Slightly reduce base motion and increase shoulder response.
 BASE_JOINT_VEL_SCALE = 0.7
 SHOULDER_JOINT_VEL_SCALE = 1.35
+ELBOW_JOINT_VEL_SCALE = 0.9
 
 # Joint limits
 
@@ -1062,6 +1063,7 @@ class HotspotDirectJointVelocity(Node):
         # Intentional per-joint tuning after IK.
         qdot_limited[0] *= BASE_JOINT_VEL_SCALE
         qdot_limited[1] *= SHOULDER_JOINT_VEL_SCALE
+        qdot_limited[2] *= ELBOW_JOINT_VEL_SCALE
 
         qdot_limited = self.postprocess_qdot(qdot_limited)
 
