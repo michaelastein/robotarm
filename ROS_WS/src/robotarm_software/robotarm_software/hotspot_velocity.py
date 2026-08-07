@@ -212,24 +212,23 @@ JACOBIAN_EPS = 1e-4
 
 # This preserves the IK ratio, unlike per-joint minimum lifting.
 
-MAX_JOINT_VEL = 0.2
+MAX_JOINT_VEL = 0.3
 
 USE_MIN_EFFECTIVE_QDOT_VECTOR = True
-MIN_EFFECTIVE_QDOT_VECTOR = 0.04
+MIN_EFFECTIVE_QDOT_VECTOR = 0.03
 
 # Controller-side startup floor.
 # The hardware interface ignores |qdot| <= 0.003 rad/s, so intended
 # non-zero joint commands are lifted only slightly above that threshold.
 USE_MIN_EFFECTIVE_QDOT_PER_JOINT = True
 MIN_EFFECTIVE_QDOT_PER_JOINT = 0.0035
-BASE_MIN_EFFECTIVE_QDOT = 0.006
 
 JOINT_VEL_DEADBAND = 0.00005
 JOINT_SMOOTHING_ALPHA = 0.20
 
 # Per-joint output tuning.
 # Slightly reduce base motion and increase shoulder response.
-BASE_JOINT_VEL_SCALE = 0.8
+BASE_JOINT_VEL_SCALE = 0.7
 SHOULDER_JOINT_VEL_SCALE = 1.35
 
 # Joint limits
@@ -910,13 +909,8 @@ class HotspotDirectJointVelocity(Node):
         # not alter zero commands and preserves each joint's sign.
         if USE_MIN_EFFECTIVE_QDOT_PER_JOINT:
             for i in range(3):
-                min_qdot = (
-                    BASE_MIN_EFFECTIVE_QDOT
-                    if i == 0
-                    else MIN_EFFECTIVE_QDOT_PER_JOINT
-                )
-                if 0.0 < abs(out[i]) < min_qdot:
-                    out[i] = math.copysign(min_qdot, out[i])
+                if 0.0 < abs(out[i]) < MIN_EFFECTIVE_QDOT_PER_JOINT:
+                    out[i] = math.copysign(MIN_EFFECTIVE_QDOT_PER_JOINT, out[i])
 
         max_abs = float(np.max(np.abs(out)))
 
@@ -1127,4 +1121,3 @@ def main(args=None):
             rclpy.shutdown()
 
 if __name__ == "__main__":
-    main()
