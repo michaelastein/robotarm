@@ -48,7 +48,8 @@ public:
 private:
   bool open_arduino_serial();
   void close_arduino_serial();
-
+  rclcpp::Time base_last_encoder_tick_time_;
+  double base_startup_boost_;
   bool parse_arduino_line(
     const std::string & line,
     std::array<long, 4> & counts);
