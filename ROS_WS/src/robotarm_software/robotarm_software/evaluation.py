@@ -64,7 +64,7 @@ HTML_PAGE = r"""<!doctype html>
             align-items: center;
             gap: 8px;
             padding: 9px;
-            border: 1px solid #222;
+            border: 1px solid #0a0a0a;
             border-radius: 10px;
             background: rgba(15, 15, 15, 0.88);
             backdrop-filter: blur(6px);
@@ -73,10 +73,10 @@ HTML_PAGE = r"""<!doctype html>
         select,
         button {
             min-height: 38px;
-            border: 1px solid #555;
+            border: 1px solid #111;
             border-radius: 7px;
             padding: 7px 10px;
-            color: #222;
+            color: #080808;
             background: #171717;
             font-size: 14px;
         }
@@ -91,7 +91,7 @@ HTML_PAGE = r"""<!doctype html>
 
         #status {
             min-width: 220px;
-            color: #222;
+            color: #080808;
             font-size: 13px;
         }
 
@@ -105,9 +105,9 @@ HTML_PAGE = r"""<!doctype html>
 
         #startMessage {
             padding: 12px 16px;
-            border: 1px solid #555;
+            border: 1px solid #111;
             border-radius: 10px;
-            color: #222;
+            color: #080808;
             background: rgba(20, 20, 20, 0.92);
             font-size: 16px;
             text-align: center;
@@ -1122,7 +1122,7 @@ class ExperimentNode(Node):
 
             command.extend(
                 [
-                    "/joint_states",
+                    "/joint_state_broadcaster/joint_states",
                     "/hotspot/target",
                 ]
             )
@@ -1537,7 +1537,7 @@ def main() -> None:
 
     node.get_logger().info(
         "Aufgezeichnete Topics: "
-        "/joint_states, "
+        "/joint_state_broadcaster/joint_states, "
         "/hotspot/target"
     )
 
