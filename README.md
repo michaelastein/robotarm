@@ -181,7 +181,7 @@ Temrinal 1:
 Terminal 2: 
 `ros2 run robotarm_software start_position_path.py -- -s  `
 To move to start position, then
-`ros2 launch robotarm_path_planning hotspot_pyth_palnning.launch.py`
+`ros2 launch robotarm_software hotspot_path_planning.launch.py`
 
 
 ## Velocity Control:
@@ -192,7 +192,7 @@ Temrinal 1:
 Terminal 2: 
 `ros2 run robotarm_software start_position_velocity.py -- -s`
 To move to start position, then
-`ros2 launch robotarm_velocity hotspot_velocity.launch.py`
+`ros2 launch robotarm_software hotspot_velocity.launch.py`
 
 
 See the camera image under http://192.168.137.2:8000/ (replace with Raspberry Pi`s IP address)
