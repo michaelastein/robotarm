@@ -457,8 +457,8 @@ HTML_PAGE = r"""<!doctype html>
 
                     const cycleDuration =
                         modeName === "expandingPointsSlower"
-                            ? lerp(2.0, 5.0, stepProgress)
-                            : 2.0;
+                            ? lerp(0.63, 1.55, stepProgress)
+                            : 0.63;
 
                     cycleDurations.push(cycleDuration);
                     cumulativeCycleDurations.push(
@@ -1110,6 +1110,86 @@ class ExperimentNode(Node):
         self.bag_lock = threading.RLock()
         self.stop_timer: threading.Timer | None = None
 
+    @staticmethod
+    def _safe_name(value: str) -> str:
+        """Macht ROS-Namen/Typen sicher für Verzeichnisnamen."""
+        safe = "".join(
+            character
+            if character.isalnum() or character in "-_"
+            else "_"
+            for character in value
+        )
+        return safe.strip("_") or "unknown"
+
+    def get_active_controller_label(self) -> str:
+        """Liest den aktiven Bewegungscontroller über ros2 control aus."""
+        try:
+            result = subprocess.run(
+                ["ros2", "control", "list_controllers"],
+                capture_output=True,
+                text=True,
+                timeout=3.0,
+                check=False,
+            )
+        except (OSError, subprocess.TimeoutExpired) as error:
+            self.get_logger().warning(
+                f"Controller-Abfrage fehlgeschlagen: {error}"
+            )
+            return "controller_unknown"
+
+        if result.returncode != 0:
+            error_text = result.stderr.strip() or "unbekannter Fehler"
+            self.get_logger().warning(
+                "ros2 control list_controllers fehlgeschlagen: "
+                + error_text
+            )
+            return "controller_unknown"
+
+        active_controllers: list[tuple[str, str]] = []
+
+        for raw_line in result.stdout.splitlines():
+            columns = raw_line.split()
+            if len(columns) < 3:
+                continue
+
+            controller_name = columns[0]
+            controller_type = columns[1]
+            state = columns[-1].lower()
+
+            if state != "active":
+                continue
+
+            # Broadcaster liefern Zustände, sind aber nicht der eigentliche
+            # Bewegungscontroller, der hier im Bag-Namen stehen soll.
+            if "broadcaster" in controller_name.lower():
+                continue
+
+            active_controllers.append(
+                (controller_name, controller_type)
+            )
+
+        if not active_controllers:
+            self.get_logger().warning(
+                "Kein aktiver Bewegungscontroller gefunden."
+            )
+            return "controller_unknown"
+
+        controller_name, controller_type = active_controllers[0]
+        type_short = controller_type.rsplit("/", 1)[-1]
+
+        label = (
+            "controller_"
+            + self._safe_name(controller_name)
+            + "_"
+            + self._safe_name(type_short)
+        )
+
+        self.get_logger().info(
+            "Aktiver Controller für Rosbag-Namen: "
+            f"{controller_name} ({controller_type})"
+        )
+        return label
+
     def start_recording(
         self,
         mode: str,
@@ -1127,19 +1207,16 @@ class ExperimentNode(Node):
                 exist_ok=True,
             )
 
-            safe_mode = "".join(
-                character
-                if character.isalnum()
-                or character in "-_"
-                else "_"
-                for character in mode
-            )
+            safe_mode = self._safe_name(mode)
+            controller_label = self.get_active_controller_label()
 
             timestamp = datetime.now().strftime(
                 "%Y%m%d_%H%M%S_%f"
             )
 
-            bag_name = f"hotspot_{safe_mode}_{timestamp}"
+            bag_name = (
+                f"hotspot_{safe_mode}_{controller_label}_{timestamp}"
+            )
             bag_path = self.bag_directory / bag_name
 
             command = [
