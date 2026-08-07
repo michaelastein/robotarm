@@ -174,8 +174,8 @@ HTML_PAGE = r"""<!doctype html>
         const CIRCLE_RADIUS = 18;
         const EXPERIMENT_DURATION_SECONDS = 180;
         const CSS_PIXELS_PER_CM = 96 / 2.54;
-        const INITIAL_POINT_STEP_PIXELS = 1 * CSS_PIXELS_PER_CM;
-        const MAXIMUM_POINT_STEP_PIXELS = 8 * CSS_PIXELS_PER_CM;
+        const POINT_STEP_PIXELS = 3 * CSS_PIXELS_PER_CM;
+        const POINT_WAIT_SECONDS = 5;
         const LINE_SPEED_PIXELS_PER_SECOND = 22;
 
         // Bewegungsbereich: abgerundetes Rechteck.
@@ -512,20 +512,11 @@ HTML_PAGE = r"""<!doctype html>
 
                 let x = 0.5;
                 let y = 0.5;
-                let stepPixels = INITIAL_POINT_STEP_PIXELS;
-
-                // 8 cm, soweit es die aktuelle Fenstergröße zulässt.
-                const maximumStepPixels = Math.min(
-                    MAXIMUM_POINT_STEP_PIXELS,
-                    Math.min(viewportWidth, viewportHeight) * 0.72
-                );
 
                 for (let index = 1; index < 500; index += 1) {
-                    const previousX = x;
-                    const previousY = y;
                     const angle = random() * Math.PI * 2;
-                    const distanceX = stepPixels / viewportWidth;
-                    const distanceY = stepPixels / viewportHeight;
+                    const distanceX = POINT_STEP_PIXELS / viewportWidth;
+                    const distanceY = POINT_STEP_PIXELS / viewportHeight;
 
                     const projectedPoint = projectInsideRoundedRect({
                         x: x + Math.cos(angle) * distanceX,
@@ -537,27 +528,15 @@ HTML_PAGE = r"""<!doctype html>
 
                     points.push({ x, y });
 
-                    // Der Punkt springt sofort von A nach B. Wie lange B sichtbar
-                    // bleibt, entspricht exakt der Fahrzeit A -> B im Linienmodus.
-                    const actualDistancePixels = Math.hypot(
-                        (x - previousX) * viewportWidth,
-                        (y - previousY) * viewportHeight
-                    );
-                    const cycleDuration = Math.max(
-                        0.001,
-                        actualDistancePixels / LINE_SPEED_PIXELS_PER_SECOND
-                    );
+                    // Der Punkt springt sofort 3 cm in eine zufällige Richtung
+                    // und bleibt anschließend exakt 5 Sekunden stehen.
+                    const cycleDuration = POINT_WAIT_SECONDS;
 
                     cycleDurations.push(cycleDuration);
                     cumulativeCycleDurations.push(
                         cumulativeCycleDurations[
                             cumulativeCycleDurations.length - 1
                         ] + cycleDuration
-                    );
-
-                    stepPixels = Math.min(
-                        maximumStepPixels,
-                        stepPixels * 1.014 + 0.45
                     );
                 }
 
@@ -710,8 +689,7 @@ HTML_PAGE = r"""<!doctype html>
 
             const cycleIndex = low;
 
-            // Sofort auf B springen und dort genau so lange bleiben, wie die
-            // kontinuierliche Linienbewegung von A nach B gebraucht hätte.
+            // Sofort auf B springen und dort 5 Sekunden stehen bleiben.
             return pattern.points[
                 (cycleIndex + 1) % pattern.points.length
             ];
