@@ -215,7 +215,7 @@ JACOBIAN_EPS = 1e-4
 MAX_JOINT_VEL = 0.3
 
 USE_MIN_EFFECTIVE_QDOT_VECTOR = True
-MIN_EFFECTIVE_QDOT_VECTOR = 0.03
+MIN_EFFECTIVE_QDOT_VECTOR = 0.04
 
 # Controller-side startup floor.
 # The hardware interface ignores |qdot| <= 0.003 rad/s, so intended
