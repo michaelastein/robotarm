@@ -770,7 +770,7 @@ hardware_interface::return_type RobotArmSystem::write(
      */
     if (info_.joints[i].name == "base_joint")
     {
-      constexpr double base_start_pwm = 0.23;
+      constexpr double base_start_pwm = 0.28;
       constexpr double base_stopped_velocity_rad_s = 0.015;
 
       const bool command_was_stopped =
