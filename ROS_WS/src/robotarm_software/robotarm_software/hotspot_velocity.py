@@ -229,7 +229,7 @@ JOINT_SMOOTHING_ALPHA = 0.20
 # Per-joint output tuning.
 # Slightly reduce base motion and increase shoulder response.
 BASE_JOINT_VEL_SCALE = 0.6
-SHOULDER_JOINT_VEL_SCALE = 1.55
+SHOULDER_JOINT_VEL_SCALE = 1.7
 ELBOW_JOINT_VEL_SCALE = 0.9
 
 # Joint limits
