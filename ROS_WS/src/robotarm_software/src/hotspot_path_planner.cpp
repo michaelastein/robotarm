@@ -77,8 +77,8 @@ constexpr double kAccelerationScalingFactor = 0.18;
 constexpr double kMinimumConfidence = 2.0;
 constexpr double kTargetTimeoutSeconds = 0.5;
 
-constexpr double kImageDeadbandX = 0.1;
-constexpr double kImageDeadbandY = 0.1;
+constexpr double kImageDeadbandX = 0.15;
+constexpr double kImageDeadbandY = 0.15;
 
 constexpr double kMaximumCorrectionPerPlanMeters = 0.090;
 
