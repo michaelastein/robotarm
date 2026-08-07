@@ -6,7 +6,12 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     return LaunchDescription(
-        [
+        [    
+            DeclareLaunchArgument(
+                "mode",
+                default_value="led",
+                description="Hotspot detector mode",
+            )
             Node(
                 package="robotarm_software",
                 executable="hotspot_detector.py",
