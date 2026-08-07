@@ -1,1 +1,0 @@
-/home/admin/robotarm/ROS_WS/src/robotarm_hardware/include/robotarm_hardware/robotarm_system.hpp

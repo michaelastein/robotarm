@@ -1,1 +1,0 @@
-rclcpp;rclpy;std_msgs;sensor_msgs;geometry_msgs;control_msgs;trajectory_msgs;tf2_ros;robot_state_publisher;controller_manager;camera_ros;moveit_ros_planning_interface;robotarm_hardware;ament_lint_auto;ament_lint_common;python3-pytest

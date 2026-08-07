@@ -1,3 +1,0 @@
-source;share/robotarm_software/environment/ament_prefix_path.sh
-source;share/robotarm_software/environment/path.sh
-source;share/robotarm_software/environment/pythonpath.sh

@@ -1,8 +1,0 @@
-source;share/robotarm_software/hook/cmake_prefix_path.dsv
-source;share/robotarm_software/hook/cmake_prefix_path.sh
-source;share/robotarm_software/hook/pythonpath.dsv
-source;share/robotarm_software/hook/pythonpath.sh
-source;share/robotarm_software/local_setup.bash
-source;share/robotarm_software/local_setup.dsv
-source;share/robotarm_software/local_setup.sh
-source;share/robotarm_software/local_setup.zsh
