@@ -704,6 +704,11 @@ hardware_interface::return_type RobotArmSystem::write(
   const rclcpp::Time & time,
   const rclcpp::Duration &)
 {
+  // Base startup hysteresis latch. There is exactly one base_joint in this system.
+  // It is set after a genuine standstill and remains active until the measured
+  // base velocity is safely above the release threshold.
+  static bool base_startup_active = false;
+
   for (size_t i = 0; i < info_.joints.size(); ++i)
   {
     double desired_velocity = command_[i];
@@ -734,6 +739,11 @@ hardware_interface::return_type RobotArmSystem::write(
 
     if (std::abs(desired_velocity) <= joint_velocity_deadband)
     {
+      if (info_.joints[i].name == "base_joint")
+      {
+        base_startup_active = false;
+      }
+
       last_motion_sign_[i] = 0.0;
       set_motor(i, 0.0);
       continue;
@@ -759,42 +769,36 @@ hardware_interface::return_type RobotArmSystem::write(
       velocity_kp_[i] * velocity_error;
 
     /*
-     * Base-only startup assistance.
+     * Base-only startup assistance with hysteresis.
      *
-     * The base needs more torque to break static friction than it needs once
-     * it is already moving. Therefore a new command from standstill receives
-     * a fixed minimum start PWM. As soon as the measured base velocity is no
-     * longer near zero, the normal velocity-to-PWM controller takes over
-     * again.
+     * A genuine start after an idle period latches the stronger 0.26 PWM
+     * startup boost. The boost remains active while the base accelerates and
+     * is released only after the filtered measured velocity reaches the upper
+     * hysteresis threshold. This prevents the old behavior where the strong
+     * startup PWM was applied for only one control cycle.
      *
-     * Shoulder and elbow are completely unaffected by this block.
+     * Small quick re-engagements near the target still use the gentler trim
+     * PWM so that fine corrections do not receive the full startup kick.
      */
     if (info_.joints[i].name == "base_joint")
     {
-      /*
-       * Two-stage base startup / re-engagement assistance.
-       *
-       * The base needs a stronger kick after a genuine standstill to overcome
-       * static friction. However, using the same strong kick for small
-       * corrections near the target causes overshoot.
-       *
-       * Therefore:
-       *   - after a genuine idle period: use 0.26 PWM,
-       *   - for a quick re-engagement / fine correction: use only 0.19 PWM.
-       *
-       * last_active_command_time_ is intentionally checked before it is updated
-       * at the end of this write cycle.
-       */
-      constexpr double base_true_start_pwm = 0.29;
+      constexpr double base_true_start_pwm = 0.26;
       constexpr double base_trim_start_pwm = 0.21;
       constexpr double base_true_start_idle_s = 0.30;
-      constexpr double base_stopped_velocity_rad_s = 0.005;
+
+      // Hysteresis thresholds:
+      // - below 0.005 rad/s the base is considered effectively stopped,
+      // - once the startup latch is active, keep it active until >= 0.015 rad/s.
+      constexpr double base_start_enter_velocity_rad_s = 0.005;
+      constexpr double base_start_release_velocity_rad_s = 0.015;
 
       const bool command_was_stopped =
         last_motion_sign_[i] == 0.0;
 
+      const double measured_base_speed = std::abs(velocity_[i]);
+
       const bool base_is_nearly_stopped =
-        std::abs(velocity_[i]) < base_stopped_velocity_rad_s;
+        measured_base_speed < base_start_enter_velocity_rad_s;
 
       double idle_time_s = std::numeric_limits<double>::infinity();
 
@@ -808,15 +812,25 @@ hardware_interface::return_type RobotArmSystem::write(
         command_was_stopped &&
         idle_time_s >= base_true_start_idle_s;
 
-      const bool fine_reengagement =
-        !genuine_start &&
-        (command_was_stopped || base_is_nearly_stopped);
-
+      // Enter the startup state only after a genuine standstill.
       if (genuine_start)
+      {
+        base_startup_active = true;
+      }
+
+      // Hysteresis release: do not drop the startup PWM until the motor has
+      // clearly started moving.
+      if (base_startup_active &&
+          measured_base_speed >= base_start_release_velocity_rad_s)
+      {
+        base_startup_active = false;
+      }
+
+      if (base_startup_active)
       {
         pwm_abs = std::max(pwm_abs, base_true_start_pwm);
       }
-      else if (fine_reengagement)
+      else if (command_was_stopped || base_is_nearly_stopped)
       {
         pwm_abs = std::max(pwm_abs, base_trim_start_pwm);
       }
