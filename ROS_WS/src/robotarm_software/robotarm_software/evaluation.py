@@ -150,6 +150,9 @@ HTML_PAGE = r"""<!doctype html>
             <option value="curves">
                 Kurven
             </option>
+            <option value="linesFast">
+                Linien 2× schnell
+            </option>
         </select>
 
         <button id="resetButton" type="button">Stop / Reset</button>
@@ -177,6 +180,8 @@ HTML_PAGE = r"""<!doctype html>
         const POINT_STEP_PIXELS = 3 * CSS_PIXELS_PER_CM;
         const POINT_WAIT_SECONDS = 10;
         const LINE_SPEED_PIXELS_PER_SECOND = 35;
+        const FAST_LINE_SPEED_PIXELS_PER_SECOND =
+            LINE_SPEED_PIXELS_PER_SECOND * 2;
 
         // Bewegungsbereich: abgerundetes Rechteck.
         // Das Rechteck lässt links, oben und unten 10 % frei; rechts 30 %.
@@ -188,6 +193,7 @@ HTML_PAGE = r"""<!doctype html>
 
         const MODE_SEEDS = {
             lines: 104729,
+            linesFast: 104729,
             expandingPoints: 224737,
             curves: 736879
         };
@@ -439,7 +445,10 @@ HTML_PAGE = r"""<!doctype html>
             finishRequestSent = false;
         }
 
-        function buildPathMetrics(samples) {
+        function buildPathMetrics(
+            samples,
+            speed = LINE_SPEED_PIXELS_PER_SECOND
+        ) {
             const cumulativeLengths = [0];
             let totalLength = 0;
 
@@ -459,7 +468,7 @@ HTML_PAGE = r"""<!doctype html>
                 samples,
                 cumulativeLengths,
                 totalLength,
-                speed: LINE_SPEED_PIXELS_PER_SECOND
+                speed
             };
         }
 
@@ -467,7 +476,10 @@ HTML_PAGE = r"""<!doctype html>
             const seed = MODE_SEEDS[modeName] ?? 123456;
             const random = createRandom(seed);
 
-            if (modeName === "lines") {
+            if (
+                modeName === "lines" ||
+                modeName === "linesFast"
+            ) {
                 const anchors = [{
                     x: 0.5,
                     y: 0.5
@@ -497,7 +509,12 @@ HTML_PAGE = r"""<!doctype html>
                     }
                 }
 
-                return buildPathMetrics(samples);
+                return buildPathMetrics(
+                    samples,
+                    modeName === "linesFast"
+                        ? FAST_LINE_SPEED_PIXELS_PER_SECOND
+                        : LINE_SPEED_PIXELS_PER_SECOND
+                );
             }
 
             if (modeName === "expandingPoints") {
@@ -613,7 +630,11 @@ HTML_PAGE = r"""<!doctype html>
         }
 
         function getPosition(modeName, seconds) {
-            if (modeName === "lines" || modeName === "curves") {
+            if (
+                modeName === "lines" ||
+                modeName === "linesFast" ||
+                modeName === "curves"
+            ) {
                 return getConstantSpeedPathPosition(seconds);
             }
 
@@ -1537,4 +1558,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
