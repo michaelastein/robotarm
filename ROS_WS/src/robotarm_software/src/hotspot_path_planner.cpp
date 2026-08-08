@@ -67,11 +67,11 @@ constexpr char kHotspotTopic[] = "/hotspot/target";
 
 // Short polling period: after one trajectory finishes, the next fresh camera
 // sample can be acted on almost immediately. This is not an intentional pause.
-constexpr auto kPlanningPeriod = 20ms;
+constexpr auto kPlanningPeriod = 5ms;
 constexpr auto kMoveGroupStartupDelay = 200ms;
 
-constexpr double kPlanningTimeSeconds = 3.0;
-constexpr int kPlanningAttempts = 5;
+constexpr double kPlanningTimeSeconds = 1.0;
+constexpr int kPlanningAttempts = 2;
 constexpr double kGoalPositionToleranceMeters = 0.008;
 
 constexpr double kVelocityScalingFactor = 0.38;
