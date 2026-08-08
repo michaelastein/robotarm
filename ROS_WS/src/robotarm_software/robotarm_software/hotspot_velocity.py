@@ -176,8 +176,8 @@ Z_HOLD_DEADBAND = 0.010
 Z_HOLD_EXIT_DEADBAND = 0.015
 
 # Stronger Z recovery than before.
-KZ_HOLD = 0.040
-MAX_Z_HOLD_VEL = 0.0035
+KZ_HOLD = 0.080
+MAX_Z_HOLD_VEL = 0.006
 MIN_EFFECTIVE_Z_VEL = 0.0000
 
 # Filtering / stopping
