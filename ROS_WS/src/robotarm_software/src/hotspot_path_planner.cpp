@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <chrono>
 #include <cmath>
+#include <cstdint>
 #include <functional>
 #include <memory>
 #include <mutex>
@@ -64,7 +65,9 @@ constexpr char kPlanningGroup[] = "arm";
 constexpr char kToolLink[] = "tool_tip_link";
 constexpr char kHotspotTopic[] = "/hotspot/target";
 
-constexpr auto kPlanningPeriod = 200ms;
+// Short polling period: after one trajectory finishes, the next fresh camera
+// sample can be acted on almost immediately. This is not an intentional pause.
+constexpr auto kPlanningPeriod = 20ms;
 constexpr auto kMoveGroupStartupDelay = 200ms;
 
 constexpr double kPlanningTimeSeconds = 3.0;
@@ -77,10 +80,16 @@ constexpr double kAccelerationScalingFactor = 0.18;
 constexpr double kMinimumConfidence = 2.0;
 constexpr double kTargetTimeoutSeconds = 0.5;
 
-constexpr double kImageDeadbandX = 0.15;
-constexpr double kImageDeadbandY = 0.15;
+// Centering hysteresis:
+// - enter "centered" only inside 0.10
+// - stay centered until the error leaves 0.15
+constexpr double CENTER_ENTER_DEADBAND = 0.10;
+constexpr double CENTER_EXIT_DEADBAND = 0.15;
 
-constexpr double kMaximumCorrectionPerPlanMeters = 0.090;
+// Keep individual corrections smaller. This is especially important after the
+// hardware/PWM changes, because a large Cartesian jump is more likely to
+// overshoot before a fresh camera correction is available.
+constexpr double kMaximumCorrectionPerPlanMeters = 0.060;
 
 }  // namespace
 
@@ -109,8 +118,10 @@ public:
         this,
         std::placeholders::_1));
 
+    // Only one planning/execution callback at a time. The hotspot subscriber
+    // still runs independently and can keep updating the newest target.
     planning_callback_group_ = create_callback_group(
-      rclcpp::CallbackGroupType::Reentrant);
+      rclcpp::CallbackGroupType::MutuallyExclusive);
 
     planning_timer_ = create_wall_timer(
       kPlanningPeriod,
@@ -185,6 +196,7 @@ private:
 
     last_target_time_ = now();
     have_target_message_ = true;
+    ++target_sequence_;
   }
 
   /**
@@ -243,7 +255,8 @@ private:
     double & error_x,
     double & error_y,
     double & confidence,
-    rclcpp::Time & target_time)
+    rclcpp::Time & target_time,
+    std::uint64_t & target_sequence)
   {
     std::lock_guard<std::mutex> lock(target_mutex_);
 
@@ -256,6 +269,7 @@ private:
     error_y = error_y_;
     confidence = confidence_;
     target_time = last_target_time_;
+    target_sequence = target_sequence_;
 
     return true;
   }
@@ -289,13 +303,15 @@ private:
       0,
       0,
       get_clock()->get_clock_type());
+    std::uint64_t target_sequence = 0;
 
     if (!read_target(
         visible,
         error_x,
         error_y,
         confidence,
-        target_time))
+        target_time,
+        target_sequence))
     {
       return;
     }
@@ -311,13 +327,34 @@ private:
       return;
     }
 
-    const bool x_centered =
-      std::abs(error_x) <= kImageDeadbandX;
+    // Never execute the same camera sample twice. With the shorter planning
+    // period this prevents repeated corrections from one stale error value.
+    if (target_sequence == last_planned_target_sequence_) {
+      return;
+    }
 
-    const bool y_centered =
-      std::abs(error_y) <= kImageDeadbandY;
+    const double abs_error_x = std::abs(error_x);
+    const double abs_error_y = std::abs(error_y);
 
-    if (x_centered && y_centered) {
+    if (x_centered_) {
+      if (abs_error_x > CENTER_EXIT_DEADBAND) {
+        x_centered_ = false;
+      }
+    } else if (abs_error_x <= CENTER_ENTER_DEADBAND) {
+      x_centered_ = true;
+    }
+
+    if (y_centered_) {
+      if (abs_error_y > CENTER_EXIT_DEADBAND) {
+        y_centered_ = false;
+      }
+    } else if (abs_error_y <= CENTER_ENTER_DEADBAND) {
+      y_centered_ = true;
+    }
+
+    last_planned_target_sequence_ = target_sequence;
+
+    if (x_centered_ && y_centered_) {
       return;
     }
 
@@ -358,13 +395,15 @@ private:
 
       double adaptive_scale = 0.020;
 
+      // Softer large-error response than before. The previous 0.120 scale plus
+      // a 90 mm vector cap could command unnecessarily large jumps.
       if (largest_image_error >= 0.70) {
-        adaptive_scale = 0.120;
+        adaptive_scale = 0.080;
       } else if (largest_image_error >= 0.45) {
-        adaptive_scale = 0.090;
-      } else if (largest_image_error >= 0.25) {
         adaptive_scale = 0.060;
-      } else if (largest_image_error >= 0.15) {
+      } else if (largest_image_error >= 0.25) {
+        adaptive_scale = 0.045;
+      } else if (largest_image_error >= CENTER_ENTER_DEADBAND) {
         adaptive_scale = 0.028;
       }
 
@@ -374,11 +413,11 @@ private:
       double correction_y =
         -error_x * adaptive_scale;
 
-      if (std::abs(error_x) <= kImageDeadbandX) {
+      if (x_centered_) {
         correction_y = 0.0;
       }
 
-      if (std::abs(error_y) <= kImageDeadbandY) {
+      if (y_centered_) {
         correction_x = 0.0;
       }
 
@@ -484,6 +523,11 @@ private:
   bool have_target_message_{false};
   bool planning_or_executing_{false};
   bool height_initialized_{false};
+  bool x_centered_{false};
+  bool y_centered_{false};
+
+  std::uint64_t target_sequence_{0};
+  std::uint64_t last_planned_target_sequence_{0};
 
   double error_x_{0.0};
   double error_y_{0.0};
