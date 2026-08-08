@@ -171,13 +171,13 @@ ENABLE_BASE_Y = True
 
 ENABLE_Z_HOLD = True
 
-# Z hysteresis avoids constant small corrections around the stored height.
-Z_HOLD_DEADBAND = 0.03
-Z_HOLD_EXIT_DEADBAND = 0.04
+# Tighter Z hysteresis so height correction starts earlier.
+Z_HOLD_DEADBAND = 0.010
+Z_HOLD_EXIT_DEADBAND = 0.015
 
 # Stronger Z recovery than before.
-KZ_HOLD = 0.020
-MAX_Z_HOLD_VEL = 0.0020
+KZ_HOLD = 0.040
+MAX_Z_HOLD_VEL = 0.0035
 MIN_EFFECTIVE_Z_VEL = 0.0000
 
 # Filtering / stopping
@@ -847,6 +847,10 @@ class HotspotDirectJointVelocity(Node):
         vz = KZ_HOLD * z_error
         vz = clamp(vz, -MAX_Z_HOLD_VEL, MAX_Z_HOLD_VEL)
 
+        self.get_logger().debug(
+            f"Z hold: error={z_error:+.4f} m, vz={vz:+.5f} m/s"
+        )
+
         # No minimum Z velocity. Minimum caused Z oscillation.
         return vz
 
@@ -1011,12 +1015,15 @@ class HotspotDirectJointVelocity(Node):
             xy_is_moving,
         )
 
-        # Critical anti-circling stop:
-        # Only hard-stop when image X, image Y, and Z are all centered.
-        # Do NOT hard-stop just because qdot is tiny while the target is still off-center.
-        if self.centered_x and self.centered_y and self.z_centered:
+        # Stop only when X/Y are centered AND there is no active Z correction.
+        # This allows pure Z motion to continue even while the hotspot is already
+        # centered in image space.
+        xy_centered = self.centered_x and self.centered_y
+        z_command_active = abs(raw_base_v[2]) > COMMAND_EPSILON
+
+        if xy_centered and not z_command_active:
             self.get_logger().info(
-                "ZERO CMD: target centered in X/Y and Z hold centered",
+                "ZERO CMD: target centered in X/Y and no active Z correction",
                 throttle_duration_sec=1.0,
             )
             self.hard_stop()
