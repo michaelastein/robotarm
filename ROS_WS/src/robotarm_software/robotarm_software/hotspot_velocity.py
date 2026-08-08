@@ -146,8 +146,11 @@ CENTER_EXIT_DEADBAND_X = 0.15
 CENTER_ENTER_DEADBAND_Y = 0.15
 CENTER_EXIT_DEADBAND_Y = 0.15
 
-MAX_CART_VEL_XY = 0.004
-MIN_EFFECTIVE_CART_VEL_XY = 0.0007
+# Reduced peak speed and a much smaller near-center floor.
+# This lets the image controller approach the target gently instead of
+# commanding a finite jump right up to the deadband boundary.
+MAX_CART_VEL_XY = 0.0025
+MIN_EFFECTIVE_CART_VEL_XY = 0.0002
 
 ERROR_FULL_SPEED = 1.00
 
@@ -186,7 +189,11 @@ XY_SCALE_WHEN_Z_SOFT_ERROR = 0.25
 
 # Filtering / stopping
 
+# Acceleration remains smooth, but deceleration/reversal reacts much faster.
+# A slow symmetric low-pass filter keeps pushing after the target has already
+# moved into the center and is a common source of overshoot.
 SMOOTHING_ALPHA = 0.18
+DECEL_SMOOTHING_ALPHA = 0.65
 LOST_ALPHA = 0.35
 
 STOP_COMMANDS_AFTER_LOST = 10
@@ -245,8 +252,15 @@ MAX_JOINT_VEL = np.array(
 
 # Whole-vector minimum retained as an optional global lower bound. It preserves
 # the Jacobian ratio because the same multiplier is applied to every component.
-USE_MIN_EFFECTIVE_QDOT_VECTOR = True
+# Do not force a tiny IK vector up to a fixed minimum. Near the target, the
+# commanded joint velocity must be allowed to become genuinely small.
+USE_MIN_EFFECTIVE_QDOT_VECTOR = False
 MIN_EFFECTIVE_QDOT_VECTOR = 0.03
+
+# Likewise, do not scale the complete Jacobian vector upward merely to clear
+# every hardware deadband. The hardware layer may ignore very small commands;
+# that is preferable to multiplying all joints and overshooting the target.
+USE_HARDWARE_QDOT_FLOOR_SCALING = False
 
 # Components below this threshold are treated as negligible. This prevents a
 # tiny Jacobian component from forcing an excessive global scale factor.
@@ -255,6 +269,7 @@ JOINT_INTENT_EPS = 0.002
 # Numerical cleanup threshold.
 JOINT_VEL_DEADBAND = 0.00005
 JOINT_SMOOTHING_ALPHA = 0.20
+JOINT_DECEL_SMOOTHING_ALPHA = 0.70
 
 # Joint limits
 
@@ -509,7 +524,9 @@ class HotspotDirectJointVelocity(Node):
         self.get_logger().warn("Centering controller active.")
         self.get_logger().warn("Z-hold is slow drift correction only.")
         self.get_logger().warn("No pulse mode.")
-        self.get_logger().warn("Jacobian-ratio-preserving qdot scaling enabled.")
+        self.get_logger().warn(
+            "Anti-overshoot qdot processing enabled: no forced upward floor scaling."
+        )
         self.get_logger().warn(
             f"XY hysteresis: x enter={CENTER_ENTER_DEADBAND_X:.2f}, "
             f"x exit={CENTER_EXIT_DEADBAND_X:.2f}, "
@@ -525,10 +542,8 @@ class HotspotDirectJointVelocity(Node):
             f"min={MIN_EFFECTIVE_QDOT_VECTOR:.4f}"
         )
         self.get_logger().warn(
-            "hardware qdot floors used for common scaling: "
-            f"base={HARDWARE_QDOT_FLOOR[0]:.4f}, "
-            f"shoulder={HARDWARE_QDOT_FLOOR[1]:.4f}, "
-            f"elbow={HARDWARE_QDOT_FLOOR[2]:.4f}"
+            "hardware qdot floor scaling: "
+            f"enabled={USE_HARDWARE_QDOT_FLOOR_SCALING}"
         )
         self.get_logger().warn(
             "qdot per-joint maxima used to cap the common scale: "
@@ -927,10 +942,9 @@ class HotspotDirectJointVelocity(Node):
         Processing order:
             1. Remove tiny numerical noise.
             2. Remove negligible joint components below JOINT_INTENT_EPS.
-            3. Compute one common scale factor large enough to:
-               - satisfy the optional whole-vector minimum, and
-               - bring every remaining intended joint above its hardware
-                 activation floor.
+            3. Optionally compute a common upward scale for the vector minimum
+               and hardware activation floors. These upward scales are disabled
+               by default for anti-overshoot hotspot centering.
             4. Compute the largest common scale allowed by all per-joint
                maximum velocity limits.
             5. Apply exactly one common scale factor to the whole qdot vector.
@@ -968,12 +982,15 @@ class HotspotDirectJointVelocity(Node):
                 MIN_EFFECTIVE_QDOT_VECTOR / max_abs,
             )
 
-        # Minimum common scale required so every remaining intended joint clears
-        # its hardware command deadband.
-        for i in range(3):
-            if out[i] != 0.0:
-                required_scale = HARDWARE_QDOT_FLOOR[i] / abs(out[i])
-                min_scale = max(min_scale, required_scale)
+        # Optional minimum common scale required so every remaining intended
+        # joint clears its hardware command deadband. Disabled by default for
+        # hotspot centering because this upward scaling causes overshoot near
+        # the target.
+        if USE_HARDWARE_QDOT_FLOOR_SCALING:
+            for i in range(3):
+                if out[i] != 0.0:
+                    required_scale = HARDWARE_QDOT_FLOOR[i] / abs(out[i])
+                    min_scale = max(min_scale, required_scale)
 
         # Maximum common scale allowed by all hardware joint-speed limits.
         max_scale = float("inf")
@@ -1092,12 +1109,35 @@ class HotspotDirectJointVelocity(Node):
             self.hard_stop()
             return
 
-        alpha = SMOOTHING_ALPHA if active else LOST_ALPHA
+        # Asymmetric filtering: accelerate smoothly, but brake/reverse quickly.
+        # This removes filter tail after the hotspot crosses the target.
+        for i in range(3):
+            current = self.filtered_base_v[i]
+            target = raw_base_v[i]
 
-        self.filtered_base_v = (
-            alpha * raw_base_v
-            + (1.0 - alpha) * self.filtered_base_v
-        )
+            slowing_down = abs(target) < abs(current)
+            reversing = current * target < 0.0
+
+            if not active:
+                alpha = LOST_ALPHA
+            elif slowing_down or reversing:
+                alpha = DECEL_SMOOTHING_ALPHA
+            else:
+                alpha = SMOOTHING_ALPHA
+
+            self.filtered_base_v[i] = (
+                alpha * target
+                + (1.0 - alpha) * current
+            )
+
+        # Image X controls base-frame Y, image Y controls base-frame X. Once an
+        # image axis is inside its centered hysteresis band, remove the residual
+        # filtered command on the corresponding Cartesian axis immediately.
+        if self.centered_x:
+            self.filtered_base_v[1] = 0.0
+
+        if self.centered_y:
+            self.filtered_base_v[0] = 0.0
 
         self.filtered_base_v[0] = clamp(
             self.filtered_base_v[0],
@@ -1136,12 +1176,36 @@ class HotspotDirectJointVelocity(Node):
         # Hardware-aware minimum/maximum handling is applied below.
         qdot_limited = self.postprocess_qdot(qdot_limited)
 
-        self.filtered_qdot = (
-            JOINT_SMOOTHING_ALPHA * qdot_limited
-            + (1.0 - JOINT_SMOOTHING_ALPHA) * self.filtered_qdot
-        )
+        # Joint filtering is also asymmetric. Deceleration and direction
+        # reversal must react quickly so stored filter momentum cannot keep a
+        # joint moving after the Cartesian controller has already backed off.
+        for i in range(3):
+            current = self.filtered_qdot[i]
+            target = qdot_limited[i]
+            slowing_down = abs(target) < abs(current)
+            reversing = current * target < 0.0
+            alpha = (
+                JOINT_DECEL_SMOOTHING_ALPHA
+                if slowing_down or reversing
+                else JOINT_SMOOTHING_ALPHA
+            )
+            self.filtered_qdot[i] = (
+                alpha * target
+                + (1.0 - alpha) * current
+            )
 
-        self.filtered_qdot = self.postprocess_qdot(self.filtered_qdot)
+        # IMPORTANT: do not postprocess a second time here. A second upward
+        # minimum/floor scaling pass would undo the intended low-pass decay.
+        # Only apply a final maximum-speed safety scale; never scale upward.
+        max_scale = 1.0
+        for i in range(3):
+            if abs(self.filtered_qdot[i]) > MAX_JOINT_VEL[i]:
+                max_scale = min(
+                    max_scale,
+                    MAX_JOINT_VEL[i] / abs(self.filtered_qdot[i]),
+                )
+
+        self.filtered_qdot *= max_scale
         self.cmd_qdot = self.filtered_qdot.copy()
 
         if (
