@@ -193,7 +193,7 @@ HTML_PAGE = r"""<!doctype html>
 
         const MODE_SEEDS = {
             lines: 104729,
-            linesFast: 104729,
+            linesFast: 583921,
             expandingPoints: 224737,
             curves: 736879
         };
