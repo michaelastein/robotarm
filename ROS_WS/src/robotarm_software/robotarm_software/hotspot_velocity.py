@@ -201,32 +201,60 @@ JACOBIAN_EPS = 1e-4
 # Joint velocity output
 
 #
-
-# Hardware deadband is around 0.003 rad/s.
-
-# If Python sends tiny qdot values like 0.0003, nothing happens.
-
+# Hardware-side velocity thresholds from robotarm_system.cpp:
 #
+#   base_joint:
+#       hardware deadband = 0.028 rad/s
+#       hardware minimum commanded speed = 0.030 rad/s
+#       hardware maximum speed = 0.300 rad/s
+#
+#   shoulder_joint:
+#       hardware deadband = 0.020 rad/s
+#       hardware minimum commanded speed = 0.040 rad/s
+#       hardware maximum speed = 0.180 rad/s
+#
+#   elbow_joint:
+#       hardware deadband = 0.020 rad/s
+#       hardware minimum commanded speed = 0.035 rad/s
+#       hardware maximum speed = 0.220 rad/s
+#
+# This controller does NOT lift or clip joints independently. Instead it applies
+# one common scale factor to the complete Jacobian qdot vector so the joint ratio
+# is preserved as closely as possible.
+#
+# Tiny components below JOINT_INTENT_EPS are treated as negligible and set to
+# zero before the common scale factor is calculated.
 
-# Therefore use a small VECTOR minimum.
+HARDWARE_QDOT_FLOOR = np.array(
+    [
+        0.030,  # base_joint: clears 0.028 hardware deadband
+        0.021,  # shoulder_joint: clears 0.020 hardware deadband
+        0.021,  # elbow_joint: clears 0.020 hardware deadband
+    ],
+    dtype=np.float64,
+)
 
-# This preserves the IK ratio, unlike per-joint minimum lifting.
+MAX_JOINT_VEL = np.array(
+    [
+        0.30,  # base_joint
+        0.18,  # shoulder_joint
+        0.22,  # elbow_joint
+    ],
+    dtype=np.float64,
+)
 
-MAX_JOINT_VEL = 0.5
-
+# Whole-vector minimum retained as an optional global lower bound. It preserves
+# the Jacobian ratio because the same multiplier is applied to every component.
 USE_MIN_EFFECTIVE_QDOT_VECTOR = True
-MIN_EFFECTIVE_QDOT_VECTOR = 0.035
+MIN_EFFECTIVE_QDOT_VECTOR = 0.03
 
-# Controller-side startup floor.
-# The hardware interface ignores |qdot| <= 0.003 rad/s, so intended
-# non-zero joint commands are lifted only slightly above that threshold.
-USE_MIN_EFFECTIVE_QDOT_PER_JOINT = True
-MIN_EFFECTIVE_QDOT_PER_JOINT = 0.0035
+# Components below this threshold are treated as negligible. This prevents a
+# tiny Jacobian component from forcing an excessive global scale factor.
+JOINT_INTENT_EPS = 0.002
 
+# Numerical cleanup threshold.
 JOINT_VEL_DEADBAND = 0.00005
 JOINT_SMOOTHING_ALPHA = 0.20
-
-
 
 # Joint limits
 
@@ -481,7 +509,7 @@ class HotspotDirectJointVelocity(Node):
         self.get_logger().warn("Centering controller active.")
         self.get_logger().warn("Z-hold is slow drift correction only.")
         self.get_logger().warn("No pulse mode.")
-        self.get_logger().warn("Small qdot vector minimum enabled to cross hardware deadband.")
+        self.get_logger().warn("Jacobian-ratio-preserving qdot scaling enabled.")
         self.get_logger().warn(
             f"XY hysteresis: x enter={CENTER_ENTER_DEADBAND_X:.2f}, "
             f"x exit={CENTER_EXIT_DEADBAND_X:.2f}, "
@@ -494,7 +522,19 @@ class HotspotDirectJointVelocity(Node):
         )
         self.get_logger().warn(
             f"qdot vector minimum: enabled={USE_MIN_EFFECTIVE_QDOT_VECTOR}, "
-            f"min={MIN_EFFECTIVE_QDOT_VECTOR:.4f}, max={MAX_JOINT_VEL:.4f}"
+            f"min={MIN_EFFECTIVE_QDOT_VECTOR:.4f}"
+        )
+        self.get_logger().warn(
+            "hardware qdot floors used for common scaling: "
+            f"base={HARDWARE_QDOT_FLOOR[0]:.4f}, "
+            f"shoulder={HARDWARE_QDOT_FLOOR[1]:.4f}, "
+            f"elbow={HARDWARE_QDOT_FLOOR[2]:.4f}"
+        )
+        self.get_logger().warn(
+            "qdot per-joint maxima used to cap the common scale: "
+            f"base={MAX_JOINT_VEL[0]:.3f}, "
+            f"shoulder={MAX_JOINT_VEL[1]:.3f}, "
+            f"elbow={MAX_JOINT_VEL[2]:.3f}"
         )
         self.get_logger().info("Command order is fixed: [base_joint, shoulder_joint, elbow_joint]")
         self.get_logger().info("Mapping: err_x negative -> +base_y left")
@@ -876,20 +916,42 @@ class HotspotDirectJointVelocity(Node):
 
     def postprocess_qdot(self, qdot):
         """
-        Apply joint deadband, whole-vector minimum scaling, and speed limiting.
+        Preserve the Jacobian joint ratio by applying only common scaling.
 
         Parameters:
             qdot: Three-element joint-velocity vector in radians per second.
 
         Returns:
-            A processed copy that preserves the relative inverse-kinematics
-            ratio between joints while respecting effective and maximum speeds.
+            A processed copy suitable for the hardware velocity interface.
+
+        Processing order:
+            1. Remove tiny numerical noise.
+            2. Remove negligible joint components below JOINT_INTENT_EPS.
+            3. Compute one common scale factor large enough to:
+               - satisfy the optional whole-vector minimum, and
+               - bring every remaining intended joint above its hardware
+                 activation floor.
+            4. Compute the largest common scale allowed by all per-joint
+               maximum velocity limits.
+            5. Apply exactly one common scale factor to the whole qdot vector.
+
+        If the minimum required common scale is larger than the maximum common
+        scale allowed by the hardware limits, the largest safe common scale is
+        used. This preserves the Jacobian ratio but may leave one or more small
+        components below their hardware activation floor.
         """
 
         out = qdot.copy()
 
+        # Step 1: numerical cleanup.
         for i in range(3):
             if abs(out[i]) < JOINT_VEL_DEADBAND:
+                out[i] = 0.0
+
+        # Step 2: remove negligible components before determining the common
+        # scale. Otherwise a numerical crumb could force a huge scale factor.
+        for i in range(3):
+            if 0.0 < abs(out[i]) < JOINT_INTENT_EPS:
                 out[i] = 0.0
 
         max_abs = float(np.max(np.abs(out)))
@@ -897,22 +959,36 @@ class HotspotDirectJointVelocity(Node):
         if max_abs <= 0.0:
             return out
 
-        if USE_MIN_EFFECTIVE_QDOT_VECTOR:
-            if max_abs < MIN_EFFECTIVE_QDOT_VECTOR:
-                out *= MIN_EFFECTIVE_QDOT_VECTOR / max_abs
+        # Minimum common scale required by the controller-level vector minimum.
+        min_scale = 1.0
 
-        # Ensure every intended non-zero joint command clears the hardware
-        # velocity deadband. This is deliberately only a small lift; it does
-        # not alter zero commands and preserves each joint's sign.
-        if USE_MIN_EFFECTIVE_QDOT_PER_JOINT:
-            for i in range(3):
-                if 0.0 < abs(out[i]) < MIN_EFFECTIVE_QDOT_PER_JOINT:
-                    out[i] = math.copysign(MIN_EFFECTIVE_QDOT_PER_JOINT, out[i])
+        if USE_MIN_EFFECTIVE_QDOT_VECTOR and max_abs < MIN_EFFECTIVE_QDOT_VECTOR:
+            min_scale = max(
+                min_scale,
+                MIN_EFFECTIVE_QDOT_VECTOR / max_abs,
+            )
 
-        max_abs = float(np.max(np.abs(out)))
+        # Minimum common scale required so every remaining intended joint clears
+        # its hardware command deadband.
+        for i in range(3):
+            if out[i] != 0.0:
+                required_scale = HARDWARE_QDOT_FLOOR[i] / abs(out[i])
+                min_scale = max(min_scale, required_scale)
 
-        if max_abs > MAX_JOINT_VEL:
-            out *= MAX_JOINT_VEL / max_abs
+        # Maximum common scale allowed by all hardware joint-speed limits.
+        max_scale = float("inf")
+
+        for i in range(3):
+            if out[i] != 0.0:
+                allowed_scale = MAX_JOINT_VEL[i] / abs(out[i])
+                max_scale = min(max_scale, allowed_scale)
+
+        # Preserve the Jacobian ratio exactly for all remaining nonzero joints.
+        # If the ideal floor-clearing scale is impossible because of a hardware
+        # maximum, use the largest safe uniform scale instead.
+        scale = min(min_scale, max_scale)
+
+        out *= scale
 
         return out
 
@@ -1056,8 +1132,8 @@ class HotspotDirectJointVelocity(Node):
 
         qdot_limited = self.apply_joint_limits(q, qdot_raw)
 
-
-
+        # Keep the damped-Jacobian joint ratio unchanged here.
+        # Hardware-aware minimum/maximum handling is applied below.
         qdot_limited = self.postprocess_qdot(qdot_limited)
 
         self.filtered_qdot = (
