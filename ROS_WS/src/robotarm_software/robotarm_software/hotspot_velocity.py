@@ -33,9 +33,10 @@ CENTER_*_DEADBAND_*:
     Enter/exit hysteresis thresholds for image X and Y errors. Separate
     thresholds prevent rapid switching and circular motion near center.
 
-MAX_CART_VEL_XY / MIN_EFFECTIVE_CART_VEL_XY:
-    Maximum and minimum effective commanded Cartesian speeds in the base
-    X/Y plane. The minimum helps overcome hardware deadband.
+MAX_CART_VEL_FAR / MAX_CART_VEL_NEAR / MIN_EFFECTIVE_CART_VEL_XY:
+    Adaptive maximum Cartesian speed in the base X/Y plane. The controller
+    allows a higher maximum speed when far from the target and reduces the
+    maximum speed near the target. The minimum helps overcome hardware deadband.
 
 HOTSPOT_*_SIGN_TO_BASE_*:
     Sign mappings from camera-image error directions to base-frame motion.
@@ -146,8 +147,15 @@ CENTER_EXIT_DEADBAND_X = 0.15
 CENTER_ENTER_DEADBAND_Y = 0.15
 CENTER_EXIT_DEADBAND_Y = 0.15
 
-MAX_CART_VEL_XY = 0.004
+MAX_CART_VEL_FAR = 0.008
+MAX_CART_VEL_NEAR = 0.0015
 MIN_EFFECTIVE_CART_VEL_XY = 0.0007
+
+# Error range used to interpolate the adaptive Cartesian maximum speed.
+# At/below ADAPTIVE_VEL_ERROR_NEAR -> MAX_CART_VEL_NEAR.
+# At/above ADAPTIVE_VEL_ERROR_FAR  -> MAX_CART_VEL_FAR.
+ADAPTIVE_VEL_ERROR_NEAR = 0.10
+ADAPTIVE_VEL_ERROR_FAR = 0.70
 
 ERROR_FULL_SPEED = 1.00
 
@@ -212,9 +220,9 @@ JACOBIAN_EPS = 1e-4
 
 # This preserves the IK ratio, unlike per-joint minimum lifting.
 
-MAX_JOINT_VEL = 0.1
+MAX_JOINT_VEL = 0.20
 
-USE_MIN_EFFECTIVE_QDOT_VECTOR = True
+USE_MIN_EFFECTIVE_QDOT_VECTOR = False
 MIN_EFFECTIVE_QDOT_VECTOR = 0.03
 
 # Controller-side startup floor.
@@ -226,10 +234,11 @@ MIN_EFFECTIVE_QDOT_PER_JOINT = 0.0035
 JOINT_VEL_DEADBAND = 0.00005
 JOINT_SMOOTHING_ALPHA = 0.20
 
-# Per-joint output tuning.
-# Slightly reduce base motion and increase shoulder response.
-BASE_JOINT_VEL_SCALE = 0.75
-SHOULDER_JOINT_VEL_SCALE = 1.35
+# Per-joint output scaling.
+# Keep all IK joint ratios unchanged. Cartesian velocity is the primary
+# speed-control mechanism; joint limits and MAX_JOINT_VEL remain safety caps.
+BASE_JOINT_VEL_SCALE = 1.0
+SHOULDER_JOINT_VEL_SCALE = 1.0
 
 # Joint limits
 
@@ -482,9 +491,20 @@ class HotspotDirectJointVelocity(Node):
         self.get_logger().info(f"Publishing direct joint velocities to {COMMAND_TOPIC}")
         self.get_logger().warn("MoveIt Servo is bypassed/removed.")
         self.get_logger().warn("Centering controller active.")
+        self.get_logger().warn(
+            f"Adaptive XY max velocity: near={MAX_CART_VEL_NEAR:.4f} m/s "
+            f"at error<={ADAPTIVE_VEL_ERROR_NEAR:.2f}, "
+            f"far={MAX_CART_VEL_FAR:.4f} m/s "
+            f"at error>={ADAPTIVE_VEL_ERROR_FAR:.2f}"
+        )
         self.get_logger().warn("Z-hold is slow drift correction only.")
         self.get_logger().warn("No pulse mode.")
-        self.get_logger().warn("Small qdot vector minimum enabled to cross hardware deadband.")
+        self.get_logger().warn(
+            "Whole-vector qdot minimum disabled; Cartesian velocity drives speed."
+        )
+        self.get_logger().warn(
+            "Only the small per-joint hardware-deadband floor remains active."
+        )
         self.get_logger().warn(
             f"XY hysteresis: x enter={CENTER_ENTER_DEADBAND_X:.2f}, "
             f"x exit={CENTER_EXIT_DEADBAND_X:.2f}, "
@@ -719,6 +739,13 @@ class HotspotDirectJointVelocity(Node):
         """
         Convert hotspot errors into a base-frame X/Y velocity command.
 
+        The maximum Cartesian X/Y speed is adaptive:
+        - far from the target: up to MAX_CART_VEL_FAR
+        - near the target:    down to MAX_CART_VEL_NEAR
+
+        The interpolation is based on the larger absolute deadband-filtered
+        image error so both Cartesian axes share the same speed envelope.
+
         Parameters:
             active: Whether target tracking is currently permitted.
             err_x: Normalized horizontal image error.
@@ -744,17 +771,38 @@ class HotspotDirectJointVelocity(Node):
             err_y,
         )
 
+        error_mag = max(
+            abs(err_x_used),
+            abs(err_y_used),
+        )
+
+        adaptive_denominator = max(
+            1e-6,
+            ADAPTIVE_VEL_ERROR_FAR - ADAPTIVE_VEL_ERROR_NEAR,
+        )
+
+        scale = clamp(
+            (error_mag - ADAPTIVE_VEL_ERROR_NEAR) / adaptive_denominator,
+            0.0,
+            1.0,
+        )
+
+        max_cart_vel = (
+            MAX_CART_VEL_NEAR
+            + scale * (MAX_CART_VEL_FAR - MAX_CART_VEL_NEAR)
+        )
+
         vy_image = self.nonlinear_error_to_velocity(
             err_x_used,
             CENTER_ENTER_DEADBAND_X,
-            MAX_CART_VEL_XY,
+            max_cart_vel,
             MIN_EFFECTIVE_CART_VEL_XY,
         )
 
         vx_image = self.nonlinear_error_to_velocity(
             err_y_used,
             CENTER_ENTER_DEADBAND_Y,
-            MAX_CART_VEL_XY,
+            max_cart_vel,
             MIN_EFFECTIVE_CART_VEL_XY,
         )
 
@@ -767,8 +815,8 @@ class HotspotDirectJointVelocity(Node):
         if not ENABLE_BASE_Y:
             vy = 0.0
 
-        raw_v[0] = clamp(vx, -MAX_CART_VEL_XY, MAX_CART_VEL_XY)
-        raw_v[1] = clamp(vy, -MAX_CART_VEL_XY, MAX_CART_VEL_XY)
+        raw_v[0] = clamp(vx, -max_cart_vel, max_cart_vel)
+        raw_v[1] = clamp(vy, -max_cart_vel, max_cart_vel)
         raw_v[2] = 0.0
 
         return raw_v
@@ -879,14 +927,16 @@ class HotspotDirectJointVelocity(Node):
 
     def postprocess_qdot(self, qdot):
         """
-        Apply joint deadband, whole-vector minimum scaling, and speed limiting.
+        Apply joint deadband, optional hardware-deadband handling, and safety
+        speed limiting.
 
         Parameters:
             qdot: Three-element joint-velocity vector in radians per second.
 
         Returns:
-            A processed copy that preserves the relative inverse-kinematics
-            ratio between joints while respecting effective and maximum speeds.
+            A processed copy. With whole-vector minimum scaling disabled,
+            inverse-kinematics magnitudes are left unchanged unless a command
+            must clear the hardware deadband or exceeds MAX_JOINT_VEL.
         """
 
         out = qdot.copy()
@@ -904,9 +954,9 @@ class HotspotDirectJointVelocity(Node):
             if max_abs < MIN_EFFECTIVE_QDOT_VECTOR:
                 out *= MIN_EFFECTIVE_QDOT_VECTOR / max_abs
 
-        # Ensure every intended non-zero joint command clears the hardware
-        # velocity deadband. This is deliberately only a small lift; it does
-        # not alter zero commands and preserves each joint's sign.
+        # Only remaining intentional qdot modification below the safety cap:
+        # lift tiny intended non-zero commands just above the hardware velocity
+        # deadband. Zero commands remain zero and signs are preserved.
         if USE_MIN_EFFECTIVE_QDOT_PER_JOINT:
             for i in range(3):
                 if 0.0 < abs(out[i]) < MIN_EFFECTIVE_QDOT_PER_JOINT:
@@ -1028,14 +1078,14 @@ class HotspotDirectJointVelocity(Node):
 
         self.filtered_base_v[0] = clamp(
             self.filtered_base_v[0],
-            -MAX_CART_VEL_XY,
-            MAX_CART_VEL_XY,
+            -MAX_CART_VEL_FAR,
+            MAX_CART_VEL_FAR,
         )
 
         self.filtered_base_v[1] = clamp(
             self.filtered_base_v[1],
-            -MAX_CART_VEL_XY,
-            MAX_CART_VEL_XY,
+            -MAX_CART_VEL_FAR,
+            MAX_CART_VEL_FAR,
         )
 
         self.filtered_base_v[2] = clamp(
@@ -1059,7 +1109,8 @@ class HotspotDirectJointVelocity(Node):
 
         qdot_limited = self.apply_joint_limits(q, qdot_raw)
 
-        # Intentional per-joint tuning after IK.
+        # Keep IK joint ratios unchanged. These scales are intentionally 1.0;
+        # Cartesian velocity is the primary speed-control mechanism.
         qdot_limited[0] *= BASE_JOINT_VEL_SCALE
         qdot_limited[1] *= SHOULDER_JOINT_VEL_SCALE
 
