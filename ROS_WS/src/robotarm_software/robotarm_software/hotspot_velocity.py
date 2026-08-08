@@ -140,17 +140,17 @@ TARGET_TIMEOUT = 0.25
 
 # Larger hysteresis against circling around a stationary LED.
 
-CENTER_ENTER_DEADBAND_X = 0.15
-CENTER_EXIT_DEADBAND_X = 0.15
+CENTER_ENTER_DEADBAND_X = 0.08
+CENTER_EXIT_DEADBAND_X = 0.12
 
-CENTER_ENTER_DEADBAND_Y = 0.15
-CENTER_EXIT_DEADBAND_Y = 0.15
+CENTER_ENTER_DEADBAND_Y = 0.08
+CENTER_EXIT_DEADBAND_Y = 0.12
 
 # Reduced peak speed and a much smaller near-center floor.
 # This lets the image controller approach the target gently instead of
 # commanding a finite jump right up to the deadband boundary.
-MAX_CART_VEL_XY = 0.0025
-MIN_EFFECTIVE_CART_VEL_XY = 0.0002
+MAX_CART_VEL_XY = 0.0035
+MIN_EFFECTIVE_CART_VEL_XY = 0.0007
 
 ERROR_FULL_SPEED = 1.00
 
@@ -260,11 +260,11 @@ MIN_EFFECTIVE_QDOT_VECTOR = 0.03
 # Likewise, do not scale the complete Jacobian vector upward merely to clear
 # every hardware deadband. The hardware layer may ignore very small commands;
 # that is preferable to multiplying all joints and overshooting the target.
-USE_HARDWARE_QDOT_FLOOR_SCALING = False
+USE_HARDWARE_QDOT_FLOOR_SCALING = True
 
 # Components below this threshold are treated as negligible. This prevents a
 # tiny Jacobian component from forcing an excessive global scale factor.
-JOINT_INTENT_EPS = 0.002
+JOINT_INTENT_EPS = 0.0002
 
 # Numerical cleanup threshold.
 JOINT_VEL_DEADBAND = 0.00005
