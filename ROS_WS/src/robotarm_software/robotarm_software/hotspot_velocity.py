@@ -42,11 +42,8 @@ HOTSPOT_*_SIGN_TO_BASE_*:
     Sign mappings from camera-image error directions to base-frame motion.
 
 Z_HOLD_* / KZ_HOLD / MAX_Z_HOLD_VEL:
-    Parameters for slow tool-tip height correction. Z correction is
-    deliberately weaker than hotspot-centering motion.
-
-Z_SOFT_ERROR / Z_HARD_ERROR:
-    Height-error thresholds that reduce or stop X/Y motion so Z can recover.
+    Parameters for tool-tip height correction. Z correction runs in parallel
+    with hotspot centering and never suppresses X/Y motion.
 
 SMOOTHING_ALPHA / JOINT_SMOOTHING_ALPHA:
     Low-pass filter weights for Cartesian and joint-velocity commands.
@@ -146,15 +143,18 @@ CENTER_EXIT_DEADBAND_X = 0.15
 CENTER_ENTER_DEADBAND_Y = 0.10
 CENTER_EXIT_DEADBAND_Y = 0.15
 
-MAX_CART_VEL_FAR = 0.008
-MAX_CART_VEL_NEAR = 0.005
+# Slightly higher Cartesian speed than before.
+MAX_CART_VEL_FAR = 0.009
+MAX_CART_VEL_NEAR = 0.0055
 
 MIN_EFFECTIVE_CART_VEL_XY = 0.0015
 
+# Left-shifted response: approximately the old response at error=0.20
+# is now reached already around error=0.15.
 ADAPTIVE_VEL_ERROR_NEAR = 0.10
-ADAPTIVE_VEL_ERROR_FAR = 0.50
+ADAPTIVE_VEL_ERROR_FAR = 0.30
 
-ERROR_FULL_SPEED = 0.40
+ERROR_FULL_SPEED = 0.25
 
 HOTSPOT_X_SIGN_TO_BASE_Y = -1.0
 HOTSPOT_Y_SIGN_TO_BASE_X = -1.0
@@ -166,28 +166,19 @@ ENABLE_BASE_Y = True
 
 #
 
-# Z is only a slow drift correction.
-
-# It should not constantly fight tiny height changes.
+# Z height correction runs continuously in parallel with X/Y tracking.
+# It never slows or stops X/Y motion.
 
 ENABLE_Z_HOLD = True
 
-# More relaxed Z hysteresis.
-
+# Z hysteresis avoids constant small corrections around the stored height.
 Z_HOLD_DEADBAND = 0.03
 Z_HOLD_EXIT_DEADBAND = 0.04
 
-KZ_HOLD = 0.006
-MAX_Z_HOLD_VEL = 0.00035
+# Stronger Z recovery than before.
+KZ_HOLD = 0.020
+MAX_Z_HOLD_VEL = 0.0020
 MIN_EFFECTIVE_Z_VEL = 0.0000
-
-Z_HOLD_SCALE_WHILE_XY_MOVING = 1.00
-
-# If Z drifts far, slow/stop XY so height can recover.
-
-Z_SOFT_ERROR = 0.055
-Z_HARD_ERROR = 0.080
-XY_SCALE_WHEN_Z_SOFT_ERROR = 0.25
 
 # Filtering / stopping
 
@@ -494,7 +485,7 @@ class HotspotDirectJointVelocity(Node):
             f"far={MAX_CART_VEL_FAR:.4f} m/s "
             f"at error>={ADAPTIVE_VEL_ERROR_FAR:.2f}"
         )
-        self.get_logger().warn("Z-hold is slow drift correction only.")
+        self.get_logger().warn("Z correction runs in parallel; it never suppresses X/Y.")
         self.get_logger().warn("No pulse mode.")
         self.get_logger().warn(
             "Whole-vector qdot minimum disabled; Cartesian velocity drives speed."
@@ -820,7 +811,7 @@ class HotspotDirectJointVelocity(Node):
 
     def compute_z_hold_velocity(self, tip, xy_is_moving):
         """
-        Compute the slow Z velocity used to maintain the stored height.
+        Compute the Z velocity used to maintain the stored height.
 
         Parameters:
             tip: Current three-element tool-tip position in meters.
@@ -858,36 +849,6 @@ class HotspotDirectJointVelocity(Node):
 
         # No minimum Z velocity. Minimum caused Z oscillation.
         return vz
-
-    def apply_z_priority_to_xy(self, raw_base_v, tip):
-        """
-        Reduce X/Y motion when the tool-tip height error is excessive.
-
-        Parameters:
-            raw_base_v: Mutable three-element Cartesian velocity vector.
-            tip: Current three-element tool-tip position in meters.
-
-        Returns:
-            The adjusted velocity vector. X/Y are scaled at the soft threshold
-            and set to zero at the hard threshold.
-        """
-        if self.hold_z is None:
-            return raw_base_v
-
-        z_error = self.hold_z - float(tip[2])
-        z_error_abs = abs(z_error)
-
-        if z_error_abs > Z_HARD_ERROR:
-            raw_base_v[0] = 0.0
-            raw_base_v[1] = 0.0
-            return raw_base_v
-
-        if z_error_abs > Z_SOFT_ERROR:
-            raw_base_v[0] *= XY_SCALE_WHEN_Z_SOFT_ERROR
-            raw_base_v[1] *= XY_SCALE_WHEN_Z_SOFT_ERROR
-            return raw_base_v
-
-        return raw_base_v
 
     def apply_joint_limits(self, q, qdot):
         """
@@ -1048,11 +1009,6 @@ class HotspotDirectJointVelocity(Node):
         raw_base_v[2] = self.compute_z_hold_velocity(
             tip,
             xy_is_moving,
-        )
-
-        raw_base_v = self.apply_z_priority_to_xy(
-            raw_base_v,
-            tip,
         )
 
         # Critical anti-circling stop:
