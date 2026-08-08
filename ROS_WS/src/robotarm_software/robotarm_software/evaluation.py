@@ -175,8 +175,8 @@ HTML_PAGE = r"""<!doctype html>
         const EXPERIMENT_DURATION_SECONDS = 180;
         const CSS_PIXELS_PER_CM = 96 / 2.54;
         const POINT_STEP_PIXELS = 3 * CSS_PIXELS_PER_CM;
-        const POINT_WAIT_SECONDS = 5;
-        const LINE_SPEED_PIXELS_PER_SECOND = 22;
+        const POINT_WAIT_SECONDS = 10;
+        const LINE_SPEED_PIXELS_PER_SECOND = 28.6;
 
         // Bewegungsbereich: abgerundetes Rechteck.
         // Das Rechteck lässt auf jeder Bildschirmseite 10 % frei.
@@ -529,7 +529,7 @@ HTML_PAGE = r"""<!doctype html>
                     points.push({ x, y });
 
                     // Der Punkt springt sofort 3 cm in eine zufällige Richtung
-                    // und bleibt anschließend exakt 5 Sekunden stehen.
+                    // und bleibt anschließend exakt 10 Sekunden stehen.
                     const cycleDuration = POINT_WAIT_SECONDS;
 
                     cycleDurations.push(cycleDuration);
@@ -689,7 +689,7 @@ HTML_PAGE = r"""<!doctype html>
 
             const cycleIndex = low;
 
-            // Sofort auf B springen und dort 5 Sekunden stehen bleiben.
+            // Sofort auf B springen und dort 10 Sekunden stehen bleiben.
             return pattern.points[
                 (cycleIndex + 1) % pattern.points.length
             ];
