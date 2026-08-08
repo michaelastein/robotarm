@@ -785,8 +785,8 @@ hardware_interface::return_type RobotArmSystem::write(
        * last_active_command_time_ is intentionally checked before it is updated
        * at the end of this write cycle.
        */
-      constexpr double base_true_start_pwm = 0.27;
-      constexpr double base_trim_start_pwm = 0.19;
+      constexpr double base_true_start_pwm = 0.28;
+      constexpr double base_trim_start_pwm = 0.20;
       constexpr double base_true_start_idle_s = 0.30;
       constexpr double base_stopped_velocity_rad_s = 0.005;
 
