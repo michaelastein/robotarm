@@ -51,6 +51,7 @@
 #include <cmath>
 #include <cstring>
 #include <fcntl.h>
+#include <limits>
 #include <mutex>
 #include <thread>
 #include <tuple>
@@ -770,7 +771,23 @@ hardware_interface::return_type RobotArmSystem::write(
      */
     if (info_.joints[i].name == "base_joint")
     {
-      constexpr double base_start_pwm = 0.28;
+      /*
+       * Two-stage base startup / re-engagement assistance.
+       *
+       * The base needs a stronger kick after a genuine standstill to overcome
+       * static friction. However, using the same strong kick for small
+       * corrections near the target causes overshoot.
+       *
+       * Therefore:
+       *   - after a genuine idle period: use 0.26 PWM,
+       *   - for a quick re-engagement / fine correction: use only 0.19 PWM.
+       *
+       * last_active_command_time_ is intentionally checked before it is updated
+       * at the end of this write cycle.
+       */
+      constexpr double base_true_start_pwm = 0.26;
+      constexpr double base_trim_start_pwm = 0.19;
+      constexpr double base_true_start_idle_s = 0.30;
       constexpr double base_stopped_velocity_rad_s = 0.005;
 
       const bool command_was_stopped =
@@ -779,9 +796,29 @@ hardware_interface::return_type RobotArmSystem::write(
       const bool base_is_nearly_stopped =
         std::abs(velocity_[i]) < base_stopped_velocity_rad_s;
 
-      if (command_was_stopped || base_is_nearly_stopped)
+      double idle_time_s = std::numeric_limits<double>::infinity();
+
+      if (last_active_command_time_[i].nanoseconds() > 0)
       {
-        pwm_abs = std::max(pwm_abs, base_start_pwm);
+        idle_time_s =
+          (time - last_active_command_time_[i]).seconds();
+      }
+
+      const bool genuine_start =
+        command_was_stopped &&
+        idle_time_s >= base_true_start_idle_s;
+
+      const bool fine_reengagement =
+        !genuine_start &&
+        (command_was_stopped || base_is_nearly_stopped);
+
+      if (genuine_start)
+      {
+        pwm_abs = std::max(pwm_abs, base_true_start_pwm);
+      }
+      else if (fine_reengagement)
+      {
+        pwm_abs = std::max(pwm_abs, base_trim_start_pwm);
       }
     }
 
