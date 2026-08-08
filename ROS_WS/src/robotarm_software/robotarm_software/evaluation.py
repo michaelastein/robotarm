@@ -176,13 +176,14 @@ HTML_PAGE = r"""<!doctype html>
         const CSS_PIXELS_PER_CM = 96 / 2.54;
         const POINT_STEP_PIXELS = 3 * CSS_PIXELS_PER_CM;
         const POINT_WAIT_SECONDS = 10;
-        const LINE_SPEED_PIXELS_PER_SECOND = 28.6;
+        const LINE_SPEED_PIXELS_PER_SECOND = 35;
 
         // Bewegungsbereich: abgerundetes Rechteck.
-        // Das Rechteck lässt auf jeder Bildschirmseite 10 % frei.
+        // Das Rechteck lässt links, oben und unten 10 % frei; rechts 30 %.
         // Der Kreisradius wird zusätzlich berücksichtigt, damit der Kreis
         // vollständig innerhalb des Bewegungsbereichs bleibt.
         const MOVEMENT_MARGIN_FRACTION = 0.10;
+        const MOVEMENT_RIGHT_MARGIN_FRACTION = 0.30;
         const ROUNDED_RECT_CORNER_RADIUS_FRACTION = 0.08;
 
         const MODE_SEEDS = {
@@ -246,29 +247,26 @@ HTML_PAGE = r"""<!doctype html>
         }
 
         function getRoundedRectBounds() {
-            const marginX = viewportWidth * MOVEMENT_MARGIN_FRACTION;
+            const marginLeft = viewportWidth * MOVEMENT_MARGIN_FRACTION;
+            const marginRight =
+                viewportWidth * MOVEMENT_RIGHT_MARGIN_FRACTION;
             const marginY = viewportHeight * MOVEMENT_MARGIN_FRACTION;
 
-            // Zusätzlich zum 10-%-Rand wird der Kreisradius eingerückt,
+            // Zusätzlich zum prozentualen Rand wird der Kreisradius eingerückt,
             // damit auch die Kreisfläche komplett im Rechteck bleibt.
-            const requestedClearanceX = marginX + CIRCLE_RADIUS;
-            const requestedClearanceY = marginY + CIRCLE_RADIUS;
-
-            // Falls das Browserfenster extrem klein ist, bleibt wenigstens
-            // ein minimaler Bewegungsbereich um die Mitte erhalten.
-            const halfWidth = Math.max(
-                1,
-                viewportWidth / 2 - requestedClearanceX
+            const left = marginLeft + CIRCLE_RADIUS;
+            const right = Math.max(
+                left + 2,
+                viewportWidth - marginRight - CIRCLE_RADIUS
             );
-            const halfHeight = Math.max(
-                1,
-                viewportHeight / 2 - requestedClearanceY
+            const top = marginY + CIRCLE_RADIUS;
+            const bottom = Math.max(
+                top + 2,
+                viewportHeight - marginY - CIRCLE_RADIUS
             );
 
-            const left = viewportWidth / 2 - halfWidth;
-            const right = viewportWidth / 2 + halfWidth;
-            const top = viewportHeight / 2 - halfHeight;
-            const bottom = viewportHeight / 2 + halfHeight;
+            const halfWidth = Math.max(1, (right - left) / 2);
+            const halfHeight = Math.max(1, (bottom - top) / 2);
 
             const cornerRadius = Math.min(
                 Math.min(viewportWidth, viewportHeight) *
@@ -1539,3 +1537,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
