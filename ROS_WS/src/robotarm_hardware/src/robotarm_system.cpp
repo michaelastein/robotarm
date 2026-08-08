@@ -163,7 +163,7 @@ hardware_interface::CallbackReturn RobotArmSystem::on_init(
       velocity_to_pwm_gain_[i] = 0.30;
       velocity_kp_[i] = 0.06;
 
-      min_command_velocity_[i] = 0.03;
+      min_command_velocity_[i] = 0.025;
       max_joint_velocity_[i] = 0.30;
 
       lower_limit_[i] = -3.14159265;
