@@ -368,9 +368,14 @@ class HotspotDetector(Node):
             qos_profile_sensor_data,
         )
 
-        # Simple exponential moving average (EMA) smoothing.
-        # Higher alpha reacts faster; lower alpha smooths more strongly.
-        self.smoothing_alpha = 0.3
+        # Adaptive exponential moving average (EMA) smoothing.
+        # Small motion -> strong smoothing for a stable stationary target.
+        # Moderate motion -> faster response.
+        # Large motion -> snap directly to the new measurement.
+        self.smoothing_alpha = 0.20
+        self.fast_smoothing_alpha = 0.75
+        self.motion_threshold_px = 10.0
+        self.jump_threshold_px = 60.0
         self.smoothed_x = None
         self.smoothed_y = None
 
@@ -481,9 +486,34 @@ class HotspotDetector(Node):
             )
         else:
             measurement, confidence, _ = find_led_hotspot(search_img)
-        self.current_conf = float(confidence)
 
         valid = measurement is not None and confidence >= self.conf_threshold
+
+        # If the target jumped outside the ROI, immediately retry the current
+        # frame using a full-frame search. This avoids waiting several lost
+        # frames before a genuine large jump can be reacquired.
+        if not valid and self.mode == "ROI":
+            if self.detector_mode == "welding":
+                full_measurement, full_confidence, _ = find_welding_hotspot(
+                    img,
+                    roi_mode=False,
+                )
+            else:
+                full_measurement, full_confidence, _ = find_led_hotspot(img)
+
+            full_valid = (
+                full_measurement is not None
+                and full_confidence >= self.conf_threshold
+            )
+
+            if full_valid:
+                measurement = full_measurement
+                confidence = full_confidence
+                valid = True
+                offset = np.zeros(2, dtype=np.float32)
+                self.mode = "FULL-REACQUIRE"
+
+        self.current_conf = float(confidence)
         self.current_detection_valid = valid
 
         if valid:
@@ -493,18 +523,41 @@ class HotspotDetector(Node):
             measured_x = float(measurement[0, 0])
             measured_y = float(measurement[1, 0])
 
-            # Smooth the measured position directly. No prediction/extrapolation.
+            # Adaptive smoothing:
+            # - tiny changes are strongly smoothed to suppress jitter;
+            # - normal motion is followed more quickly;
+            # - a large real jump bypasses smoothing completely.
             if self.smoothed_x is None or self.smoothed_y is None:
                 self.smoothed_x = measured_x
                 self.smoothed_y = measured_y
             else:
-                alpha = self.smoothing_alpha
-                self.smoothed_x = (
-                    alpha * measured_x + (1.0 - alpha) * self.smoothed_x
-                )
-                self.smoothed_y = (
-                    alpha * measured_y + (1.0 - alpha) * self.smoothed_y
-                )
+                dx = measured_x - self.smoothed_x
+                dy = measured_y - self.smoothed_y
+                distance = float(np.hypot(dx, dy))
+
+                if distance >= self.jump_threshold_px:
+                    self.smoothed_x = measured_x
+                    self.smoothed_y = measured_y
+                elif distance >= self.motion_threshold_px:
+                    alpha = self.fast_smoothing_alpha
+                    self.smoothed_x = (
+                        alpha * measured_x
+                        + (1.0 - alpha) * self.smoothed_x
+                    )
+                    self.smoothed_y = (
+                        alpha * measured_y
+                        + (1.0 - alpha) * self.smoothed_y
+                    )
+                else:
+                    alpha = self.smoothing_alpha
+                    self.smoothed_x = (
+                        alpha * measured_x
+                        + (1.0 - alpha) * self.smoothed_x
+                    )
+                    self.smoothed_y = (
+                        alpha * measured_y
+                        + (1.0 - alpha) * self.smoothed_y
+                    )
 
             # Keep the smoothed target position inside the valid image area.
             self.smoothed_x = float(
