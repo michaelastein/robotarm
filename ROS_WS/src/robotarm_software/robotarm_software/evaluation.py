@@ -184,11 +184,16 @@ HTML_PAGE = r"""<!doctype html>
             LINE_SPEED_PIXELS_PER_SECOND * 2;
 
         // Bewegungsbereich: abgerundetes Rechteck.
-        // Das Rechteck lässt links, oben und unten 10 % frei; rechts 30 %.
+        // Links, oben und unten bleiben 10 % frei.
+        // Für Punkte und Kurven bleiben rechts 40 % frei.
+        // Normale Linien lassen rechts 30 % frei.
+        // Linien 2× schnell lassen rechts 40 % frei.
         // Der Kreisradius wird zusätzlich berücksichtigt, damit der Kreis
         // vollständig innerhalb des Bewegungsbereichs bleibt.
         const MOVEMENT_MARGIN_FRACTION = 0.10;
-        const MOVEMENT_RIGHT_MARGIN_FRACTION = 0.30;
+        const MOVEMENT_RIGHT_MARGIN_FRACTION = 0.40;
+        const LINE_RIGHT_MARGIN_FRACTION = 0.30;
+        const FAST_LINE_RIGHT_MARGIN_FRACTION = 0.40;
         const ROUNDED_RECT_CORNER_RADIUS_FRACTION = 0.08;
 
         const MODE_SEEDS = {
@@ -252,10 +257,9 @@ HTML_PAGE = r"""<!doctype html>
             return value * value * (3 - 2 * value);
         }
 
-        function getRoundedRectBounds() {
+        function getRoundedRectBounds(rightMarginFraction = MOVEMENT_RIGHT_MARGIN_FRACTION) {
             const marginLeft = viewportWidth * MOVEMENT_MARGIN_FRACTION;
-            const marginRight =
-                viewportWidth * MOVEMENT_RIGHT_MARGIN_FRACTION;
+            const marginRight = viewportWidth * rightMarginFraction;
             const marginY = viewportHeight * MOVEMENT_MARGIN_FRACTION;
 
             // Zusätzlich zum prozentualen Rand wird der Kreisradius eingerückt,
@@ -356,8 +360,11 @@ HTML_PAGE = r"""<!doctype html>
             };
         }
 
-        function randomPointInRoundedRect(random) {
-            const bounds = getRoundedRectBounds();
+        function randomPointInRoundedRect(
+            random,
+            rightMarginFraction = MOVEMENT_RIGHT_MARGIN_FRACTION
+        ) {
+            const bounds = getRoundedRectBounds(rightMarginFraction);
 
             for (let attempt = 0; attempt < 1000; attempt += 1) {
                 const x = lerp(bounds.left, bounds.right, random());
@@ -485,8 +492,18 @@ HTML_PAGE = r"""<!doctype html>
                     y: 0.5
                 }];
 
+                const lineRightMargin =
+                    modeName === "linesFast"
+                        ? FAST_LINE_RIGHT_MARGIN_FRACTION
+                        : LINE_RIGHT_MARGIN_FRACTION;
+
                 for (let index = 0; index < 32; index += 1) {
-                    anchors.push(randomPointInRoundedRect(random));
+                    anchors.push(
+                        randomPointInRoundedRect(
+                            random,
+                            lineRightMargin
+                        )
+                    );
                 }
 
                 const samples = [anchors[0]];
